@@ -24,7 +24,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const transcript = event.results[0][0].transcript;
     document.getElementById('textInput').value = transcript;
     
-    // ពេលចាប់សំឡេងបានហើយ ផ្ញើទៅ askAI ស្វ័យប្រវត្តិ
+    // ពេលចាប់សំឡេងបានហើយ ផ្ញើទៅ AI ស្វ័យប្រវត្តិ
     askAI();
   };
 
@@ -41,10 +41,10 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   };
 }
 
-// មុខងារចុចដើមស្រមៃនិយាយជាមួយ AI (Voice Chat Button)
+// មុខងារចុចប៊ូតុងនិយាយ
 function startVoiceInput() {
   if (!recognition) {
-    alert("Browser របស់អ្នកមិនគាំទ្រមុខងារចាប់សំឡេង (Speech Recognition) ទេ! សូមប្រើ Google Chrome។");
+    alert("Browser របស់អ្នកមិនគាំទ្រមុខងារចាប់សំឡេងទេ! សូមប្រើ Google Chrome លើទូរស័ព្ទ។");
     return;
   }
 
@@ -53,7 +53,6 @@ function startVoiceInput() {
     return;
   }
 
-  // កំណត់ភាសានិយាយតាមការជ្រើសរើស (km-KH ឬ en-US)
   const lang = document.getElementById('langSelect').value;
   recognition.lang = lang;
   
@@ -61,7 +60,7 @@ function startVoiceInput() {
   recognition.start();
 }
 
-// 2. មុខងារចាក់សំឡេង (Text-to-Speech / TTS)
+// 2. មុខងារចាក់សំឡេង (TTS)
 function playAudio() {
   const text = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
@@ -171,5 +170,5 @@ function shareText() {
     navigator.clipboard.writeText(text);
     alert("បាន Copy អត្ថបទរួចរាល់!");
   }
-    }
+        }
     
