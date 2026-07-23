@@ -1,5 +1,5 @@
-// 🔑 API Key របស់អ្នក
-const GEMINI_API_KEY = "AQ.Ab8RN6IIQZwQjC4KjaBFOB9C84VWhQjrCTKulgFZkOXXUIs9w";
+// 🔑 OpenAI API Key របស់អ្នក
+const OPENAI_API_KEY = "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";
 
 const player = document.getElementById('audioPlayer');
 
@@ -38,7 +38,7 @@ function stopAudio() {
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 }
 
-// 2. មុខងារសួរ AI (Gemini API)
+// 2. មុខងារសួរ ChatGPT API (OpenAI)
 async function askAI() {
   const prompt = document.getElementById('textInput').value.trim();
   const statusBox = document.getElementById('statusBox');
@@ -52,32 +52,40 @@ async function askAI() {
 
   stopAudio();
   statusBox.style.display = 'block';
-  statusText.innerText = "AI កំពុងគិត និងរកចម្លើយ...";
+  statusText.innerText = "ChatGPT កំពុងគិត និងរកចម្លើយ...";
 
   try {
-    const instruction = (lang === 'km-KH') 
-      ? "សូមឆ្លើយសំណួរខាងក្រោមជាភាសាខ្មែរ ឱ្យបានត្រឹមត្រូវ និងច្បាស់លាស់៖ " 
-      : "Please answer concisely and accurately in English: ";
+    const systemInstruction = (lang === 'km-KH') 
+      ? "សូមឆ្លើយសំណួរជាភាសាខ្មែរ ឱ្យបានត្រឹមត្រូវ និងច្បាស់លាស់។" 
+      : "Please answer concisely and accurately in English.";
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    // Endpoint របស់ OpenAI ChatGPT
+    const endpoint = `https://api.openai.com/v1/chat/completions`;
 
     const response = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: instruction + prompt }] }]
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: systemInstruction },
+          { role: "user", content: prompt }
+        ]
       })
     });
 
     const data = await response.json();
     
-    if (data.candidates && data.candidates[0].content.parts[0].text) {
-      const reply = data.candidates[0].content.parts[0].text;
+    if (data.choices && data.choices[0].message.content) {
+      const reply = data.choices[0].message.content;
       document.getElementById('textInput').value = reply;
       statusBox.style.display = 'none';
       playAudio();
     } else {
-      alert("មានបញ្ហា API ៖ " + (data.error?.message || "សូមពិនិត្យមើលម្ដងទៀត"));
+      alert("មានបញ្ហា API ៖ " + (data.error?.message || "សូមពិនិត្យមើល API Key ឡើងវិញ"));
       statusBox.style.display = 'none';
     }
   } catch (error) {
@@ -102,4 +110,4 @@ function shareText() {
     navigator.clipboard.writeText(text);
     alert("បាន Copy អត្ថបទរួចរាល់!");
   }
-  }
+}
