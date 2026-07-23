@@ -1,10 +1,15 @@
 // 🔑 API Keys
 const GROQ_API_KEY = "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";
-const GOAPI_KEY = "61eea210b4b30af17f637f16c57e7eee1df15c4980736baf972f225788bdfdb2"; // Key របស់ GoAPI
+const GOAPI_KEY = "61eea210b4b30af17f637f16c57e7eee1df15c4980736baf972f225788bdfdb2";
 
 const player = document.getElementById('audioPlayer');
 let recognition = null;
 let isListening = false;
+
+// ផ្ទុកប្រវត្តិបទចម្រៀងពេលបើក Web ដំបូង
+document.addEventListener('DOMContentLoaded', () => {
+  loadSongHistory();
+});
 
 // 1. មុខងារចាប់សំឡេងនិយាយ (Speech-to-Text)
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -100,31 +105,32 @@ async function askAI() {
   }
 }
 
-// 3. មុខងារបង្កើតបទចម្រៀងតាម Suno AI (តាមរយៈ GoAPI) 🎵
+// 3. មុខងារបង្កើតបទចម្រៀងតាម Suno AI (តាម GoAPI + CORS Proxy) 🎵
 async function generateSunoMusic() {
   const prompt = document.getElementById('textInput').value.trim();
 
   if (!prompt) {
-    alert("សូមបញ្ចូលប្រធានបទចម្រៀង ឬអត្ថបទចម្រៀងជាមុនសិន! (ឧ. បទចម្រៀងស្នេហាមនោសញ្ចេតនា)");
+    alert("សូមបញ្ចូលប្រធានបទចម្រៀងជាមុនសិន! (ឧ. Love song, pop music)");
     return;
   }
 
   stopAudio();
-  showStatus("🎵 Suno AI កំពុងបង្កើតបទចម្រៀង... (អាចចំណាយពេល 30-60 វិនាទី)");
+  showStatus("🎵 Suno AI កំពុងបង្កើតបទចម្រៀង... (សូមរង់ចាំប្រមាណ ៣០-៦០ វិនាទី)");
+
+  const corsProxy = "https://corsproxy.io/?";
+  const apiUrl = corsProxy + encodeURIComponent("https://api.goapi.ai/api/suno/v1/music");
 
   try {
-    const response = await fetch("https://api.goapi.ai/api/v1/task", {
+    const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "X-API-Key": GOAPI_KEY
       },
       body: JSON.stringify({
-        model: "suno-v3.5",
-        task_type: "generate_music",
+        custom_mode: false,
         input: {
-          prompt: prompt,
-          custom_mode: false,
+          gpt_description_prompt: prompt,
           make_instrumental: false
         }
       })
@@ -132,52 +138,126 @@ async function generateSunoMusic() {
 
     const data = await response.json();
 
-    if (data.data && data.data.audio_url) {
-      hideStatus();
-      player.src = data.data.audio_url;
-      player.style.display = "block";
-      player.play();
-      alert("🎉 បង្កើតបទចម្រៀងជោគជ័យ! កំពុងចាក់ភ្លេង...");
-    } else if (data.data && data.data.task_id) {
-      // ប្រសិនបើ API បញ្ជូន Task ID មក ត្រូវរង់ចាំទាញយកសំឡេង
-      checkMusicStatus(data.data.task_id);
+    if (data.data && data.data.task_id) {
+      checkMusicStatus(data.data.task_id, prompt);
+    } else if (data.data && data.data.audio_url) {
+      handleMusicSuccess(data.data.audio_url, prompt);
     } else {
       hideStatus();
-      alert("មិនអាចបង្កើតបទចម្រៀងបានទេ៖ " + (data.message || "សូមពិនិត្យមើល Credit ក្នុង GoAPI"));
+      alert("មិនអាចបង្កើតបទចម្រៀងបានទេ៖ " + (data.message || "សូមពិនិត្យមើល Credit/API Key"));
     }
   } catch (error) {
     hideStatus();
-    alert("មានបញ្ហាភ្ជាប់ទៅ GoAPI៖ " + error.message);
+    console.error("Music Error:", error);
+    alert("មានបញ្ហាភ្ជាប់ទៅ API៖ " + error.message);
   }
 }
 
-// មុខងាររង់ចាំទាញយកបទចម្រៀងប្រសិនបើវាកំពុង Render
-async function checkMusicStatus(taskId) {
+// មុខងាររង់ចាំទាញយកចម្រៀងដែល Render រួចរាល់
+async function checkMusicStatus(taskId, prompt) {
+  const corsProxy = "https://corsproxy.io/?";
+  const apiUrl = corsProxy + encodeURIComponent(`https://api.goapi.ai/api/suno/v1/music/${taskId}`);
+
   setTimeout(async () => {
     try {
-      const response = await fetch(`https://api.goapi.ai/api/v1/task/${taskId}`, {
+      const response = await fetch(apiUrl, {
         headers: { "X-API-Key": GOAPI_KEY }
       });
       const data = await response.json();
-      if (data.data && data.data.audio_url) {
-        hideStatus();
-        player.src = data.data.audio_url;
-        player.style.display = "block";
-        player.play();
-        alert("🎉 បង្កើតបទចម្រៀងជោគជ័យ!");
-      } else if (data.data && data.data.status === "processing") {
-        checkMusicStatus(taskId); // រង់ចាំបន្តទៀត
+
+      if (data.data && (data.data.audio_url || (data.data.clips && data.data.clips[0]?.audio_url))) {
+        const audioUrl = data.data.audio_url || data.data.clips[0].audio_url;
+        handleMusicSuccess(audioUrl, prompt);
+      } else if (data.data && (data.data.status === "processing" || data.data.status === "pending")) {
+        checkMusicStatus(taskId, prompt);
       } else {
         hideStatus();
         alert("ការបង្កើតចម្រៀងបរាជ័យ!");
       }
     } catch (e) {
       hideStatus();
+      console.error(e);
     }
   }, 5000);
 }
 
-// 4. មុខងារចាក់ និងគ្រប់គ្រង Audio
+// បង្ហាញចម្រៀង + Download + រក្សាទុកក្នុងប្រវត្តិ
+function handleMusicSuccess(audioUrl, prompt) {
+  hideStatus();
+  player.src = audioUrl;
+  player.style.display = "block";
+  player.play();
+
+  // បង្ហាញប៊ូតុង Download
+  const downloadContainer = document.getElementById('downloadContainer');
+  const downloadBtn = document.getElementById('downloadBtn');
+  downloadBtn.href = audioUrl;
+  downloadContainer.style.display = 'block';
+
+  // រក្សាទុកក្នុងប្រវត្តិ
+  saveToHistory(prompt, audioUrl);
+  alert("🎉 បង្កើតបទចម្រៀងជោគជ័យ!");
+}
+
+// 4. ប្រព័ន្ធគ្រប់គ្រងប្រវត្តិបទចម្រៀង (LocalStorage)
+function saveToHistory(title, url) {
+  let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
+  const newItem = {
+    title: title || "បទចម្រៀង AI",
+    url: url,
+    date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  };
+  
+  history.unshift(newItem); // បញ្ចូលខាងដើម
+  if (history.length > 20) history.pop(); // រក្សាទុកត្រឹម ២០ បទចុងក្រោយ
+
+  localStorage.setItem('suno_song_history', JSON.stringify(history));
+  loadSongHistory();
+}
+
+function loadSongHistory() {
+  const historyList = document.getElementById('historyList');
+  let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
+
+  if (history.length === 0) {
+    historyList.innerHTML = '<p style="font-size: 0.85em; color: #888; margin-top: 5px;">មិនទាន់មានប្រវត្តិបទចម្រៀងនៅឡើយទេ</p>';
+    return;
+  }
+
+  historyList.innerHTML = '';
+  history.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.className = 'history-item';
+    div.innerHTML = `
+      <span>🎵 ${item.title} <small style="color:#aaa;">(${item.date})</small></span>
+      <div>
+        <button class="btn-play-hist" onclick="playHistorySong('${item.url}')">▶️ ចាក់</button>
+        <a href="${item.url}" target="_blank" download="song_${index}.mp3" class="btn-download">📥</a>
+      </div>
+    `;
+    historyList.appendChild(div);
+  });
+}
+
+function playHistorySong(url) {
+  player.src = url;
+  player.style.display = "block";
+  player.play();
+  
+  const downloadContainer = document.getElementById('downloadContainer');
+  const downloadBtn = document.getElementById('downloadBtn');
+  downloadBtn.href = url;
+  downloadContainer.style.display = 'block';
+}
+
+function clearHistory() {
+  if (confirm("តើអ្នកពិតជាចង់លុបប្រវត្តិបទចម្រៀងទាំងអស់មែនទេ?")) {
+    localStorage.removeItem('suno_song_history');
+    loadSongHistory();
+  }
+}
+
+// 5. មុខងារចាក់សំឡេង Google TTS & គ្រប់គ្រង
 function playAudio() {
   const text = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
@@ -192,6 +272,7 @@ function playAudio() {
 
   player.src = audioUrl;
   player.style.display = "block";
+  document.getElementById('downloadContainer').style.display = 'none';
   player.play().catch(() => {
     useWebSpeech(text, lang);
   });
@@ -216,6 +297,7 @@ function clearAll() {
   stopAudio();
   document.getElementById('textInput').value = '';
   player.style.display = "none";
+  document.getElementById('downloadContainer').style.display = 'none';
 }
 
 function showStatus(msg) {
@@ -229,3 +311,4 @@ function hideStatus() {
   const statusBox = document.getElementById('statusBox');
   if (statusBox) statusBox.style.display = 'none';
 }
+  
