@@ -1,8 +1,67 @@
-// 🔑 Groq API Key
+// 🔑 Groq API Key របស់អ្នក
 const GROQ_API_KEY = "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";
 
 const player = document.getElementById('audioPlayer');
+let recognition = null;
+let isListening = false;
 
+// 1. កំណត់មុខងារចាប់សំឡេងនិយាយ (Speech-to-Text / Voice Input)
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onstart = function() {
+    isListening = true;
+    const statusText = document.getElementById('statusText');
+    const statusBox = document.getElementById('statusBox');
+    if (statusBox) statusBox.style.display = 'block';
+    if (statusText) statusText.innerText = "🎤 កំពុងស្ដាប់សំឡេងរបស់អ្នក...";
+  };
+
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript;
+    document.getElementById('textInput').value = transcript;
+    
+    // ពេលចាប់សំឡេងបានហើយ ផ្ញើទៅ askAI ស្វ័យប្រវត្តិ
+    askAI();
+  };
+
+  recognition.onerror = function(event) {
+    console.error("Speech Recognition Error:", event.error);
+    const statusBox = document.getElementById('statusBox');
+    if (statusBox) statusBox.style.display = 'none';
+    alert("មានបញ្ហាក្នុងការចាប់សំឡេង៖ " + event.error);
+    isListening = false;
+  };
+
+  recognition.onend = function() {
+    isListening = false;
+  };
+}
+
+// មុខងារចុចដើមស្រមៃនិយាយជាមួយ AI (Voice Chat Button)
+function startVoiceInput() {
+  if (!recognition) {
+    alert("Browser របស់អ្នកមិនគាំទ្រមុខងារចាប់សំឡេង (Speech Recognition) ទេ! សូមប្រើ Google Chrome។");
+    return;
+  }
+
+  if (isListening) {
+    recognition.stop();
+    return;
+  }
+
+  // កំណត់ភាសានិយាយតាមការជ្រើសរើស (km-KH ឬ en-US)
+  const lang = document.getElementById('langSelect').value;
+  recognition.lang = lang;
+  
+  stopAudio();
+  recognition.start();
+}
+
+// 2. មុខងារចាក់សំឡេង (Text-to-Speech / TTS)
 function playAudio() {
   const text = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
@@ -37,7 +96,7 @@ function stopAudio() {
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 }
 
-// មុខងារសួរ Groq AI ជាមួយរបៀបដោះស្រាយ CORS
+// 3. មុខងារសួរ Groq AI
 async function askAI() {
   const prompt = document.getElementById('textInput').value.trim();
   const statusBox = document.getElementById('statusBox');
@@ -45,18 +104,18 @@ async function askAI() {
   const lang = document.getElementById('langSelect').value;
 
   if (!prompt) {
-    alert("សូមបញ្ចូលសំណួរដើម្បីសួរ AI!");
+    alert("សូមបញ្ចូលសំណួរ ឬនិយាយដើម្បីសួរ AI!");
     return;
   }
 
   stopAudio();
   statusBox.style.display = 'block';
-  statusText.innerText = "Groq AI កំពុងគិត និងរកចម្លើយ...";
+  statusText.innerText = "🤖 AI កំពុងគិត និងរកចម្លើយ...";
 
   try {
     const systemInstruction = (lang === 'km-KH') 
-      ? "សូមឆ្លើយសំណួរជាភាសាខ្មែរ ឱ្យបានត្រឹមត្រូវ និងច្បាស់លាស់។" 
-      : "Please answer concisely and accurately in English.";
+      ? "អ្នកគឺជាអ្នកជំនាញឆ្លាតវៃ។ សូមឆ្លើយសំណួរជាភាសាខ្មែរឱ្យបានផ្លូវការ ច្បាស់លាស់ ត្រឹមត្រូវតាមអក្ខរាវិរុទ្ធ និងខ្លីល្មមសមរម្យសម្រាប់អានជាសំឡេង។" 
+      : "You are a helpful assistant. Please answer concisely and accurately in English suitable for speech output.";
 
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: 'POST',
@@ -66,6 +125,7 @@ async function askAI() {
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
+        temperature: 0.3,
         messages: [
           { role: "system", content: systemInstruction },
           { role: "user", content: prompt }
@@ -84,7 +144,7 @@ async function askAI() {
       const reply = data.choices[0].message.content;
       document.getElementById('textInput').value = reply;
       statusBox.style.display = 'none';
-      playAudio();
+      playAudio(); // ចាក់សំឡេងឆ្លើយតបស្វ័យប្រវត្តិ
     } else {
       alert("មិនមានចម្លើយពី AI ទេ!");
       statusBox.style.display = 'none';
@@ -111,4 +171,5 @@ function shareText() {
     navigator.clipboard.writeText(text);
     alert("បាន Copy អត្ថបទរួចរាល់!");
   }
-}
+    }
+    
