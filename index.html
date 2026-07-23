@@ -3,69 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>កម្មវិធីអានអត្ថបទ & AI Assistant</title>
+  <title>កម្វិធីអានអត្ថបទ & AI Assistant</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-  <div class="tts-container">
-    <div class="tts-header">
-      <h2><i class="fa-solid fa-robot"></i> កម្មវិធីអានអត្ថបទ & AI Assistant</h2>
-      <p>បញ្ចូលអត្ថបទអាន ឬសួរសំណួរទៅកាន់ AI</p>
-    </div>
+  <div class="container">
+    <h2>🤖 កម្មវិធីអានអត្ថបទ & AI Assistant</h2>
+    <p>បញ្ចូលអត្ថបទអាន ឬ ចុចនិយាយសួរ AI</p>
 
     <!-- ជ្រើសរើសភាសា -->
-    <div style="margin-bottom: 12px;">
-      <label for="langSelect" style="color: #cbd5e1; font-size: 14px; display: block; margin-bottom: 5px;">
-        <i class="fa-solid fa-language"></i> ជ្រើសរើសភាសា៖
-      </label>
+    <div class="form-group">
+      <label for="langSelect">🔤 ជ្រើសរើសភាសា៖</label>
       <select id="langSelect">
-        <option value="km-KH">ភាសាខ្មែរ (Khmer)</option>
-        <option value="en-US">ភាសាអង់គ្លេស (English)</option>
+        <option value="km-KH" selected>ភាសាខ្មែរ (Khmer)</option>
+        <option value="en-US">English (US)</option>
       </select>
     </div>
 
-    <!-- ប្រអប់បញ្ចូលអត្ថបទ/សំណួរ -->
-    <div class="input-group">
-      <textarea id="textInput" placeholder="បញ្ចូលអត្ថបទអាន ឬ សួរសំណួរនៅទីនេះ..."></textarea>
-    </div>
+    <!-- ប្រអប់បញ្ចូលអត្ថបទ -->
+    <textarea id="textInput" placeholder="បញ្ចូលអត្ថបទអាន ឬ និយាយសួរនៅទីនេះ..."></textarea>
 
-    <!-- Audio Player -->
-    <audio id="audioPlayer" style="width: 100%; margin-top: 10px; display: none;" controls></audio>
-
-    <!-- របារបង្ហាញស្ថានភាព -->
-    <div id="statusBox" style="margin-top: 8px; color: #38bdf8; font-size: 14px; text-align: center; display: none;">
+    <!-- ផ្ទាំងបង្ហាញ Status -->
+    <div id="statusBox" style="display: none; margin-bottom: 10px; color: #f39c12; font-weight: bold;">
       <span id="statusText">កំពុងដំណើរការ...</span>
     </div>
 
-    <!-- ប៊ូតុងបញ្ជាសំខាន់ៗ -->
-    <div class="button-group" style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
-      <button class="btn btn-ai" onclick="askAI()">
-        <i class="fa-solid fa-wand-magic-sparkles"></i> សួរ AI
-      </button>
-      <button class="btn btn-play" onclick="playAudio()">
-        <i class="fa-solid fa-play"></i> ចាក់សំឡេង
-      </button>
-      <button class="btn btn-stop" onclick="stopAudio()">
-        <i class="fa-solid fa-square"></i> បញ្ឈប់
-      </button>
+    <!-- ជួរប៊ូតុងទី ១ -->
+    <div class="button-group" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
+      <button onclick="askAI()" style="flex: 1; background-color: #008cba; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">✨ សួរ AI</button>
+      <button onclick="startVoiceInput()" style="flex: 1; background-color: #e67e22; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">🎤 និយាយ</button>
+      <button onclick="playAudio()" style="flex: 1; background-color: #4caf50; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">▶️ ចាក់សំឡេង</button>
+      <button onclick="stopAudio()" style="flex: 1; background-color: #f44336; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">⏹️ បញ្ចប់</button>
     </div>
 
-    <!-- មុខងារបន្ថែម -->
-    <div style="margin-top: 10px; display: flex; gap: 8px;">
-      <button class="btn btn-share" onclick="shareText()">
-        <i class="fa-solid fa-share-nodes"></i> ចែករំលែក
-      </button>
-      <button class="btn btn-clear" onclick="clearAll()">
-        <i class="fa-solid fa-trash-can"></i> លុប
-      </button>
+    <!-- ជួរប៊ូតុងទី ២ -->
+    <div class="button-group" style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <button onclick="shareText()" style="flex: 1; background-color: #8e44ad; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">🔗 ចែករំលែក</button>
+      <button onclick="clearAll()" style="flex: 1; background-color: #7f8c8d; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">🗑️ លុប</button>
     </div>
 
+    <!-- កន្លែងចាក់ Audio -->
+    <audio id="audioPlayer" controls style="display: none; width: 100%; margin-top: 15px;"></audio>
   </div>
 
   <script src="script.js"></script>
 </body>
-  <button onclick="startVoiceInput()" style="background-color: #e67e22; color: white;">🎤 និយាយជាមួយ AI</button>
 </html>
-                                                                             
