@@ -5,6 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>កម្វិធីអានអត្ថបទ & AI Assistant</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .history-section {
+      margin-top: 20px;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px;
+      border-radius: 8px;
+    }
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 8px 12px;
+      margin-top: 8px;
+      border-radius: 5px;
+      gap: 10px;
+    }
+    .history-item span {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.9em;
+    }
+    .btn-download {
+      background-color: #27ae60;
+      color: white;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: bold;
+    }
+    .btn-play-hist {
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85em;
+    }
+  </style>
 </head>
 <body>
 
@@ -29,7 +73,7 @@
       <span id="statusText">កំពុងដំណើរការ...</span>
     </div>
 
-    <!-- ជួរប៊ូតុងទី ១ (សួរ AI & និយាយ) -->
+    <!-- ជួរប៊ូតុងទី ១ (សួរ AI, និយាយ & បង្កើតចម្រៀង) -->
     <div class="button-group" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
       <button onclick="askAI()" style="flex: 1; background-color: #008cba; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">✨ សួរ AI</button>
       <button onclick="startVoiceInput()" style="flex: 1; background-color: #e67e22; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">🎤 និយាយ</button>
@@ -43,10 +87,26 @@
       <button onclick="clearAll()" style="flex: 1; background-color: #7f8c8d; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">🗑️ លុប</button>
     </div>
 
-    <!-- កន្លែងចាក់ Audio -->
+    <!-- កន្លែងចាក់ Audio & ប៊ូតុង Download -->
     <audio id="audioPlayer" controls style="display: none; width: 100%; margin-top: 15px;"></audio>
+    <div id="downloadContainer" style="margin-top: 10px; display: none;">
+      <a id="downloadBtn" href="#" target="_blank" download="song.mp3" class="btn-download">📥 ទាញយក MP3 (Download)</a>
+    </div>
+
+    <!-- ប្រវត្តិបទចម្រៀងដែលបានបង្កើត -->
+    <div class="history-section">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="margin: 0; font-size: 1.05em; color: #3498db;">📜 ប្រវត្តិបទចម្រៀង MP3</h3>
+        <button onclick="clearHistory()" style="background: transparent; color: #e74c3c; border: none; cursor: pointer; font-size: 0.8em;">🗑️ លុបប្រវត្តិ</button>
+      </div>
+      <div id="historyList">
+        <p style="font-size: 0.85em; color: #888; margin-top: 5px;">មិនទាន់មានប្រវត្តិបទចម្រៀងនៅឡើយទេ</p>
+      </div>
+    </div>
+
   </div>
 
   <script src="script.js"></script>
 </body>
-</html>
+  </html>
+                            
