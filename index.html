@@ -10,7 +10,7 @@
 
   <div class="container">
     <h2>🤖 កម្មវិធីអានអត្ថបទ & AI Assistant</h2>
-    <p>បញ្ចូលអត្ថបទអាន ឬ ចុចនិយាយសួរ AI</p>
+    <p>បញ្ចូលអត្ថបទអាន និយាយសួរ ឬបង្កើតបទចម្រៀង</p>
 
     <!-- ជ្រើសរើសភាសា -->
     <div class="form-group">
@@ -22,24 +22,24 @@
     </div>
 
     <!-- ប្រអប់បញ្ចូលអត្ថបទ -->
-    <textarea id="textInput" placeholder="បញ្ចូលអត្ថបទអាន ឬ និយាយសួរនៅទីនេះ..."></textarea>
+    <textarea id="textInput" placeholder="បញ្ចូលអត្ថបទ ឬ ប្រធានបទចម្រៀង (ឧ. បទចម្រៀងស្នេហា រ៉េប)..."></textarea>
 
     <!-- ផ្ទាំងបង្ហាញ Status -->
     <div id="statusBox" style="display: none; margin-bottom: 10px; color: #f39c12; font-weight: bold;">
       <span id="statusText">កំពុងដំណើរការ...</span>
     </div>
 
-    <!-- ជួរប៊ូតុងទី ១ -->
+    <!-- ជួរប៊ូតុងទី ១ (សួរ AI & និយាយ) -->
     <div class="button-group" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
       <button onclick="askAI()" style="flex: 1; background-color: #008cba; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">✨ សួរ AI</button>
       <button onclick="startVoiceInput()" style="flex: 1; background-color: #e67e22; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">🎤 និយាយ</button>
-      <button onclick="playAudio()" style="flex: 1; background-color: #4caf50; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">▶️ ចាក់សំឡេង</button>
-      <button onclick="stopAudio()" style="flex: 1; background-color: #f44336; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">⏹️ បញ្ចប់</button>
+      <button onclick="generateSunoMusic()" style="flex: 1; background-color: #9b59b6; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">🎵 បង្កើតចម្រៀង</button>
     </div>
 
-    <!-- ជួរប៊ូតុងទី ២ -->
-    <div class="button-group" style="display: flex; gap: 8px; flex-wrap: wrap;">
-      <button onclick="shareText()" style="flex: 1; background-color: #8e44ad; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">🔗 ចែករំលែក</button>
+    <!-- ជួរប៊ូតុងទី ២ (ចាក់សំឡេង & គ្រប់គ្រង) -->
+    <div class="button-group" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
+      <button onclick="playAudio()" style="flex: 1; background-color: #4caf50; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">▶️ ចាក់សំឡេង</button>
+      <button onclick="stopAudio()" style="flex: 1; background-color: #f44336; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">⏹️ បញ្ចប់</button>
       <button onclick="clearAll()" style="flex: 1; background-color: #7f8c8d; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">🗑️ លុប</button>
     </div>
 
