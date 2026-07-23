@@ -87,6 +87,11 @@ async function askAI() {
       })
     });
 
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`API Error Status: ${response.status} - សូមពិនិត្យមើល API Key ឡើងវិញ`);
+    }
+
     const data = await response.json();
     if (data.choices && data.choices[0].message.content) {
       const reply = data.choices[0].message.content;
@@ -99,11 +104,11 @@ async function askAI() {
     }
   } catch (error) {
     hideStatus();
-    alert("មានបញ្ហាភ្ជាប់ទៅ AI៖ " + error.message);
+    alert("មានបញ្ហា連接ទៅ AI៖ " + error.message);
   }
 }
 
-// 3. មុខងារបង្កើតបទចម្រៀងតាម Groq AI 🎵 (ដើរ ១០០%)
+// 3. មុខងារបង្កើតបទចម្រៀង 🎵
 async function generateSunoMusic() {
   const prompt = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
@@ -118,8 +123,8 @@ async function generateSunoMusic() {
 
   try {
     const systemInstruction = (lang === 'km-KH')
-      ? "អ្នកគឺជាអ្នកតែងបទចម្រៀងអាជីព។ សូមតែងបទចម្រៀងខ្លីមួយមានចង្វាក់ ពិរោះ (ប្រហែល ៣០ ទៅ ៤០ ម៉ាត់) ផ្អែកលើប្រធានបទនេះ។ សរសេរតែទំនុកច្រៀងសុទ្ធ មិនបាច់ដាក់ពាក្យ Header ដូចជា Verse/Chorus ទេ។"
-      : "You are a song writer. Write a short catchy song (30-40 words) based on the prompt. Output only the song lyrics directly.";
+      ? "អ្នកគឺជាអ្នកតែងបទចម្រៀងអាជីព។ សូមតែងបទចម្រៀងខ្លីមួយមានចង្វាក់ ពិរោះ ផ្អែកលើប្រធានបទនេះ។ សរសេរតែទំនុកច្រៀងសុទ្ធ មិនបាច់ដាក់ពាក្យ Header ទេ។"
+      : "You are a song writer. Write a short catchy song based on the prompt. Output only the song lyrics directly.";
 
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: 'POST',
@@ -137,13 +142,16 @@ async function generateSunoMusic() {
       })
     });
 
+    if (!response.ok) {
+      throw new Error(`Groq API Key មានបញ្ហា ឬអស់កំណត់ប្រើប្រាស់ (Status ${response.status})`);
+    }
+
     const data = await response.json();
     if (data.choices && data.choices[0].message.content) {
       const lyrics = data.choices[0].message.content.trim();
       document.getElementById('textInput').value = lyrics;
       hideStatus();
 
-      // បង្កើត Audio Link ជា MP3
       const cleanText = encodeURIComponent(lyrics.substring(0, 200));
       const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${cleanText}&tl=${lang.split('-')[0]}&client=tw-ob`;
 
@@ -151,14 +159,15 @@ async function generateSunoMusic() {
       player.style.display = "block";
       player.play();
 
-      // បង្ហាញប៊ូតុង Download & រក្សាទុកក្នុងប្រវត្តិ
       const downloadContainer = document.getElementById('downloadContainer');
       const downloadBtn = document.getElementById('downloadBtn');
-      downloadBtn.href = audioUrl;
-      downloadContainer.style.display = 'block';
+      if (downloadBtn && downloadContainer) {
+        downloadBtn.href = audioUrl;
+        downloadContainer.style.display = 'block';
+      }
 
       saveToHistory(prompt, audioUrl);
-      alert("🎉 បង្កើតបទចម្រៀងជោគជ័យ! កំពុងចាក់សំឡេង...");
+      alert("🎉 បង្កើតបទចម្រៀងជោគជ័យ!");
     } else {
       hideStatus();
       alert("មិនអាចបង្កើតបទចម្រៀងបានទេ!");
@@ -187,6 +196,7 @@ function saveToHistory(title, url) {
 
 function loadSongHistory() {
   const historyList = document.getElementById('historyList');
+  if (!historyList) return;
   let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
 
   if (history.length === 0) {
@@ -216,8 +226,10 @@ function playHistorySong(url) {
   
   const downloadContainer = document.getElementById('downloadContainer');
   const downloadBtn = document.getElementById('downloadBtn');
-  downloadBtn.href = url;
-  downloadContainer.style.display = 'block';
+  if (downloadBtn && downloadContainer) {
+    downloadBtn.href = url;
+    downloadContainer.style.display = 'block';
+  }
 }
 
 function clearHistory() {
@@ -280,5 +292,4 @@ function showStatus(msg) {
 function hideStatus() {
   const statusBox = document.getElementById('statusBox');
   if (statusBox) statusBox.style.display = 'none';
-      }
-  
+}
