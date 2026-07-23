@@ -1,9 +1,8 @@
-// 🔑 OpenAI API Key របស់អ្នក
-const OPENAI_API_KEY = "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";
+// 🔑 Groq API Key
+const GROQ_API_KEY = "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";
 
 const player = document.getElementById('audioPlayer');
 
-// 1. មុខងារចាក់សំឡេង
 function playAudio() {
   const text = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
@@ -38,7 +37,7 @@ function stopAudio() {
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 }
 
-// 2. មុខងារសួរ ChatGPT API (OpenAI)
+// មុខងារសួរ Groq AI ជាមួយរបៀបដោះស្រាយ CORS
 async function askAI() {
   const prompt = document.getElementById('textInput').value.trim();
   const statusBox = document.getElementById('statusBox');
@@ -52,30 +51,32 @@ async function askAI() {
 
   stopAudio();
   statusBox.style.display = 'block';
-  statusText.innerText = "ChatGPT កំពុងគិត និងរកចម្លើយ...";
+  statusText.innerText = "Groq AI កំពុងគិត និងរកចម្លើយ...";
 
   try {
     const systemInstruction = (lang === 'km-KH') 
       ? "សូមឆ្លើយសំណួរជាភាសាខ្មែរ ឱ្យបានត្រឹមត្រូវ និងច្បាស់លាស់។" 
       : "Please answer concisely and accurately in English.";
 
-    // Endpoint របស់ OpenAI ChatGPT
-    const endpoint = `https://api.openai.com/v1/chat/completions`;
-
-    const response = await fetch(endpoint, {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
+        'Authorization': `Bearer ${GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "llama-3.3-70b-versatile",
         messages: [
           { role: "system", content: systemInstruction },
           { role: "user", content: prompt }
         ]
       })
     });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error?.message || `HTTP Error: ${response.status}`);
+    }
 
     const data = await response.json();
     
@@ -85,13 +86,13 @@ async function askAI() {
       statusBox.style.display = 'none';
       playAudio();
     } else {
-      alert("មានបញ្ហា API ៖ " + (data.error?.message || "សូមពិនិត្យមើល API Key ឡើងវិញ"));
+      alert("មិនមានចម្លើយពី AI ទេ!");
       statusBox.style.display = 'none';
     }
   } catch (error) {
-    console.error(error);
+    console.error("API Error Detail:", error);
     statusBox.style.display = 'none';
-    alert("មិនអាចភ្ជាប់ទៅ AI បានទេ! សូមពិនិត្យមើលការតភ្ជាប់អ៊ីនធឺណិត។");
+    alert("មានបញ្ហាភ្ជាប់ទៅ AI៖ " + error.message);
   }
 }
 
