@@ -104,7 +104,7 @@
 
     .btn-enter:disabled {
       background: #4a4a6a;
-      color: #8888aa;
+      color: #b0b0cc;
       cursor: not-allowed;
       box-shadow: none;
       transform: none !important;
@@ -161,7 +161,6 @@
       margin-bottom: 10px;
     }
     
-    /* ក្រឡាចត្រង្គប៊ូតុងបញ្ជា */
     .btn-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -189,7 +188,7 @@
     .btn-cam { background: #14b8a6; }
     .btn-live { background: #db2777; }
     .btn-song { background: #8b5cf6; }
-    .btn-image { background: #f97316; } /* 🎨 ប៊ូតុងបង្កើតរូបភាពថ្មី */
+    .btn-image { background: #f97316; }
     .btn-play { background: #16a34a; }
     .btn-stop { background: #dc2626; }
     
@@ -240,7 +239,6 @@
       font-weight: 500;
     }
     
-    /* 🖼️ ការបង្ហាញរូបភាព និង Preview */
     .preview-container {
       display: flex;
       gap: 10px;
@@ -275,7 +273,7 @@
     <div class="splash-icon">🤖✨</div>
     <h1>សូមស្វាគមន៍មកកាន់វេបសាយរបស់</h1>
     <h2>លោក ឃួន ថាវ៉ាន់</h2>
-    <button id="enterBtn" class="btn-enter" disabled onclick="enterWebsite()">សូមរង់ចាំ (3)...</button>
+    <button id="enterBtn" class="btn-enter" disabled>សូមរង់ចាំ (3)...</button>
   </div>
 </div>
 
@@ -303,7 +301,6 @@
     <img id="imagePreview" class="preview-img" alt="Preview">
   </div>
 
-  <!-- 🖼️ កន្លែងបង្ហាញរូបភាពដែល AI បង្កើតបាន -->
   <img id="generatedImageResult" alt="AI Generated Image">
   
   <textarea id="inputText" placeholder="វាយអក្សរ, ពណ៌នាពីរូបភាពដែលចង់បង្កើត, ឬចុចនិយាយ..."></textarea>
@@ -353,12 +350,15 @@
   bgMusic.loop = false;
   bgMusic.volume = 0.3;
 
-  let countdownTimer = 3;
+  // ⏱️ ការកំណត់ពេលរាប់ថយក្រោយ
+  let timeLeft = 3;
   const enterBtn = document.getElementById('enterBtn');
 
   window.addEventListener('DOMContentLoaded', () => {
+    // ចាក់ភ្លេង Background ភ្លាមពេលបើកវេបសាយ
     bgMusic.play().catch(e => console.log("Audio autoplay restricted:", e));
 
+    // បិទភ្លេងស្វ័យប្រវត្តិក្រោយ ១០ វិនាទី
     setTimeout(() => {
       if (!bgMusic.paused) {
         bgMusic.pause();
@@ -366,17 +366,20 @@
       }
     }, 10000);
 
-    const interval = setInterval(() => {
-      countdownTimer--;
-      if (countdownTimer > 0) {
-        enterBtn.innerText = `សូមរង់ចាំ (${countdownTimer})...`;
+    // ប្រព័ន្ធរាប់ថយក្រោយយ៉ាងទៀងទាត់ (Fixed Countdown)
+    const timerInterval = setInterval(() => {
+      timeLeft--;
+      if (timeLeft > 0) {
+        enterBtn.innerText = `សូមរង់ចាំ (${timeLeft})...`;
       } else {
-        clearInterval(interval);
+        clearInterval(timerInterval);
         enterBtn.disabled = false;
         enterBtn.innerText = "🚀 ចូលទៅកាន់វេបសាយ";
+        enterBtn.setAttribute("onclick", "enterWebsite()");
       }
     }, 1000);
 
+    // Setup Speech Recognition
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRec();
@@ -408,6 +411,7 @@
     }
   });
 
+  // 🚀 ប៊ូតុងចូលទៅកាន់វេបសាយ
   function enterWebsite() {
     const splash = document.getElementById('splashScreen');
     splash.style.opacity = '0';
@@ -523,11 +527,10 @@
     }
   }
 
-  // 🎨 មុខងារបង្កើតរូបភាពដោយប្រើ AI (Image Generation)
   async function generateAIImage() {
     let promptText = document.getElementById('inputText').value.trim();
     if (!promptText) {
-      alert("សូមវាយបញ្ចូលការពណ៌នាពីរូបភាពដែលលោកអ្នកចង់បង្កើត (ឧទាហរណ៍: ទេសភាពព្រះអាទិត្យអស្ចារ្យ)");
+      alert("សូមវាយបញ្ចូលការពណ៌នាពីរូបភាពដែលលោកអ្នកចង់បង្កើត!");
       return;
     }
 
@@ -535,7 +538,6 @@
     document.getElementById('generatedImageResult').style.display = 'none';
 
     try {
-      // បើកការបកប្រែ Prompt ទៅជាភាសាអង់គ្លេសស្វ័យប្រវត្តិតាមរយៈ Groq ដើម្បីឱ្យ AI គូររូបបានស្រស់ស្អាតនិងត្រូវម៉ត់
       const transRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: { "Authorization": "Bearer " + getKey(), "Content-Type": "application/json" },
@@ -553,11 +555,9 @@
         englishPrompt = transData.choices[0].message.content.trim();
       }
 
-      // បង្កើត URL រូបភាពដោយផ្អែកលើ Prompt
       const encodedPrompt = encodeURIComponent(englishPrompt);
       const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1024&height=1024&nologo=true`;
 
-      // ពិនិត្យមើលថាតើរូបភាពផ្ទុកបានសម្រេចឬអត់
       const imgElement = document.getElementById('generatedImageResult');
       imgElement.src = imageUrl;
       
@@ -570,12 +570,12 @@
 
       imgElement.onerror = () => {
         hideStatus();
-        alert("សូមអភ័យទោស មិនអាចបង្កើតរូបភាពបានទេ!");
+        alert("មិនអាចបង្កើតរូបភាពបានទេ!");
       };
 
     } catch(e) {
       hideStatus();
-      alert("មានបញ្ហាក្នុងការបង្កើតរូបភាព: " + e.message);
+      alert("មានបញ្ហា: " + e.message);
     }
   }
 
@@ -648,4 +648,12 @@
   }
 
   function playAudio() {
-    const text = d
+    const text = document.getElementById('outputText').value;
+    const lang = document.getElementById('targetLang').value;
+    speak(text, lang);
+  }
+
+  function stopAudio() {
+    isAiSpeaking = false;
+    if ('speechSynthesis' in window) {
+    
