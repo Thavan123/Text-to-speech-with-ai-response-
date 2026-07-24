@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khuon Thavan - Simple AI Assistant</title>
+  <title>Khuon Thavan - File to Text Extractor</title>
+  <!-- ប្រើប្រាស់ Tesseract.js សម្រាប់ទាញយកអត្ថបទពីរូបភាព -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.0.2/tesseract.min.js"></script>
   <style>
     :root {
       --primary: #7c3aed;
@@ -26,7 +28,7 @@
 
     .container {
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
       background: var(--card-bg);
       backdrop-filter: blur(15px);
       padding: 20px;
@@ -43,22 +45,31 @@
       margin-bottom: 15px;
     }
 
-    .lang-selects {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 12px;
+    .upload-box {
+      border: 2px dashed rgba(0, 210, 255, 0.4);
+      padding: 20px;
+      text-align: center;
+      border-radius: 12px;
+      background: rgba(26, 26, 46, 0.6);
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: 0.2s;
     }
-    .lang-group {
-      flex: 1;
+    .upload-box:hover {
+      border-color: var(--accent);
     }
-    label {
-      display: block;
-      font-size: 12px;
-      margin-bottom: 4px;
-      color: #aaa;
+    input[type="file"] {
+      display: none;
     }
-    select, textarea {
+    .upload-label {
+      cursor: pointer;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    textarea {
       width: 100%;
+      height: 150px;
       padding: 12px;
       border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.15);
@@ -67,20 +78,16 @@
       font-size: 14px;
       box-sizing: border-box;
       outline: none;
-    }
-    textarea {
-      height: 90px;
       resize: vertical;
       margin-bottom: 12px;
     }
     
     .btn-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
       gap: 10px;
-      margin-bottom: 10px;
     }
     button {
+      flex: 1;
       padding: 12px;
       border: none;
       border-radius: 12px;
@@ -94,10 +101,8 @@
     button:active {
       transform: scale(0.97);
     }
-    .btn-ask { background: #0284c7; }
-    .btn-trans { background: #0ea5e9; }
-    .btn-voice { background: #16a34a; }
-    .btn-clear { background: #64748b; width: 100%; margin-top: 5px; }
+    .btn-copy { background: #16a34a; }
+    .btn-clear { background: #64748b; }
 
     #status {
       text-align: center;
@@ -111,48 +116,27 @@
 <body>
 
 <div class="container">
-  <h2>🤖 Thavan AI Assistant</h2>
+  <h2>📂 បម្លែងឯកសារជាអត្ថបទ (Text Extractor)</h2>
 
-  <div class="lang-selects">
-    <div class="lang-group">
-      <label>🗣️ ភាសាប្រភព</label>
-      <select id="srcLang">
-        <option value="km">ភាសាខ្មែរ (Khmer)</option>
-        <option value="en">English</option>
-        <option value="fr">Français</option>
-        <option value="zh">中文</option>
-        <option value="th">ไทย</option>
-      </select>
+  <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+    <div class="upload-label">
+      📁 <b>ចុចទីនេះដើម្បីជ្រើសរើសហ្វាល់</b><br>
+      <span style="font-size: 12px; color: #aaa;">(គាំទ្ររូបភាព PNG, JPG ឬឯកសារអត្ថបទ)</span>
     </div>
-    <div class="lang-group">
-      <label>🌐 ភាសាបកប្រែ/គោលដៅ</label>
-      <select id="targetLang">
-        <option value="en">English</option>
-        <option value="km">ភាសាខ្មែរ (Khmer)</option>
-        <option value="fr">Français</option>
-        <option value="zh">中文</option>
-        <option value="th">ไทย</option>
-      </select>
-    </div>
+    <input type="file" id="fileInput" accept="image/*,.txt" onchange="handleFile(this)">
   </div>
 
-  <div id="status">កំពុងដំណើរការ...</div>
+  <div id="status">កំពុងអានអត្ថបទ... សូមរង់ចាំបន្តិច</div>
   
-  <textarea id="inputText" placeholder="វាយអក្សរទីនេះ ដើម្បីសួរ AI ឬបកប្រែ..."></textarea>
-  <textarea id="outputText" readonly placeholder="លទ្ធផលចម្លើយ AI..."></textarea>
+  <textarea id="resultText" placeholder="អត្ថបទដែលទាញយកបាននឹងបង្ហាញទីនេះ..."></textarea>
 
   <div class="btn-grid">
-    <button class="btn-ask" onclick="askAI()">✨ សួរ AI</button>
-    <button class="btn-trans" onclick="translateText()">🌐 បកប្រែ</button>
-    <button class="btn-voice" onclick="playAudio()">▶️ ស្តាប់សំឡេង</button>
-    <button class="btn-clear" onclick="clearAll()" style="grid-column: span 2;">🗑️ សម្អាតទិន្នន័យ</button>
-  </div>
+    <button class="btn-copy" onclick="copyText()">📋 ចម្លងអត្ថបទ (Copy)</button>
+    <button class="btn-clear" onclick="clearAll()">🗑️ សម្អាត</button>
+</div>
 </div>
 
 <script>
-  // API Key ថ្មីរបស់បង
-  const getKey = () => "gsk_x3b3Wzg1BEFnphqvkdAXWGdyb3FYIpRZxFEjRUvVPiPbMYhRGBTdq";
-
   function showStatus(msg) {
     const s = document.getElementById('status');
     s.style.display = 'block';
@@ -162,114 +146,65 @@
     document.getElementById('status').style.display = 'none';
   }
 
-  async function askAI() {
-    const text = document.getElementById('inputText').value.trim();
-    if (!text) {
-      alert("សូមវាយអក្សរសិន!");
-      return;
-    }
+  function handleFile(input) {
+    const file = input.files[0];
+    if (!file) return;
 
-    showStatus("⚡ AI កំពុងគិត...");
+    showStatus("📂 កំពុងដំណើរការហ្វាល់...");
 
-    try {
-      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: { 
-          "Authorization": "Bearer " + getKey(), 
-          "Content-Type": "application/json" 
-        },
-        body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          messages: [
-            { role: "system", content: "អ្នកគឺជាជំនួយការ AI ដ៏ឆ្លាតវៃ។ សូមឆ្លើយតបជាភាសាខ្មែរ ឬភាសាដែលបានស្នើសុំ។" },
-            { role: "user", content: text }
-          ],
-          temperature: 0.7
-        })
+    // ប្រសិនបើជា Text File (.txt)
+    if (file.type === "text/plain") {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('resultText').value = e.target.result;
+        hideStatus();
+      };
+      reader.readAsText(file, "UTF-8");
+    } 
+    // ប្រសិនបើជារូបភាព (PNG, JPG) ប្រើ OCR ដើម្បីទាញយកអក្សរ
+    else if (file.type.startsWith("image/")) {
+      showStatus("🔍 កំពុងទាញយកអក្សរពីរូបភាព (OCR)...");
+      Tesseract.recognize(
+        file,
+        'eng+khm', // គាំទ្រភាសាអង់គ្លេស និងខ្មែរ
+        { 
+          logger: m => {
+            if (m.status === 'recognizing text') {
+              showStatus(`🔍 កំពុងអាន: ${Math.round(m.progress * 100)}%`);
+            }
+          } 
+        }
+      ).then(({ data: { text } }) => {
+        document.getElementById('resultText').value = text;
+        hideStatus();
+      }).catch(err => {
+        hideStatus();
+        alert("មានបញ្កាក្នុងการអានរូបភាព: " + err);
       });
-
-      const data = await res.json();
+    } else {
       hideStatus();
-
-      if (data.choices && data.choices[0]) {
-        const reply = data.choices[0].message.content.trim();
-        document.getElementById('outputText').value = reply;
-      } else {
-        alert("Error: " + (data.error?.message || "មានបញ្ហាទិន្នន័យ API"));
-      }
-    } catch(e) {
-      hideStatus();
-      alert("Network Error: " + e.message);
+      alert("សូមជ្រើសរើសយករូបភាព ឬឯកសារ .txt ជាមុនសិន!");
     }
   }
 
-  async function translateText() {
-    const text = document.getElementById('inputText').value.trim();
-    if (!text) {
-      alert("សូមបញ្ចូលអត្ថបទសម្រាប់បកប្រែ!");
+  function copyText() {
+    const text = document.getElementById('resultText');
+    if (!text.value) {
+      alert("គ្មានអត្ថបទសម្រាប់ចម្លងទេ!");
       return;
     }
-    const target = document.getElementById('targetLang').value;
-    showStatus("🌐 កំពុងបកប្រែ...");
-
-    try {
-      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: { 
-          "Authorization": "Bearer " + getKey(), 
-          "Content-Type": "application/json" 
-        },
-        body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          messages: [
-            { role: "system", content: `Translate accurately into language code: ${target}. Return only the translation text.` },
-            { role: "user", content: text }
-          ]
-        })
-      });
-
-      const data = await res.json();
-      hideStatus();
-
-      if (data.choices) {
-        const translated = data.choices[0].message.content.trim();
-        document.getElementById('outputText').value = translated;
-      } else {
-        alert("Translation Error");
-      }
-    } catch(e) {
-      hideStatus();
-      alert("Error: " + e.message);
-    }
-  }
-
-  function playAudio() {
-    const text = document.getElementById('outputText').value;
-    if (!text) {
-      alert("គ្មានអត្ថបទសម្រាប់អានទេ!");
-      return;
-    }
-    if (!('speechSynthesis' in window)) {
-      alert("Browser មិនគាំទ្រការអានសំឡេងទេ");
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-    const langMap = { km: 'km-KH', en: 'en-US', fr: 'fr-FR', zh: 'zh-CN', th: 'th-TH' };
-    const target = document.getElementById('targetLang').value;
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = langMap[target] || 'en-US';
-    window.speechSynthesis.speak(utterance);
+    text.select();
+    text.setSelectionRange(0, 99999); // សម្រាប់ទូរស័ព្ទដៃ
+    navigator.clipboard.writeText(text.value).then(() => {
+      alert("✅ បានចម្លងអត្ថបទជោគជ័យ!");
+    });
   }
 
   function clearAll() {
-    document.getElementById('inputText').value = '';
-    document.getElementById('outputText').value = '';
+    document.getElementById('fileInput').value = '';
+    document.getElementById('resultText').value = '';
     hideStatus();
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   }
 </script>
 </body>
-  </html>
-  
+</html>
