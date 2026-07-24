@@ -3,11 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>កម្មវិធីអានអត្ថបទ & AI Assistant v7</title>
-
-  <!-- ResponsiveVoice Library សម្រាប់ចាក់សំឡេង -->
-  <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
-
+  <title>Groq AI Assistant</title>
   <style>
     body {
       font-family: 'Kantumruy Pro', sans-serif, Arial;
@@ -25,33 +21,24 @@
       padding: 20px;
       border-radius: 16px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      position: relative;
     }
     h2 {
       text-align: center;
-      color: #38bdf8;
+      color: #10b981;
       margin-top: 0;
       margin-bottom: 15px;
       font-size: 1.3em;
     }
-
-    .lang-container {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 12px;
+    .box-label {
+      font-size: 0.85em;
+      color: #34d399;
+      font-weight: bold;
+      margin-top: 10px;
+      margin-bottom: 5px;
     }
-    .lang-box {
-      flex: 1;
-    }
-    .lang-box label {
-      display: block;
-      font-size: 0.8em;
-      color: #94a3b8;
-      margin-bottom: 4px;
-    }
-
-    select, textarea {
+    textarea {
       width: 100%;
+      height: 100px;
       padding: 10px;
       border-radius: 8px;
       border: 1px solid #334155;
@@ -60,60 +47,34 @@
       box-sizing: border-box;
       font-size: 0.95em;
       font-family: inherit;
-    }
-    select {
-      margin-bottom: 10px;
-    }
-
-    .box-label {
-      font-size: 0.85em;
-      color: #38bdf8;
-      font-weight: bold;
-      margin-top: 5px;
-      margin-bottom: 5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    textarea {
-      height: 95px;
       resize: vertical;
-      margin-bottom: 10px;
       line-height: 1.5;
     }
     #outputText {
       background-color: #090d16;
-      border-color: #0284c7;
+      border-color: #059669;
     }
-
     .button-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 10px;
-      margin-bottom: 15px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 15px;
     }
     button {
-      padding: 10px 5px;
+      padding: 12px;
       border: none;
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
       color: white;
-      font-size: 0.85em;
+      font-size: 0.9em;
       transition: 0.2s;
       font-family: inherit;
     }
-    .btn-ask { background-color: #0284c7; }
+    .btn-ask { background-color: #059669; }
     .btn-translate { background-color: #2563eb; }
-    .btn-voice { background-color: #d97706; }
-    .btn-music { background-color: #9333ea; }
-    .btn-play { background-color: #16a34a; }
-    .btn-stop { background-color: #dc2626; }
-    .btn-clear { background-color: #475569; grid-column: span 3; }
-
+    .btn-clear { background-color: #475569; grid-column: span 2; }
     button:active { transform: scale(0.96); }
-
     #statusBox {
       display: none;
       background: #334155;
@@ -121,507 +82,134 @@
       border-radius: 8px;
       text-align: center;
       font-size: 0.85em;
-      margin-bottom: 10px;
-    }
-    .history-box {
-      margin-top: 15px;
-      border-top: 1px solid #334155;
-      padding-top: 10px;
-    }
-    .history-item {
-      background: #0f172a;
-      padding: 6px 10px;
-      border-radius: 6px;
-      margin-top: 5px;
-      font-size: 0.8em;
-    }
-
-    .welcome-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(15, 23, 42, 0.95);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    .modal-content {
-      background: #1e293b;
-      padding: 25px;
-      border-radius: 16px;
-      text-align: center;
-      max-width: 350px;
-      width: 85%;
-      border: 1px solid #38bdf8;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
-    }
-    .modal-content h3 {
-      color: #38bdf8;
-      margin-top: 0;
-    }
-    .modal-content p {
-      color: #cbd5e1;
-      font-size: 0.9em;
-      line-height: 1.5;
-    }
-    .btn-enter {
-      background: linear-gradient(135deg, #0284c7, #9333ea);
-      color: white;
-      padding: 10px 20px;
-      font-size: 0.95em;
-      border-radius: 25px;
       margin-top: 10px;
-      width: 100%;
     }
   </style>
 </head>
 <body>
 
-<audio id="bgMusic" preload="auto">
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-</audio>
-
-<div id="welcomeModal" class="welcome-modal">
-  <div class="modal-content">
-    <h3>សូមស្វាគមន៍! 👋</h3>
-    <p>សូមស្វាគមន៍មកកាន់គេហទំព័ររបស់<br><strong style="color: #38bdf8; font-size: 1.15em;">លោក ឃួន ថាវ៉ាន់</strong></p>
-    <p style="font-size: 0.8em; color: #94a3b8;">ប្រព័ន្ធ AI Assistant, បកប្រែ & កម្មវិធីអានអត្ថបទ</p>
-    <button class="btn-enter" onclick="startApp()">🚀 ចូលប្រើប្រាស់កម្មវិធី</button>
-  </div>
-</div>
-
 <div class="container">
-  <h2>🤖 AI Voice & Translator</h2>
+  <h2>⚡ Groq AI Assistant</h2>
 
-  <div class="lang-container">
-    <div class="lang-box">
-      <label for="srcLangSelect">🗣️ ភាសាអ្នកនិយាយ/វាយ៖</label>
-      <select id="srcLangSelect">
-        <option value="km-KH">🇰🇭 ភាសាខ្មែរ (Khmer)</option>
-        <option value="en-US">🇺🇸 English (US)</option>
-        <option value="fr-FR">🇫🇷 Français (French)</option>
-        <option value="zh-CN">🇨🇳 中文 (Chinese)</option>
-        <option value="ja-JP">🇯🇵 日本語 (Japanese)</option>
-        <option value="ko-KR">🇰🇷 한국어 (Korean)</option>
-        <option value="th-TH">🇹🇭 ភាសាថៃ (Thai)</option>
-        <option value="vi-VN">🇻🇳 Tiếng Việt (Vietnamese)</option>
-        <option value="lo-LA">🇱🇦 ភាសាឡាវ (Lao)</option>
-        <option value="de-DE">🇩🇪 Deutsch (German)</option>
-        <option value="es-ES">🇪🇸 Español (Spanish)</option>
-      </select>
-    </div>
+  <div class="box-label">✏️ សំណួរ ឬអត្ថបទរបស់អ្នក៖</div>
+  <textarea id="inputText" placeholder="សរសេរសំណួរជាភាសាខ្មែរ ឬភាសាដទៃនៅទីនេះ..."></textarea>
 
-    <div class="lang-box">
-      <label for="targetLangSelect">🌐 ភាសាចង់បកប្រែទៅ៖</label>
-      <select id="targetLangSelect">
-        <option value="en-US">🇺🇸 English (US)</option>
-        <option value="km-KH">🇰🇭 ភាសាខ្មែរ (Khmer)</option>
-        <option value="fr-FR">🇫🇷 Français (French)</option>
-        <option value="zh-CN">🇨🇳 中文 (Chinese)</option>
-        <option value="ja-JP">🇯🇵 日本語 (Japanese)</option>
-        <option value="ko-KR">🇰🇷 한국어 (Korean)</option>
-        <option value="th-TH">🇹🇭 ភាសាថៃ (Thai)</option>
-        <option value="vi-VN">🇻🇳 Tiếng Việt (Vietnamese)</option>
-        <option value="lo-LA">🇱🇦 ភាសាឡាវ (Lao)</option>
-        <option value="de-DE">🇩🇪 Deutsch (German)</option>
-        <option value="es-ES">🇪🇸 Español (Spanish)</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="box-label">
-    <span>✏️ អត្ថបទ ឬ សំឡេងរបស់អ្នក៖</span>
-  </div>
-  <textarea id="inputText" placeholder="វាយអក្សរ ឬចុចប៊ូតុង 🎤 និយាយ..."></textarea>
-
-  <div class="box-label">
-    <span>🤖 ចម្លើយ AI / លទ្ធផលបកប្រែ៖</span>
-  </div>
-  <textarea id="outputText" readonly placeholder="លទ្ធផលឆ្លើយតប ឬបកប្រែនឹងបង្ហាញនៅទីនេះ..."></textarea>
+  <div class="box-label">🤖 ចម្លើយពី Groq AI៖</div>
+  <textarea id="outputText" readonly placeholder="លទ្ធផលនឹងបង្ហាញយ៉ាងលឿននៅទីនេះ..."></textarea>
 
   <div id="statusBox">
-    <span id="statusText">...</span>
+    <span id="statusText">Groq កំពុងដំណើរការ...</span>
   </div>
 
   <div class="button-grid">
-    <button class="btn-ask" onclick="askAI()">✨ សួរ AI</button>
-    <button class="btn-translate" onclick="translateText()">🌐 បកប្រែ</button>
-    <button class="btn-voice" onclick="startVoiceInput()">🎤 និយាយ</button>
-    <button class="btn-music" onclick="generateSunoMusic()">🎵 តែងចម្រៀង</button>
-    <button class="btn-play" onclick="playAudio()">▶️ ចាក់សំឡេង</button>
-    <button class="btn-stop" onclick="stopAudio()">⏹️ បញ្ឈប់</button>
-    <button class="btn-clear" onclick="clearAll()">🗑️ លុបទាំងអស់</button>
-  </div>
-
-  <div class="history-box">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <span style="font-size:0.85em;">📜 ប្រវត្តិបទចម្រៀង MP3</span>
-      <button onclick="clearHistory()" style="background:none; border:none; color:#ef4444; padding:0; cursor:pointer; font-size:0.8em;">🗑️ លុបប្រវត្តិ</button>
-    </div>
-    <div id="historyList"></div>
+    <button class="btn-ask" onclick="askGroqAI()">🚀 សួរ Groq AI</button>
+    <button class="btn-translate" onclick="translateGroq()">🌐 បកប្រែភាសា</button>
+    <button class="btn-clear" onclick="clearAll()">🗑️ លុបចោល</button>
   </div>
 </div>
 
 <script>
-// Key ត្រូវ Encrypt ជា Base64 ដើម្បីការពារ Groq Bot
-const encodedKey = "Z3NrX0kxYkh6bjVTaDdOQ0NmOXNJME9IV0dkeWIzRll0VXQ3b3VRaEtmeXRObUFRb3hyb1d1dHY="; 
+// 🔑 ដាក់ Groq API Key របស់អ្នកនៅទីនេះ (ទម្រង់ចាប់ផ្តើមដោយ gsk_...)
+const GROQ_API_KEY = "gsk_សូមដាក់GroqApiKeyរបស់អ្នកនៅទីនេះ";
 
-function getGroqApiKey() {
-  return atob(encodedKey).trim();
-}
-
-const bgMusic = document.getElementById('bgMusic');
-
-function startApp() {
-  document.getElementById('welcomeModal').style.display = 'none';
-  if (bgMusic) {
-    bgMusic.volume = 0.2;
-    bgMusic.play().catch(err => console.log("Audio play blocked"));
-
-    setTimeout(() => {
-      let fadeInterval = setInterval(() => {
-        if (bgMusic.volume > 0.02) {
-          bgMusic.volume -= 0.02;
-        } else {
-          bgMusic.pause();
-          bgMusic.currentTime = 0;
-          clearInterval(fadeInterval);
-        }
-      }, 200);
-    }, 8000);
-  }
-}
-
-function stopBgMusicImmediately() {
-  if (bgMusic) {
-    bgMusic.pause();
-    bgMusic.currentTime = 0;
-  }
-}
-
-let recognition = null;
-let isListening = false;
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadSongHistory();
-  initSpeechRecognition();
-});
-
-function initSpeechRecognition() {
-  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    recognition.onstart = function() { 
-      isListening = true; 
-      stopBgMusicImmediately();
-      showStatus("🎤 កំពុងស្ដាប់សំឡេងរបស់អ្នក..."); 
-    };
-
-    recognition.onresult = function(event) {
-      const transcript = event.results[0][0].transcript;
-      document.getElementById('inputText').value = transcript;
-      hideStatus();
-      askAI(); 
-    };
-
-    recognition.onerror = function(event) { 
-      hideStatus(); 
-      console.error("Speech Error:", event.error);
-      isListening = false; 
-    };
-
-    recognition.onend = function() { 
-      isListening = false; 
-    };
-  }
-}
-
-function startVoiceInput() {
-  if (!recognition) { 
-    alert("Browser របស់អ្នកមិនគាំទ្រមុខងារចាប់សំឡេងទេ!"); 
-    return; 
-  }
-  if (isListening) { 
-    recognition.stop(); 
-    return; 
-  }
-  recognition.lang = document.getElementById('srcLangSelect').value;
-  stopAudio();
-  recognition.start();
-}
-
-// --- មុខងារសួរ AI (កែប្រែឱ្យឆ្លើយតបធម្មជាតិ ដូចមនុស្ស) ---
-async function askAI() {
-  const apiKey = getGroqApiKey();
+async function askGroqAI() {
   const promptText = document.getElementById('inputText').value.trim();
-  const srcLang = document.getElementById('srcLangSelect').value;
-
-  if (!promptText) { 
-    alert("សូមបញ្ចូលសំណួរក្នុងប្រអប់ខាងលើជាមុនសិន!"); 
-    return; 
-  }
-
-  stopAudio();
-  showStatus("🤖 AI កំពុងគិត និងត្រៀមឆ្លើយតប...");
-
-  try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + apiKey
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        temperature: 0.6,
-        messages: [
-          { 
-            role: "system", 
-            content: `You are an intelligent, warm, and natural conversational AI assistant speaking fluent Khmer. 
-                     Respond directly, politely, and naturally as a human friend would. 
-                     Avoid robotic phrasing or word-for-word translation tone. 
-                     Keep answers clean, beautifully formatted in Khmer, and to the point. Language target code: ${srcLang}.` 
-          }, 
-          { role: "user", content: promptText }
-        ]
-      })
-    });
-
-    const data = await response.json();
-    if (data.choices && data.choices[0].message.content) {
-      const aiReply = data.choices[0].message.content.trim();
-      document.getElementById('outputText').value = aiReply;
-      hideStatus();
-      speakText(aiReply, srcLang);
-
-    } else if (data.error) {
-      hideStatus();
-      alert("Groq Error: " + data.error.message);
-    }
-  } catch (error) { 
-    hideStatus(); 
-    alert("មានបញ្ហាភ្ជាប់ទៅ AI៖ " + error.message); 
-  }
-}
-
-// --- មុខងារបកប្រែភាសា ---
-async function translateText() {
-  const apiKey = getGroqApiKey();
-  const promptText = document.getElementById('inputText').value.trim();
-  const targetLang = document.getElementById('targetLangSelect').value;
-
-  if (!promptText) { 
-    alert("សូមបញ្ចូលអត្ថបទក្នុងប្រអប់ខាងលើជាមុនសិន!"); 
-    return; 
-  }
-
-  stopAudio();
-  showStatus("🌐 AI កំពុងបកប្រែភាសា...");
-
-  try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + apiKey
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        temperature: 0.3,
-        messages: [
-          { 
-            role: "system", 
-            content: `You are an expert human translator. Translate the text accurately and naturally into language code: ${targetLang}. Preserve natural context and fluency. Output ONLY the translated result without intro.` 
-          }, 
-          { role: "user", content: promptText }
-        ]
-      })
-    });
-
-    const data = await response.json();
-    if (data.choices && data.choices[0].message.content) {
-      const translatedText = data.choices[0].message.content.trim();
-      document.getElementById('outputText').value = translatedText;
-      hideStatus();
-      speakText(translatedText, targetLang);
-
-    } else if (data.error) {
-      hideStatus();
-      alert("Groq Error: " + data.error.message);
-    }
-  } catch (error) { 
-    hideStatus(); 
-    alert("មានបញ្ហាក្នុងការបកប្រែ៖ " + error.message); 
-  }
-}
-
-// --- មុខងារចាក់សំឡេង (កែសម្រួលឱ្យសំឡេងខ្មែរច្បាស់ និងទន់ល្មើយ) ---
-function speakText(text, langSelect) {
-  stopAudio();
-  stopBgMusicImmediately();
-
-  const langCode = langSelect.split('-')[0];
-
-  // 1. សាកល្បងប្រើ ResponsiveVoice ជាមួយការតម្រូវ Rate/Pitch ឱ្យពិរោះ
-  if (typeof responsiveVoice !== 'undefined' && responsiveVoice.voiceSupport()) {
-    let voiceName = "Khmer Female"; 
-    const voiceMap = {
-      'en': 'US English Female',
-      'fr': 'French Female',
-      'zh': 'Chinese Female',
-      'ja': 'Japanese Female',
-      'ko': 'Korean Female',
-      'th': 'Thai Female',
-      'vi': 'Vietnamese Female',
-      'de': 'Deutsch Female',
-      'es': 'Spanish Female'
-    };
-
-    if (voiceMap[langCode]) {
-      voiceName = voiceMap[langCode];
-    }
-
-    responsiveVoice.speak(text, voiceName, { 
-      rate: 0.88,  // បន្ថយល្បឿនបន្តិចដើម្បីឱ្យអានខ្មែរច្បាស់
-      pitch: 1.0, 
-      volume: 1.0 
-    });
+  if (!promptText) {
+    alert("សូមបញ្ចូលសំណួរជាមុនសិន!");
     return;
   }
 
-  // 2. ប្រើ Web Speech API ប្រសិនបើគ្មាន ResponsiveVoice
-  if ('speechSynthesis' in window) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = langSelect;
-    utterance.rate = 0.88; // អានយឺតល្មម ច្បាស់ៗ
-    utterance.pitch = 1.0;
-    window.speechSynthesis.speak(utterance);
-  }
-}
-
-async function generateSunoMusic() {
-  const apiKey = getGroqApiKey();
-  const promptText = document.getElementById('inputText').value.trim();
-  const lang = document.getElementById('srcLangSelect').value;
-
-  if (!promptText) { 
-    alert("សូមបញ្ចូលប្រធានបទចម្រៀងក្នុងប្រអប់ខាងលើ!"); 
-    return; 
-  }
-
-  stopAudio();
-  showStatus("🎵 AI កំពុងតែងបទចម្រៀង...");
+  showStatus("⚡ Groq កំពុងឆ្លើយតបយ៉ាងលឿន...");
 
   try {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + apiKey
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${GROQ_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile", // ម៉ូឌែលជំនាន់ចុងក្រោយដ៏មានឥទ្ធិពល និងលឿនបំផុតរបស់ Groq
+        messages: [
+          {
+            role: "system",
+            content: "អ្នកគឺជាជំនួយការ AI ដ៏ឈ្លាសវៃ។ សូមឆ្លើយតបជាភាសាខ្មែរឱ្យបានច្បាស់លាស់ ធម្មជាតិ និងស្រួលយល់។"
+          },
+          {
+            role: "user",
+            content: promptText
+          }
+        ],
+        temperature: 0.7
+      })
+    });
+
+    const data = await response.json();
+    if (data.choices && data.choices.length > 0) {
+      const reply = data.choices[0].message.content.trim();
+      document.getElementById('outputText').value = reply;
+    } else {
+      alert("មានបញ្ហាពីប្រព័ន្ធ Groq: " + (data.error?.message || "មិនអាចទាញយកទិន្នន័យបានទេ"));
+    }
+  } catch (error) {
+    alert("បញ្ហាการតភ្ជាប់៖ " + error.message);
+  } finally {
+    hideStatus();
+  }
+}
+
+async function translateGroq() {
+  const promptText = document.getElementById('inputText').value.trim();
+  if (!promptText) {
+    alert("សូមបញ្ចូលអត្ថបទដើម្បីបកប្រែ!");
+    return;
+  }
+
+  showStatus("🌐 Groq កំពុងបកប្រែ...");
+
+  try {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${GROQ_API_KEY}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
-        temperature: 0.7,
         messages: [
-          { role: "system", content: `Write poetic and catchy song lyrics in language code: ${lang}. Output ONLY lyrics.` }, 
-          { role: "user", content: promptText }
+          {
+            role: "user",
+            content: `Translate the following text accurately into Khmer (if it's in another language) or into English (if it's in Khmer). Return ONLY the translated text:\n\n${promptText}`
+          }
         ]
       })
     });
 
     const data = await response.json();
-    if (data.choices && data.choices[0].message.content) {
-      const lyrics = data.choices[0].message.content.trim();
-      document.getElementById('outputText').value = lyrics;
-      hideStatus();
-      speakText(lyrics, lang);
-      saveToHistory(promptText);
-
-    } else if (data.error) {
-      hideStatus();
-      alert("Groq Error: " + data.error.message);
+    if (data.choices && data.choices.length > 0) {
+      document.getElementById('outputText').value = data.choices[0].message.content.trim();
     }
-  } catch (error) { 
-    hideStatus(); 
-    alert("មានបញ្ហា៖ " + error.message); 
+  } catch (error) {
+    alert("មានបញ្ហាក្នុងការបកប្រែ៖ " + error.message);
+  } finally {
+    hideStatus();
   }
 }
 
-function saveToHistory(title) {
-  let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
-  history.unshift({ title: title || "បទចម្រៀង AI", date: new Date().toLocaleTimeString() });
-  if (history.length > 15) history.pop();
-  localStorage.setItem('suno_song_history', JSON.stringify(history));
-  loadSongHistory();
+function clearAll() {
+  document.getElementById('inputText').value = '';
+  document.getElementById('outputText').value = '';
 }
 
-function loadSongHistory() {
-  const historyList = document.getElementById('historyList');
-  if (!historyList) return;
-  let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
-  if (history.length === 0) { 
-    historyList.innerHTML = '<p style="font-size: 0.8em; color: #888;">មិនទាន់មានប្រវត្តិ</p>'; 
-    return; 
-  }
-  historyList.innerHTML = '';
-  history.forEach((item) => {
-    const div = document.createElement('div');
-    div.className = 'history-item';
-    div.innerHTML = `<span>🎵 ${item.title}</span>`;
-    historyList.appendChild(div);
-  });
+function showStatus(msg) {
+  const statusBox = document.getElementById('statusBox');
+  statusBox.style.display = 'block';
+  document.getElementById('statusText').innerText = msg;
 }
 
-function clearHistory() { 
-  localStorage.removeItem('suno_song_history'); 
-  loadSongHistory(); 
-}
-
-function playAudio() {
-  const text = document.getElementById('outputText').value.trim() || document.getElementById('inputText').value.trim();
-  const lang = document.getElementById('targetLangSelect').value;
-  if (!text) {
-    alert("មិនមានអត្ថបទដើម្បីចាក់សំឡេងទេ!");
-    return;
-  }
-  speakText(text, lang);
-}
-
-function stopAudio() { 
-  stopBgMusicImmediately();
-  if (typeof responsiveVoice !== 'undefined') {
-    responsiveVoice.cancel();
-  }
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-  }
-}
-
-function clearAll() { 
-  stopAudio(); 
-  document.getElementById('inputText').value = ''; 
-  document.getElementById('outputText').value = ''; 
-}
-
-function showStatus(msg) { 
-  const statusBox = document.getElementById('statusBox'); 
-  if (statusBox) { 
-    statusBox.style.display = 'block'; 
-    document.getElementById('statusText').innerText = msg; 
-  } 
-}
-
-function hideStatus() { 
-  const statusBox = document.getElementById('statusBox'); 
-  if (statusBox) statusBox.style.display = 'none'; 
+function hideStatus() {
+  document.getElementById('statusBox').style.display = 'none';
 }
 </script>
 </body>
-  </html>
-          
+</html>
