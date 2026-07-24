@@ -26,85 +26,6 @@
       overflow-x: hidden;
     }
 
-    /* 🌟 ផ្ទាំងស្វាគមន៍ Splash Screen */
-    #splashScreen {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(circle at center, #24243e 0%, #0f0c29 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      text-align: center;
-      padding: 25px;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
-    }
-
-    .splash-card {
-      background: rgba(25, 25, 40, 0.85);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 40px 30px;
-      border-radius: 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(124, 58, 237, 0.3);
-      max-width: 420px;
-      width: 100%;
-      animation: floatCard 4s ease-in-out infinite;
-    }
-
-    @keyframes floatCard {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .splash-icon {
-      font-size: 55px;
-      margin-bottom: 15px;
-      animation: pulseGlow 2s infinite;
-    }
-
-    @keyframes pulseGlow {
-      0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0,210,255,0.5)); }
-      50% { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(0,210,255,0.8)); }
-      100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0,210,255,0.5)); }
-    }
-
-    #splashScreen h1 {
-      font-size: 16px;
-      color: #cbd5e1;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-
-    #splashScreen h2 {
-      font-size: 22px;
-      background: linear-gradient(90deg, #00d2ff, #7c3aed, #db2777);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 25px;
-      font-weight: 700;
-    }
-
-    .btn-enter {
-      background: linear-gradient(135deg, #7c3aed, #db2777);
-      color: #fff;
-      border: none;
-      padding: 14px 28px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 30px;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(219,39,119,0.4);
-      transition: all 0.3s ease;
-      width: 100%;
-      letter-spacing: 0.5px;
-    }
-
-    .btn-enter:active {
-      transform: scale(0.95);
-    }
-
     /* 📱 កម្មវិធីหลัก Container */
     .container {
       width: 100%;
@@ -180,7 +101,7 @@
     .btn-live { background: #db2777; }
     .btn-song { background: #8b5cf6; }
     .btn-image { background: #f97316; }
-    .btn-video { background: #6366f1; } /* 🎬 ប៊ូតុងបង្កើតវីដេអូថ្មី */
+    .btn-video { background: #6366f1; }
     .btn-play { background: #16a34a; }
     .btn-stop { background: #dc2626; }
     
@@ -261,16 +182,6 @@
   </style>
 </head>
 <body>
-
-<!-- 🌟 ផ្ទាំងស្វាគមន៍ (Splash Screen) -->
-<div id="splashScreen">
-  <div class="splash-card">
-    <div class="splash-icon">🤖✨</div>
-    <h1>សូមស្វាគមន៍មកកាន់វេបសាយរបស់</h1>
-    <h2>លោក ឃួន ថាវ៉ាន់</h2>
-    <button class="btn-enter" onclick="enterWebsite()">🚀 ចូលទៅកាន់វេបសាយ</button>
-  </div>
-</div>
 
 <div class="container">
   <div class="lang-selects">
@@ -357,12 +268,6 @@
   let isAiSpeaking = false; 
   let mediaStream = null;
   let base64Img = null;
-
-  function enterWebsite() {
-    const splash = document.getElementById('splashScreen');
-    splash.style.opacity = '0';
-    splash.style.visibility = 'hidden';
-  }
 
   window.addEventListener('DOMContentLoaded', () => {
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
@@ -591,7 +496,6 @@
         engPrompt = transData.choices[0].message.content.trim();
       }
 
-      // ប្រើប្រាស់ Pollinations Video / Animation Generation Endpoint
       const videoUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(engPrompt + " cinematic movement, high quality")}?width=512&height=512&model=flux&nologo=true`;
       
       const vidElement = document.getElementById('generatedVideoResult');
@@ -627,4 +531,95 @@
         body: JSON.stringify({
           model: "llama-3.3-70b-versatile",
           messages: [
-            { ro
+            { role: "system", content: `Translate accurately into language code: ${target}. Return only translation.` },
+            { role: "user", content: text }
+          ]
+        })
+      });
+      const data = await res.json();
+      if (data.choices) {
+        const translated = data.choices[0].message.content.trim();
+        document.getElementById('outputText').value = translated;
+        hideStatus();
+        speak(translated, target);
+      }
+    } catch(e) { hideStatus(); alert("Error: " + e.message); }
+  }
+
+  function makeSong() {
+    document.getElementById('inputText').value = "សូមแต่งบทเพลงสั้นๆ เกี่ยวกับความสุขและความหวัง";
+    askAI();
+  }
+
+  function speak(text, lang, onEndCallback) {
+    if (!('speechSynthesis' in window)) {
+      if (onEndCallback) onEndCallback();
+      return;
+    }
+    window.speechSynthesis.cancel();
+    
+    if (!text) {
+      if (onEndCallback) onEndCallback();
+      return;
+    }
+
+    const langMap = { km: 'km-KH', en: 'en-US', fr: 'fr-FR', zh: 'zh-CN', th: 'th-TH', vi: 'vi-VN', ja: 'ja-JP', ko: 'ko-KR', es: 'es-ES', ar: 'ar-SA' };
+    const cleanText = text.replace(/[*#_`]/g, '');
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = langMap[lang] || 'en-US';
+    utterance.rate = 1.0;
+    
+    utterance.onstart = () => {
+      isAiSpeaking = true; 
+      if (isListening && recognition) { recognition.stop(); }
+    };
+
+    utterance.onend = () => {
+      isAiSpeaking = false; 
+      if (onEndCallback) onEndCallback();
+    };
+    
+    utterance.onerror = () => {
+      isAiSpeaking = false;
+      if (onEndCallback) onEndCallback();
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function playAudio() {
+    const text = document.getElementById('outputText').value;
+    const lang = document.getElementById('targetLang').value;
+    speak(text, lang);
+  }
+
+  function stopAudio() {
+    isAiSpeaking = false;
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  }
+
+  function clearAll() {
+    stopAudio();
+    isLive = false;
+    document.getElementById('liveBtn').style.background = '#db2777';
+    document.getElementById('inputText').value = '';
+    document.getElementById('outputText').value = '';
+    document.getElementById('imagePreview').style.display = 'none';
+    document.getElementById('generatedImageResult').style.display = 'none';
+    document.getElementById('generatedVideoResult').style.display = 'none';
+    base64Img = null;
+    hideStatus();
+  }
+
+  function showStatus(msg) {
+    const s = document.getElementById('status');
+    s.style.display = 'block';
+    s.innerText = msg;
+  }
+  function hideStatus() { document.getElementById('status').style.display = 'none'; }
+</script>
+</body>
+  </html>
+        
