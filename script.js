@@ -2,19 +2,19 @@
 function getGroqApiKey() {
   let key = localStorage.getItem('GROQ_API_KEY');
   if (!key) {
-    key = prompt("សូមបញ្ចូល Groq API Key របស់អ្នក (ផ្តើមដោយ gsk_):");
+    key = prompt("សូមបញ្ចូល Groq API Key របស់អ្នក (ឧទាហរណ៍ gsk_...):");
     if (key) {
-      key = key.trim();
+      // លុបតួអក្សរមិនមែនអង់គ្លេសចេញទាំងអស់
+      key = key.replace(/[^\x00-\x7F]/g, "").trim();
       localStorage.setItem('GROQ_API_KEY', key);
     }
   }
   return key;
 }
 
-// មុខងារដូរ Key បើចង់ប្តូរថ្មី
 function resetApiKey() {
   localStorage.removeItem('GROQ_API_KEY');
-  alert("បានលុប API Key ចាស់រួចរាល់! ពេលសួរ AI វានឹងសួរ Key ថ្មី។");
+  alert("បានលុប API Key ចាស់! ពេលសួរ AI វានឹងសួរ Key ថ្មី។");
 }
 
 let recognition = null;
@@ -73,9 +73,9 @@ function startVoiceInput() {
   recognition.start();
 }
 
-// --- ២. មុខងារសួរ AI ---
+// --- ២. មុខងារសួរ AI (សុវត្ថិភាពខ្ពស់ គ្មាន Header Error) ---
 async function askAI() {
-  const apiKey = getGroqApiKey();
+  let apiKey = getGroqApiKey();
   if (!apiKey) {
     alert("សូមបញ្ចូល API Key ដើម្បីប្រើប្រាស់!");
     return;
@@ -91,13 +91,16 @@ async function askAI() {
   stopAudio();
   showStatus("🤖 AI កំពុងគិត និងត្រៀមឆ្លើយតប...");
   
+  // រៀបចំ Header ឱ្យស្អាតគ្មានអក្សរចម្លែក
+  const cleanKey = apiKey.replace(/[^\x00-\x7F]/g, "").trim();
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + cleanKey);
+
   try {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json', 
-        'Authorization': 'Bearer ' + apiKey.replace(/[^\x00-\x7F]/g, "").trim()
-      },
+      headers: myHeaders,
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         temperature: 0.5,
@@ -118,7 +121,7 @@ async function askAI() {
 
     } else if (data.error) {
       hideStatus();
-      if (data.error.message.includes("API key")) {
+      if (data.error.message && data.error.message.includes("API key")) {
         alert("API Key មិនត្រឹមត្រូវ! សូមបញ្ចូល Key ថ្មី។");
         resetApiKey();
       } else {
@@ -167,7 +170,7 @@ function speakText(text, langSelect) {
 
 // --- ៤. មុខងារបង្កើតបទចម្រៀង ---
 async function generateSunoMusic() {
-  const apiKey = getGroqApiKey();
+  let apiKey = getGroqApiKey();
   if (!apiKey) {
     alert("សូមបញ្ចូល API Key ដើម្បីប្រើប្រាស់!");
     return;
@@ -183,13 +186,15 @@ async function generateSunoMusic() {
   stopAudio();
   showStatus("🎵 AI កំពុងតែងបទចម្រៀង...");
   
+  const cleanKey = apiKey.replace(/[^\x00-\x7F]/g, "").trim();
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + cleanKey);
+
   try {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json', 
-        'Authorization': 'Bearer ' + apiKey.replace(/[^\x00-\x7F]/g, "").trim()
-      },
+      headers: myHeaders,
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         temperature: 0.7,
@@ -288,4 +293,5 @@ function showStatus(msg) {
 function hideStatus() { 
   const statusBox = document.getElementById('statusBox'); 
   if (statusBox) statusBox.style.display = 'none'; 
-}
+                              }
+  
