@@ -27,7 +27,14 @@
     h2 {
       text-align: center;
       color: #00d2ff;
+      margin-bottom: 5px;
+    }
+    .welcome-text {
+      text-align: center;
+      color: #ffeb3b;
+      font-size: 15px;
       margin-bottom: 20px;
+      font-weight: bold;
     }
     .lang-selects {
       display: flex;
@@ -88,7 +95,29 @@
     .btn-stop { background: #dc3545; }
     .btn-clear { background: #6c757d; grid-column: span 3; }
 
-    /* 📷 Camera Modal Style */
+    /* 🎵 ផ្នែកបញ្ជាភ្លេងផ្ទៃខាងក្រោយ */
+    .music-bar {
+      background: #1a1a2e;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #444;
+    }
+    .music-bar span {
+      font-size: 13px;
+      color: #00d2ff;
+    }
+    .btn-bg-music {
+      background: #6f42c1;
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: 6px;
+    }
+
+    /* 📷 Camera Modal */
     .cam-modal {
       display: none;
       position: fixed;
@@ -144,6 +173,14 @@
 
 <div class="container">
   <h2>🤖 Groq AI Assistant</h2>
+  <!-- 🌟 ពាក្យស្វាគមន៍ឈ្មោះបង -->
+  <div id="welcomeMessage" class="welcome-text">👋 សូមស្វាគមន៍មកកាន់ប្រព័ន្ធ AI របស់អ្នកបង!</div>
+
+  <!-- 🎵 ប៊ូតុងបញ្ជាភ្លេងផ្ទៃខាងក្រោយ -->
+  <div class="music-bar">
+    <span>🎶 ភ្លេងផ្ទៃខាងក្រោយ (Background Music)</span>
+    <button class="btn-bg-music" id="bgMusicBtn" onclick="toggleBgMusic()">▶️ ចាក់ភ្លេង</button>
+  </div>
 
   <div class="lang-selects">
     <div class="lang-group">
@@ -206,7 +243,34 @@
   let mediaStream = null;
   let base64Img = null;
 
+  // 🎵 បង្កើត Background Music (ប្រើប្រាស់ Audio ដោយស្វ័យប្រវត្តិពី Lo-Fi Free Stream)
+  let bgMusic = new Audio("https://commondatastorage.googleapis.com/codesign-bucket/chill-lofi.mp3"); // ឬតំណភ្ជាប់ភ្លេងផ្សេងទៀត
+  bgMusic.loop = true;
+  let isMusicPlaying = false;
+
+  function toggleBgMusic() {
+    const btn = document.getElementById('bgMusicBtn');
+    if (isMusicPlaying) {
+      bgMusic.pause();
+      isMusicPlaying = false;
+      btn.innerText = "▶️ ចាក់ភ្លេង";
+    } else {
+      bgMusic.play().then(() => {
+        isMusicPlaying = true;
+        btn.innerText = "⏸️ ឈប់ភ្លេង";
+      }).catch(e => {
+        alert("មិនអាចចាក់ភ្លេងបានទេ: " + e.message);
+      });
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    // 🌟 បង្ហាញការស្វាគមន៍ផ្ទាល់ខ្លួន
+    const userName = prompt("សូមបញ្ចូលឈ្មោះរបស់អ្នកបង៖", "ท่าน");
+    if (userName) {
+      document.getElementById('welcomeMessage').innerText = `👋 សូមស្វាគមន៍វត្តមាន លោក/លោកស្រី ${userName} មកកាន់ប្រព័ន្ធ AI!`;
+    }
+
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRec();
@@ -393,4 +457,4 @@
 </script>
 </body>
       </html>
-  
+      
