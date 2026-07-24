@@ -47,9 +47,47 @@
       margin-bottom: 15px;
     }
 
+    /* ប្រអប់សម្រាប់ដាក់ API Key */
+    .api-box {
+      background: rgba(26, 26, 46, 0.8);
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .api-box label {
+      font-size: 12px;
+      color: #00d2ff;
+      display: block;
+      margin-bottom: 5px;
+    }
+    .api-row {
+      display: flex;
+      gap: 8px;
+    }
+    .api-row input {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(15, 12, 41, 0.9);
+      color: #fff;
+      font-size: 13px;
+    }
+    .api-row button {
+      padding: 8px 12px;
+      background: #7c3aed;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
     .upload-box {
       border: 2px dashed rgba(0, 210, 255, 0.4);
-      padding: 18px;
+      padding: 15px;
       text-align: center;
       border-radius: 12px;
       background: rgba(26, 26, 46, 0.6);
@@ -71,7 +109,7 @@
 
     textarea {
       width: 100%;
-      height: 200px;
+      height: 180px;
       padding: 12px;
       border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.15);
@@ -89,7 +127,7 @@
       gap: 10px;
       margin-bottom: 8px;
     }
-    button {
+    button.action-btn {
       flex: 1;
       padding: 12px;
       border: none;
@@ -101,7 +139,7 @@
       transition: 0.2s;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-    button:active {
+    button.action-btn:active {
       transform: scale(0.97);
     }
     .btn-ai { background: #0284c7; }
@@ -123,6 +161,15 @@
 <div class="container">
   <h2>📄 កែសម្រួល និងរៀបចំសំណួរ-ចម្លើយ</h2>
 
+  <!-- ប្រអប់បញ្ចូល API Key -->
+  <div class="api-box">
+    <label for="apiKeyInput">🔑 បញ្ចូល Groq API Key របស់អ្នកទីនេះ៖</label>
+    <div class="api-row">
+      <input type="password" id="apiKeyInput" placeholder="gsk_...">
+      <button onclick="saveApiKey()">រក្សាទុក</button>
+    </div>
+  </div>
+
   <div class="upload-box" onclick="document.getElementById('fileInput').click()">
     <div class="upload-label">
       📁 <b>ចុចទីនេះដើម្បីជ្រើសរើសហ្វាល់ PDF ឬរូបភាព</b><br>
@@ -136,15 +183,32 @@
   <textarea id="resultText" placeholder="លទ្ធផលអត្ថបទដែលបានរៀបចំរួចនឹងបង្ហាញទីនេះ..."></textarea>
 
   <div class="btn-grid">
-    <button class="btn-ai" onclick="formatWithAI()">✨ តម្រៀបសំណួរដោយ AI</button>
-    <button class="btn-copy" onclick="copyText()">📋 ចម្លងអត្ថបទ</button>
+    <button class="action-btn btn-ai" onclick="formatWithAI()">✨ តម្រៀបសំណួរដោយ AI</button>
+    <button class="action-btn btn-copy" onclick="copyText()">📋 ចម្លងអត្ថបទ</button>
   </div>
-  <button class="btn-clear" onclick="clearAll()">🗑️ សម្អាតទិន្នន័យ</button>
+  <button class="action-btn btn-clear" onclick="clearAll()">🗑️ សម្អាតទិន្នន័យ</button>
 </div>
 
 <script>
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-  const getKey = () => "gsk_x3b3Wzg1BEFnphqvkdAXWGdyb3FYIpRZxFEjRUvVPiPbMYhRGBTdq";
+
+  // ផ្ទុក API Key ដែលធ្លាប់រក្សាទុកក្នុងเครื่อง (LocalStorage) មកដាក់ក្នុងប្រអប់ស្រាប់
+  window.onload = function() {
+    const savedKey = localStorage.getItem('groq_api_key');
+    if (savedKey) {
+      document.getElementById('apiKeyInput').value = savedKey;
+    }
+  };
+
+  function saveApiKey() {
+    const key = document.getElementById('apiKeyInput').value.trim();
+    if (!key.startsWith('gsk_')) {
+      alert('⚠️ API Key មិនត្រឹមត្រូវទេ! (វាត្រូវផ្ដើមដោយ gsk_...)');
+      return;
+    }
+    localStorage.setItem('groq_api_key', key);
+    alert('✅ បានរក្សាទុក API Key ជោគជ័យ!');
+  }
 
   function showStatus(msg) {
     const s = document.getElementById('status');
@@ -178,7 +242,6 @@
 
         document.getElementById('resultText').value = fullText.trim();
         hideStatus();
-        // បញ្ជូនចូល AI ដើម្បីតម្រៀបស្វ័យប្រវត្ត
         formatWithAI();
       } catch (err) {
         hideStatus();
@@ -211,6 +274,12 @@
   }
 
   async function formatWithAI() {
+    const apiKey = localStorage.getItem('groq_api_key') || document.getElementById('apiKeyInput').value.trim();
+    if (!apiKey) {
+      alert("⚠️ សូមបញ្ចូល និងរក្សាទុក Groq API Key ជាមុនសិន!");
+      return;
+    }
+
     const rawText = document.getElementById('resultText').value.trim();
     if (!rawText) {
       alert("គ្មានអត្ថបទសម្រាប់កែសម្រួលទេ!");
@@ -223,7 +292,7 @@
       const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: { 
-          "Authorization": "Bearer " + getKey(), 
+          "Authorization": "Bearer " + apiKey, 
           "Content-Type": "application/json" 
         },
         body: JSON.stringify({
@@ -246,7 +315,7 @@
         const formatted = data.choices[0].message.content.trim();
         document.getElementById('resultText').value = formatted;
       } else {
-        alert("Error: " + (data.error?.message || "មានបញ្ហា API"));
+        alert("Error: " + (data.error?.message || "API Key មិនត្រឹមត្រូវ ឬអស់កូតាប្រើប្រាស់"));
       }
     } catch(e) {
       hideStatus();
@@ -274,5 +343,4 @@
   }
 </script>
 </body>
-  </html>
-  
+</html>
