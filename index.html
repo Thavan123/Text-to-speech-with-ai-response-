@@ -210,31 +210,37 @@
     <div class="lang-group">
       <label>🗣️ ភាសាអ្នកនិយាយ</label>
       <select id="srcLang">
-        <option value="km">🇰🇭 ភាសាខ្មែរ</option>
+        <option value="km">🇰🇭 ភាសាខ្មែរ (Khmer)</option>
         <option value="en">🇺🇸 English</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="zh">🇨🇳 中文</option>
-        <option value="th">🇹🇭 ไทย</option>
-        <option value="vi">🇻🇳 Tiếng Việt</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="ko">🇰🇷 한국어</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ar">🇸🇦 العربية</option>
+        <option value="fr">🇫🇷 Français (French)</option>
+        <option value="zh">🇨🇳 中文 (Chinese)</option>
+        <option value="th">🇹🇭 ไทย (Thai)</option>
+        <option value="vi">🇻🇳 Tiếng Việt (Vietnamese)</option>
+        <option value="ja">🇯🇵 日本語 (Japanese)</option>
+        <option value="ko">🇰🇷 한국어 (Korean)</option>
+        <option value="es">🇪🇸 Español (Spanish)</option>
+        <option value="ar">🇸🇦 العربية (Arabic)</option>
+        <option value="de">🇩🇪 Deutsch (German)</option>
+        <option value="ru">🇷🇺 Русский (Russian)</option>
+        <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
       </select>
     </div>
     <div class="lang-group">
       <label>🌐 ភាសាបកប្រែ</label>
       <select id="targetLang">
         <option value="en">🇺🇸 English</option>
-        <option value="km">🇰🇭 ភាសាខ្មែរ</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="zh">🇨🇳 中文</option>
-        <option value="th">🇹🇭 ไทย</option>
-        <option value="vi">🇻🇳 Tiếng Việt</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="ko">🇰🇷 한국어</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ar">🇸🇦 العربية</option>
+        <option value="km">🇰🇭 ភាសាខ្មែរ (Khmer)</option>
+        <option value="fr">🇫🇷 Français (French)</option>
+        <option value="zh">🇨🇳 中文 (Chinese)</option>
+        <option value="th">🇹🇭 ไทย (Thai)</option>
+        <option value="vi">🇻🇳 Tiếng Việt (Vietnamese)</option>
+        <option value="ja">🇯🇵 日本語 (Japanese)</option>
+        <option value="ko">🇰🇷 한국어 (Korean)</option>
+        <option value="es">🇪🇸 Español (Spanish)</option>
+        <option value="ar">🇸🇦 العربية (Arabic)</option>
+        <option value="de">🇩🇪 Deutsch (German)</option>
+        <option value="ru">🇷🇺 Русский (Russian)</option>
+        <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
       </select>
     </div>
   </div>
@@ -290,8 +296,8 @@
 </div>
 
 <script>
-  const encodedKey = "Z3NrXzJsZmY0TXk5NjlGcUVnMzFiUGdrV0dkeWIzRllEZkt0bXhNelZKcFMyT2JMempqcHFZQzg=";
-  const getKey = () => atob(encodedKey).trim();
+  // API Key ផ្ទាល់ខ្លួនរបស់បង
+  const getKey = () => "gsk_BCWUIBeeZ4PIHC15X5kfWGdyb3FYJlLU0MJfVETHbyT6uWzM4YbML";
 
   let recognition = null;
   let isListening = false;
@@ -338,7 +344,7 @@
       mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
       document.getElementById('video').srcObject = mediaStream;
     } catch(e) {
-      alert("មិនអាចបើកកាមេរ៉ាបានទេ: " + e.message);
+      alert("មិនអាចបើកកាមេរ៉ាได้ទេ: " + e.message);
       closeCam();
     }
   }
@@ -393,7 +399,11 @@
 
   function updateRecognitionLang() {
     if (!recognition) return;
-    const langMap = { km: 'km-KH', en: 'en-US', fr: 'fr-FR', zh: 'zh-CN', th: 'th-TH', vi: 'vi-VN', ja: 'ja-JP', ko: 'ko-KR', es: 'es-ES', ar: 'ar-SA' };
+    const langMap = { 
+      km: 'km-KH', en: 'en-US', fr: 'fr-FR', zh: 'zh-CN', 
+      th: 'th-TH', vi: 'vi-VN', ja: 'ja-JP', ko: 'ko-KR', 
+      es: 'es-ES', ar: 'ar-SA', de: 'de-DE', ru: 'ru-RU', hi: 'hi-IN' 
+    };
     const val = document.getElementById('srcLang').value;
     recognition.lang = langMap[val] || 'en-US';
   }
@@ -598,24 +608,4 @@
         hideStatus();
         speak(translated, target);
       }
-    } catch(e) { hideStatus(); alert("Error: " + e.message); }
-  }
-
-  function makeSong() {
-    document.getElementById('inputText').value = "សូមแต่งบทเพลงสั้นๆ เกี่ยวกับความสุขและความหวัง";
-    askAI();
-  }
-
-  function speak(text, lang, onEndCallback) {
-    if (!('speechSynthesis' in window)) {
-      if (onEndCallback) onEndCallback();
-      return;
-    }
-    window.speechSynthesis.cancel();
-    
-    if (!text) {
-      if (onEndCallback) onEndCallback();
-      return;
-    }
-
-    const langMap = { km: 'km-KH', en: 'en-US', fr: 'fr-FR', zh: 'zh-CN', th: 'th-TH', vi: 'vi-VN', ja: 'ja-JP
+    } catch(e) { hideStatus(); alert("Erro
