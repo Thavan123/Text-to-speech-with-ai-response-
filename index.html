@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>កម្មវិធីអានអត្ថបទ & AI Assistant v4</title>
+  <title>កម្មវិធីអានអត្ថបទ & AI Assistant v5</title>
   
   <!-- ResponsiveVoice Library សម្រាប់ចាក់សំឡេង -->
   <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
@@ -52,6 +52,7 @@
       height: 120px;
       resize: vertical;
     }
+    /* កែសម្រួល Grid ឱ្យសមស្របជាមួយប៊ូតុងបន្ថែម */
     .button-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -68,11 +69,13 @@
       transition: 0.2s;
     }
     .btn-ask { background-color: #0284c7; }
+    .btn-translate { background-color: #2563eb; } /* ប៊ូតុងបកប្រែ */
     .btn-voice { background-color: #d97706; }
     .btn-music { background-color: #9333ea; }
     .btn-play { background-color: #16a34a; }
     .btn-stop { background-color: #dc2626; }
-    .btn-clear { background-color: #475569; }
+    .btn-clear { background-color: #475569; grid-column: span 3; } /* ឱ្យនៅជួរក្រោមគេ */
+    
     button:active { transform: scale(0.96); }
     
     #statusBox {
@@ -161,13 +164,13 @@
   <div class="modal-content">
     <h3>សូមស្វាគមន៍! 👋</h3>
     <p>សូមស្វាគមន៍មកកាន់គេហទំព័ររបស់<br><strong style="color: #38bdf8; font-size: 1.2em;">លោក ឃួន ថាវ៉ាន់</strong></p>
-    <p style="font-size: 0.85em; color: #94a3b8;">ប្រព័ន្ធ AI Assistant & កម្មវិធីអានអត្ថបទឆ្លាតវៃ</p>
+    <p style="font-size: 0.85em; color: #94a3b8;">ប្រព័ន្ធ AI Assistant, បកប្រែ & កម្មវិធីអានអត្ថបទ</p>
     <button class="btn-enter" onclick="startApp()">🚀 ចូលប្រើប្រាស់កម្មវិធី</button>
   </div>
 </div>
 
 <div class="container">
-  <h2>🤖 កម្មវិធីអានអត្ថបទ & AI Assistant v4</h2>
+  <h2>🤖 កម្មវិធីអានអត្ថបទ & AI Assistant v5</h2>
 
   <button class="key-btn" onclick="resetApiKey()">🔑 ដូរ/បញ្ចូល API Key ថ្មី</button>
 
@@ -186,7 +189,7 @@
     <option value="es-ES">🇪🇸 Español (Spanish)</option>
   </select>
 
-  <textarea id="textInput" placeholder="វាយអក្សរនៅទីនេះ ឬចុចប៊ូតុង 🎤 និយាយ..."></textarea>
+  <textarea id="textInput" placeholder="វាយអក្សរ ឬនិយាយនៅទីនេះ..."></textarea>
 
   <div id="statusBox">
     <span id="statusText">...</span>
@@ -194,11 +197,12 @@
 
   <div class="button-grid">
     <button class="btn-ask" onclick="askAI()">✨ សួរ AI</button>
+    <button class="btn-translate" onclick="translateText()">🌐 បកប្រែ</button>
     <button class="btn-voice" onclick="startVoiceInput()">🎤 និយាយ</button>
     <button class="btn-music" onclick="generateSunoMusic()">🎵 តែងចម្រៀង</button>
     <button class="btn-play" onclick="playAudio()">▶️ ចាក់សំឡេង</button>
     <button class="btn-stop" onclick="stopAudio()">⏹️ បញ្ឈប់</button>
-    <button class="btn-clear" onclick="clearAll()">🗑️ លុប</button>
+    <button class="btn-clear" onclick="clearAll()">🗑️ លុបទាំងអស់</button>
   </div>
 
   <div class="history-box">
@@ -217,10 +221,9 @@ const bgMusic = document.getElementById('bgMusic');
 function startApp() {
   document.getElementById('welcomeModal').style.display = 'none';
   if (bgMusic) {
-    bgMusic.volume = 0.2; // កម្រិតសំឡេងល្មមស្ដាប់ (20%)
+    bgMusic.volume = 0.2;
     bgMusic.play().catch(err => console.log("Audio play blocked"));
 
-    // កំណត់ឱ្យចាក់តែ ១០ វិនាទី រួចរលត់ (Fade-out)
     setTimeout(() => {
       let fadeInterval = setInterval(() => {
         if (bgMusic.volume > 0.02) {
@@ -230,12 +233,11 @@ function startApp() {
           bgMusic.currentTime = 0;
           clearInterval(fadeInterval);
         }
-      }, 200); // បន្ថយសំឡេងសន្សឹមៗក្នុងរយៈពេល ២ វិនាទីចុងក្រោយ
-    }, 8000); // ៨ វិនាទីដំបូងឮពេញ រួច ២ វិនាទីចុងក្រោយស្រុតរលត់ = ១០ វិនាទី
+      }, 200);
+    }, 8000);
   }
 }
 
-// មុខងារបញ្ឈប់ Background ភ្លាមៗបើចង់ចាក់សំឡេង AI
 function stopBgMusicImmediately() {
   if (bgMusic) {
     bgMusic.pause();
@@ -378,7 +380,67 @@ async function askAI() {
   }
 }
 
-// --- ៣. មុខងារបំប្លែងអក្សរទៅជាសំឡេង ---
+// --- ៣. មុខងារបកប្រែភាសា (Translation Feature) 🆕 ---
+async function translateText() {
+  const apiKey = getGroqApiKey();
+  if (!apiKey) {
+    alert("សូមបញ្ចូល API Key ដើម្បីប្រើប្រាស់!");
+    return;
+  }
+
+  const promptText = document.getElementById('textInput').value.trim();
+  const targetLang = document.getElementById('langSelect').value;
+  
+  if (!promptText) { 
+    alert("សូមបញ្ចូលអត្ថបទដែលត្រូវបកប្រែជាមុនសិន!"); 
+    return; 
+  }
+  
+  stopAudio();
+  showStatus("🌐 AI កំពុងបកប្រែភាសា...");
+  
+  const cleanKey = apiKey.replace(/[^\x00-\x7F]/g, "").trim();
+
+  try {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + cleanKey
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        temperature: 0.3,
+        messages: [
+          { 
+            role: "system", 
+            content: `You are a professional translator. Translate the given text accurately into language code: ${targetLang}. Output ONLY the translated text without explanations or introductory words.` 
+          }, 
+          { role: "user", content: promptText }
+        ]
+      })
+    });
+
+    const data = await response.json();
+    if (data.choices && data.choices[0].message.content) {
+      const translatedText = data.choices[0].message.content.trim();
+      document.getElementById('textInput').value = translatedText;
+      hideStatus();
+      
+      // ចាក់សំឡេងភាសាដែលបានបកប្រែរួច
+      speakText(translatedText, targetLang);
+
+    } else if (data.error) {
+      hideStatus();
+      alert("Groq Error: " + data.error.message);
+    }
+  } catch (error) { 
+    hideStatus(); 
+    alert("មានបញ្ហាក្នុងការបកប្រែ៖ " + error.message); 
+  }
+}
+
+// --- ៤. មុខងារបំប្លែងអក្សរទៅជាសំឡេង ---
 function speakText(text, langSelect) {
   stopAudio();
   stopBgMusicImmediately();
@@ -424,7 +486,7 @@ function speakText(text, langSelect) {
   }
 }
 
-// --- ៤. មុខងារបង្កើតបទចម្រៀង ---
+// --- ៥. មុខងារបង្កើតបទចម្រៀង ---
 async function generateSunoMusic() {
   const apiKey = getGroqApiKey();
   if (!apiKey) {
@@ -481,7 +543,7 @@ async function generateSunoMusic() {
   }
 }
 
-// --- ៥. គ្រប់គ្រងប្រវត្តិ និង បញ្ជាសំឡេង ---
+// --- ៦. គ្រប់គ្រងប្រវត្តិ និង បញ្ជាសំឡេង ---
 function saveToHistory(title) {
   let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
   history.unshift({ title: title || "បទចម្រៀង AI", date: new Date().toLocaleTimeString() });
