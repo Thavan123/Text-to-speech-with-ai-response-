@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khuon Thavan - PDF & Image Text Extractor</title>
-  <!-- នាំយកបណ្ណាល័យ PDF.js សម្រាប់អានហ្វាល់ PDF -->
+  <title>Thavan AI - PDF & Q&A Formatter</title>
+  <!-- PDF.js សម្រាប់អានហ្វាល់ PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-  <!-- នាំយកបណ្ណាល័យ Tesseract.js សម្រាប់អានអក្សរពីរូបភាព (OCR) -->
+  <!-- Tesseract.js សម្រាប់អានរូបភាព OCR -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.0.2/tesseract.min.js"></script>
   <style>
     :root {
@@ -30,7 +30,7 @@
 
     .container {
       width: 100%;
-      max-width: 520px;
+      max-width: 550px;
       background: var(--card-bg);
       backdrop-filter: blur(15px);
       padding: 20px;
@@ -49,7 +49,7 @@
 
     .upload-box {
       border: 2px dashed rgba(0, 210, 255, 0.4);
-      padding: 20px;
+      padding: 18px;
       text-align: center;
       border-radius: 12px;
       background: rgba(26, 26, 46, 0.6);
@@ -71,7 +71,7 @@
 
     textarea {
       width: 100%;
-      height: 180px;
+      height: 200px;
       padding: 12px;
       border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.15);
@@ -87,6 +87,7 @@
     .btn-grid {
       display: flex;
       gap: 10px;
+      margin-bottom: 8px;
     }
     button {
       flex: 1;
@@ -103,8 +104,9 @@
     button:active {
       transform: scale(0.97);
     }
+    .btn-ai { background: #0284c7; }
     .btn-copy { background: #16a34a; }
-    .btn-clear { background: #64748b; }
+    .btn-clear { background: #64748b; width: 100%; }
 
     #status {
       text-align: center;
@@ -119,29 +121,30 @@
 <body>
 
 <div class="container">
-  <h2>📄 ទាញយកអត្ថបទពី PDF និងរូបភាព</h2>
+  <h2>📄 កែសម្រួល និងរៀបចំសំណួរ-ចម្លើយ</h2>
 
   <div class="upload-box" onclick="document.getElementById('fileInput').click()">
     <div class="upload-label">
-      📁 <b>ចុចទីនេះដើម្បីជ្រើសរើសហ្វាល់</b><br>
-      <span style="font-size: 12px; color: #aaa;">(គាំទ្រហ្វាល់ PDF និងរូបភាព PNG, JPG)</span>
+      📁 <b>ចុចទីនេះដើម្បីជ្រើសរើសហ្វាល់ PDF ឬរូបភាព</b><br>
+      <span style="font-size: 12px; color: #aaa;">(កម្មវិធីនឹងទាញយក និងតម្រៀបលេខរៀងជូនស្វ័យប្រវត្ត)</span>
     </div>
     <input type="file" id="fileInput" accept=".pdf,image/*" onchange="handleFile(this)">
   </div>
 
   <div id="status">កំពុងដំណើរការ...</div>
   
-  <textarea id="resultText" placeholder="អត្ថបទដែលទាញយកបាននឹងបង្ហាញទីនេះ..."></textarea>
+  <textarea id="resultText" placeholder="លទ្ធផលអត្ថបទដែលបានរៀបចំរួចនឹងបង្ហាញទីនេះ..."></textarea>
 
   <div class="btn-grid">
-    <button class="btn-copy" onclick="copyText()">📋 ចម្លងអត្ថបទ (Copy)</button>
-    <button class="btn-clear" onclick="clearAll()">🗑️ សម្អាត</button>
+    <button class="btn-ai" onclick="formatWithAI()">✨ តម្រៀបសំណួរដោយ AI</button>
+    <button class="btn-copy" onclick="copyText()">📋 ចម្លងអត្ថបទ</button>
   </div>
+  <button class="btn-clear" onclick="clearAll()">🗑️ សម្អាតទិន្នន័យ</button>
 </div>
 
 <script>
-  // កំណត់ Worker សម្រាប់ PDF.js
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+  const getKey = () => "gsk_x3b3Wzg1BEFnphqvkdAXWGdyb3FYIpRZxFEjRUvVPiPbMYhRGBTdq";
 
   function showStatus(msg) {
     const s = document.getElementById('status');
@@ -158,7 +161,6 @@
 
     document.getElementById('resultText').value = '';
 
-    // ប្រសិនបើជាហ្វាល់ PDF
     if (file.type === "application/pdf") {
       showStatus("📖 កំពុងអានហ្វាល់ PDF...");
       try {
@@ -171,22 +173,23 @@
           const page = await pdf.getPage(i);
           const textContent = await page.getTextContent();
           const pageText = textContent.items.map(item => item.str).join(" ");
-          fullText += `--- ទំព័រទី ${i} ---\n` + pageText + "\n\n";
+          fullText += pageText + "\n";
         }
 
         document.getElementById('resultText').value = fullText.trim();
         hideStatus();
+        // បញ្ជូនចូល AI ដើម្បីតម្រៀបស្វ័យប្រវត្ត
+        formatWithAI();
       } catch (err) {
         hideStatus();
         alert("មានបញ្ហាក្នុងការអាន PDF: " + err.message);
       }
     } 
-    // ប្រសិនបើជារូបភាព (PNG, JPG)
     else if (file.type.startsWith("image/")) {
       showStatus("🔍 កំពុងទាញយកអក្សរពីរូបភាព (OCR)...");
       Tesseract.recognize(
         file,
-        'eng+khm', // គាំទ្រភាសាអង់គ្លេស និងខ្មែរ
+        'eng+khm',
         { 
           logger: m => {
             if (m.status === 'recognizing text') {
@@ -197,12 +200,57 @@
       ).then(({ data: { text } }) => {
         document.getElementById('resultText').value = text;
         hideStatus();
+        formatWithAI();
       }).catch(err => {
         hideStatus();
         alert("មានបញ្ហាក្នុងការអានរូបភាព: " + err.message);
       });
     } else {
       alert("សូមជ្រើសរើសយករូបភាព ឬហ្វាល់ PDF ជាមុនសិន!");
+    }
+  }
+
+  async function formatWithAI() {
+    const rawText = document.getElementById('resultText').value.trim();
+    if (!rawText) {
+      alert("គ្មានអត្ថបទសម្រាប់កែសម្រួលទេ!");
+      return;
+    }
+
+    showStatus("🤖 AI កំពុងកែសម្រួល និងតម្រៀបសំណួរ-ចម្លើយ...");
+
+    try {
+      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { 
+          "Authorization": "Bearer " + getKey(), 
+          "Content-Type": "application/json" 
+        },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            { 
+              role: "system", 
+              content: "អ្នកគឺជាជំនួយការផ្នែកកែសម្រួលអត្ថបទវេជ្ជសាស្ត្រ។ សូមជួយរៀបចំ និងតម្រៀបអត្ថបទសំណួរ និងចម្លើយខាងក្រោមឱ្យបានត្រឹមត្រូវតាមលំដាប់លំដោយលេខរៀងពី ១ រហូតដល់ចប់ ដោយកែតម្រូវអក្ខរាវិរុទ្ធដែលរាយប៉ាយឱ្យបានស្អាត និងងាយស្រួលអានបំផុត។" 
+            },
+            { role: "user", content: rawText }
+          ],
+          temperature: 0.3
+        })
+      });
+
+      const data = await res.json();
+      hideStatus();
+
+      if (data.choices && data.choices[0]) {
+        const formatted = data.choices[0].message.content.trim();
+        document.getElementById('resultText').value = formatted;
+      } else {
+        alert("Error: " + (data.error?.message || "មានបញ្ហា API"));
+      }
+    } catch(e) {
+      hideStatus();
+      alert("Network Error: " + e.message);
     }
   }
 
@@ -226,5 +274,5 @@
   }
 </script>
 </body>
-      </html>
-      
+  </html>
+  
