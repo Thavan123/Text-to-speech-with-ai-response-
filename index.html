@@ -26,7 +26,7 @@
       overflow-x: hidden;
     }
 
-    /* 🌟 លំអផ្ទាំងស្វាគមន៍ Splash Screen បែបអាជីព */
+    /* 🌟 ផ្ទាំងស្វាគមន៍ Splash Screen បែបអាជីព */
     #splashScreen {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -38,11 +38,11 @@
       z-index: 9999;
       text-align: center;
       padding: 25px;
-      transition: opacity 1.2s ease, visibility 1.2s ease;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
     }
 
     .splash-card {
-      background: rgba(25, 25, 40, 0.7);
+      background: rgba(25, 25, 40, 0.75);
       backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 40px 30px;
@@ -71,15 +71,14 @@
     }
 
     #splashScreen h1 {
-      font-size: 20px;
+      font-size: 18px;
       color: #ffffff;
       margin-bottom: 8px;
       font-weight: 600;
-      letter-spacing: 0.5px;
     }
 
     #splashScreen h2 {
-      font-size: 22px;
+      font-size: 21px;
       background: linear-gradient(90deg, #00d2ff, #7c3aed, #db2777);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -92,7 +91,7 @@
       color: #fff;
       border: none;
       padding: 14px 28px;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: bold;
       border-radius: 30px;
       cursor: pointer;
@@ -102,16 +101,8 @@
       letter-spacing: 0.5px;
     }
 
-    .btn-enter:disabled {
-      background: #4a4a6a;
-      color: #b0b0cc;
-      cursor: not-allowed;
-      box-shadow: none;
-      transform: none !important;
-    }
-
-    .btn-enter:not(:disabled):active {
-      transform: scale(0.96);
+    .btn-enter:active {
+      transform: scale(0.95);
     }
 
     /* 📱 កម្មវិធីหลัก Container */
@@ -273,7 +264,7 @@
     <div class="splash-icon">🤖✨</div>
     <h1>សូមស្វាគមន៍មកកាន់វេបសាយរបស់</h1>
     <h2>លោក ឃួន ថាវ៉ាន់</h2>
-    <button id="enterBtn" class="btn-enter" disabled>សូមរង់ចាំ (3)...</button>
+    <button class="btn-enter" onclick="enterWebsite()">🚀 ចូលទៅកាន់វេបសាយ</button>
   </div>
 </div>
 
@@ -350,35 +341,25 @@
   bgMusic.loop = false;
   bgMusic.volume = 0.3;
 
-  // ⏱️ ការកំណត់ពេលរាប់ថយក្រោយ
-  let timeLeft = 3;
-  const enterBtn = document.getElementById('enterBtn');
+  // 🚀 ប៊ូតុងចូលទៅកាន់វេបសាយ និងចាប់ផ្តើមភ្លេង ១០ វិនាទី
+  function enterWebsite() {
+    const splash = document.getElementById('splashScreen');
+    splash.style.opacity = '0';
+    splash.style.visibility = 'hidden';
 
-  window.addEventListener('DOMContentLoaded', () => {
-    // ចាក់ភ្លេង Background ភ្លាមពេលបើកវេបសាយ
-    bgMusic.play().catch(e => console.log("Audio autoplay restricted:", e));
+    // ចាក់ភ្លេង Background ពេលអ្នកប្រើប្រាស់ចុចប៊ូតុងផ្ទាល់ (ឆ្លងផុតកាតព្វកិច្ច Browser Autoplay)
+    bgMusic.play().catch(e => console.log("Audio play error:", e));
 
-    // បិទភ្លេងស្វ័យប្រវត្តិក្រោយ ១០ វិនាទី
+    // បិទភ្លេងស្វ័យប្រវត្តិក្រោយ ១០ វិនាទីគត់
     setTimeout(() => {
       if (!bgMusic.paused) {
         bgMusic.pause();
         bgMusic.currentTime = 0;
       }
     }, 10000);
+  }
 
-    // ប្រព័ន្ធរាប់ថយក្រោយយ៉ាងទៀងទាត់ (Fixed Countdown)
-    const timerInterval = setInterval(() => {
-      timeLeft--;
-      if (timeLeft > 0) {
-        enterBtn.innerText = `សូមរង់ចាំ (${timeLeft})...`;
-      } else {
-        clearInterval(timerInterval);
-        enterBtn.disabled = false;
-        enterBtn.innerText = "🚀 ចូលទៅកាន់វេបសាយ";
-        enterBtn.setAttribute("onclick", "enterWebsite()");
-      }
-    }, 1000);
-
+  window.addEventListener('DOMContentLoaded', () => {
     // Setup Speech Recognition
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -410,13 +391,6 @@
       };
     }
   });
-
-  // 🚀 ប៊ូតុងចូលទៅកាន់វេបសាយ
-  function enterWebsite() {
-    const splash = document.getElementById('splashScreen');
-    splash.style.opacity = '0';
-    splash.style.visibility = 'hidden';
-  }
 
   async function openCam() {
     document.getElementById('camModal').style.display = 'flex';
@@ -656,4 +630,25 @@
   function stopAudio() {
     isAiSpeaking = false;
     if ('speechSynthesis' in window) {
-    
+      window.speechSynthesis.cancel();
+    }
+  }
+
+  function clearAll() {
+    stopAudio();
+    isLive = false;
+    document.getElementById('liveBtn').style.background = '#db2777';
+    document.getElementById('inputText').value = '';
+    document.getElementById('outputText').value = '';
+    document.getElementById('imagePreview').style.display = 'none';
+    document.getElementById('generatedImageResult').style.display = 'none';
+    base64Img = null;
+    hideStatus();
+  }
+
+  function showStatus(msg) {
+    const s = document.getElementById('status');
+    s.style.display = 'block';
+    s.innerText = msg;
+  }
+  function hideStatus() { document.getElementById('status').s
