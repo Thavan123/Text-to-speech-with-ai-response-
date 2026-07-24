@@ -296,7 +296,7 @@
 </div>
 
 <script>
-  // API Key ផ្ទាល់ខ្លួនរបស់បង
+  // API Key ថ្មីដែលបានបញ្ចូលរួចជាស្រេច
   const getKey = () => "gsk_BCWUIBeeZ4PIHC15X5kfWGdyb3FYJlLU0MJfVETHbyT6uWzM4YbML";
 
   let recognition = null;
@@ -344,7 +344,7 @@
       mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
       document.getElementById('video').srcObject = mediaStream;
     } catch(e) {
-      alert("មិនអាចបើកកាមេរ៉ាได้ទេ: " + e.message);
+      alert("មិនអាចបើកកាមេរ៉ាបានទេ: " + e.message);
       closeCam();
     }
   }
@@ -608,4 +608,4 @@
         hideStatus();
         speak(translated, target);
       }
-    } catch(e) { hideStatus(); alert("Erro
+    } catch(e) { hideStatus(); al
