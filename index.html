@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>កម្មវិធីអានអត្ថបទ & AI Assistant</title>
+  <title>កម្មវិធីអានអត្ថបទ & AI Assistant v3</title>
   
   <!-- ResponsiveVoice Library សម្រាប់ចាក់សំឡេង -->
   <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
@@ -25,6 +25,7 @@
       padding: 20px;
       border-radius: 16px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      position: relative;
     }
     h2 {
       text-align: center;
@@ -104,12 +105,69 @@
       padding: 8px;
       border-radius: 6px;
     }
+
+    /* --- Styles សម្រាប់ Pop-up ស្វាគមន៍ --- */
+    .welcome-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .modal-content {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 380px;
+      width: 85%;
+      border: 1px solid #38bdf8;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+    }
+    .modal-content h3 {
+      color: #38bdf8;
+      margin-top: 0;
+    }
+    .modal-content p {
+      color: #cbd5e1;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+    .btn-enter {
+      background: linear-gradient(135deg, #0284c7, #9333ea);
+      color: white;
+      padding: 12px 24px;
+      font-size: 1em;
+      border-radius: 25px;
+      margin-top: 15px;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
 
+<!-- Background Music Audio (អាចប្តូរ Link បទចម្រៀងបានត្រង់ src) -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Pop-up ស្វាគមន៍ -->
+<div id="welcomeModal" class="welcome-modal">
+  <div class="modal-content">
+    <h3>សូមស្វាគមន៍! 👋</h3>
+    <p>សូមស្វាគមន៍មកកាន់គេហទំព័ររបស់<br><strong style="color: #38bdf8; font-size: 1.2em;">លោក ឃួន ថាវ៉ាន់</strong></p>
+    <p style="font-size: 0.85em; color: #94a3b8;">ប្រព័ន្ធ AI Assistant & កម្មវិធីអានអត្ថបទឆ្លាតវៃ</p>
+    <button class="btn-enter" onclick="startApp()">🚀 ចូលប្រើប្រាស់កម្មវិធី</button>
+  </div>
+</div>
+
 <div class="container">
-  <h2>🤖 កម្មវិធីអានអត្ថបទ & AI Assistant</h2>
+  <h2>🤖 កម្មវិធីអានអត្ថបទ & AI Assistant v3</h2>
 
   <button class="key-btn" onclick="resetApiKey()">🔑 ដូរ/បញ្ចូល API Key ថ្មី</button>
 
@@ -153,6 +211,24 @@
 </div>
 
 <script>
+const bgMusic = document.getElementById('bgMusic');
+
+// --- មុខងារ Start App & ចាក់ Background Music ---
+function startApp() {
+  document.getElementById('welcomeModal').style.display = 'none';
+  if (bgMusic) {
+    bgMusic.volume = 0.3; // កម្រិតសំឡេង Background ធម្មតា (30%)
+    bgMusic.play().catch(err => console.log("Audio play blocked"));
+  }
+}
+
+// មុខងារបន្ថយ និងតំឡើងសំឡេង Background Music ស្វ័យប្រវត្តិ
+function setBgVolume(level) {
+  if (bgMusic) {
+    bgMusic.volume = level; // e.g., 0.05 ពេល AI និយាយ
+  }
+}
+
 // --- មុខងារទាញយក API Key ដោយសុវត្ថិភាព ---
 function getGroqApiKey() {
   let key = localStorage.getItem('GROQ_API_KEY');
@@ -195,6 +271,7 @@ function initSpeechRecognition() {
 
     recognition.onstart = function() { 
       isListening = true; 
+      setBgVolume(0.05); // បន្ថយភ្លេង BG ពេលកំពុងស្ដាប់សំឡេងអ្នកប្រើ
       showStatus("🎤 កំពុងស្ដាប់សំឡេងរបស់អ្នក..."); 
     };
 
@@ -207,6 +284,7 @@ function initSpeechRecognition() {
 
     recognition.onerror = function(event) { 
       hideStatus(); 
+      setBgVolume(0.3); // ឡើងសំឡេងវិញ
       console.error("Speech Error:", event.error);
       isListening = false; 
     };
@@ -224,6 +302,7 @@ function startVoiceInput() {
   }
   if (isListening) { 
     recognition.stop(); 
+    setBgVolume(0.3);
     return; 
   }
   isContinuousMode = true; 
@@ -287,14 +366,14 @@ async function askAI() {
   }
 }
 
-// --- ៣. មុខងារបំប្លែងអក្សរទៅជាសំឡេង (គាំទ្រច្រើនភាសា) ---
+// --- ៣. មុខងារបំប្លែងអក្សរទៅជាសំឡេង ---
 function speakText(text, langSelect) {
   stopAudio();
+  setBgVolume(0.05); // បន្ថយសំឡេង Background ពេល AI និយាយ
 
   const langCode = langSelect.split('-')[0];
-  let voiceName = "Khmer Female"; // Default Khmer
+  let voiceName = "Khmer Female"; 
 
-  // រៀបចំសំឡេង ResponsiveVoice តាមភាសា
   const voiceMap = {
     'en': 'US English Female',
     'fr': 'French Female',
@@ -311,27 +390,27 @@ function speakText(text, langSelect) {
     voiceName = voiceMap[langCode];
   }
 
+  const resetVolumeOnEnd = () => {
+    setBgVolume(0.3); // ឡើងសំឡេង Background វិញពេល AI និយាយចប់
+    if (isContinuousMode) {
+      setTimeout(() => { startVoiceInput(); }, 500);
+    }
+  };
+
   if (typeof responsiveVoice !== 'undefined') {
     responsiveVoice.speak(text, voiceName, {
       rate: 0.95,
       pitch: 1,
-      onend: function() {
-        if (isContinuousMode) {
-          setTimeout(() => { startVoiceInput(); }, 500);
-        }
-      }
+      onend: resetVolumeOnEnd
     });
   } else if ('speechSynthesis' in window) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = langSelect;
-    utterance.onend = function() {
-      if (isContinuousMode) {
-        setTimeout(() => { startVoiceInput(); }, 500);
-      }
-    };
+    utterance.onend = resetVolumeOnEnd;
     window.speechSynthesis.speak(utterance);
   } else {
     alert("មិនអាចចាក់សំឡេងបានទេ!");
+    setBgVolume(0.3);
   }
 }
 
@@ -436,6 +515,7 @@ function playAudio() {
 
 function stopAudio() { 
   isContinuousMode = false;
+  setBgVolume(0.3); // ឡើងសំឡេង Background មកធម្មតាវិញ
   if (typeof responsiveVoice !== 'undefined') {
     responsiveVoice.cancel();
   }
@@ -463,5 +543,4 @@ function hideStatus() {
 }
 </script>
 </body>
-  </html>
-      
+</html>
