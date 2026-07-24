@@ -1,17 +1,16 @@
-// 🔑 Groq API Key របស់បង
+// 🔑 Groq API Key
 const GROQ_API_KEY = "Gsk_C9S9o7j7eYnreNjSBAQAWGdyb3FY3fUqDPlT0qhe6Nm9V6nVZ23f";
 
-const player = document.getElementById('audioPlayer');
 let recognition = null;
 let isListening = false;
 
-// ផ្ទុកប្រវត្តិបទចម្រៀងពេលបើក Web ភ្លាម
+// ផ្ទុកប្រវត្តិពេលបើក Web ភ្លាម
 document.addEventListener('DOMContentLoaded', () => {
   loadSongHistory();
   initSpeechRecognition();
 });
 
-// --- 1. មុខងារចាប់សំឡេង (Speech-to-Text) ---
+// --- ១. មុខងារចាប់សំឡេង (Speech-to-Text) ---
 function initSpeechRecognition() {
   if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -28,7 +27,7 @@ function initSpeechRecognition() {
       const transcript = event.results[0][0].transcript;
       document.getElementById('textInput').value = transcript;
       hideStatus();
-      askAI(); // ពេលនិយាយចប់ វាបញ្ជូនទៅសួរ AI អូតូតែម្តង
+      askAI(); // និយាយចប់ បញ្ជូនទៅ AI អូតូ
     };
 
     recognition.onerror = function(event) { 
@@ -57,7 +56,7 @@ function startVoiceInput() {
   recognition.start();
 }
 
-// --- 2. មុខងារសួរ AI និងឱ្យ AI និយាយឆ្លើយតបអូតូ ---
+// --- ២. មុខងារសួរ AI ---
 async function askAI() {
   const prompt = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
@@ -78,7 +77,7 @@ async function askAI() {
         model: "llama-3.3-70b-versatile",
         temperature: 0.3,
         messages: [
-          { role: "system", content: `Respond accurately in language code: ${lang}. Keep it conversational, concise, and clear.` }, 
+          { role: "system", content: `Respond accurately in language code: ${lang}. Keep it short and plain text (no emojis or complex markdown) so it can be spoken clearly.` }, 
           { role: "user", content: prompt }
         ]
       })
@@ -89,8 +88,8 @@ async function askAI() {
       document.getElementById('textInput').value = aiReply;
       hideStatus();
       
-      // 🔊 AI និយាយឆ្លើយតបចេញមកក្រៅដោយស្វ័យប្រវត្តិអូតូ ពេលទទួលបានចម្លើយ
-      autoPlayAudio(aiReply, lang);
+      // 🔊 អានសំឡេងដោយប្រើ Web Speech Synthesis
+      speakTextNative(aiReply, lang);
 
     } else if (data.error) {
       hideStatus();
@@ -102,7 +101,7 @@ async function askAI() {
   }
 }
 
-// --- 3. មុខងារបង្កើតបទចម្រៀង ---
+// --- ៣. មុខងារបង្កើតបទចម្រៀង ---
 async function generateSunoMusic() {
   const prompt = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
@@ -134,8 +133,8 @@ async function generateSunoMusic() {
       document.getElementById('textInput').value = lyrics;
       hideStatus();
       
-      autoPlayAudio(lyrics, lang);
-      saveToHistory(prompt, player.src);
+      speakTextNative(lyrics, lang);
+      saveToHistory(prompt);
 
     } else if (data.error) {
       hideStatus();
@@ -147,25 +146,39 @@ async function generateSunoMusic() {
   }
 }
 
-// --- 4. មុខងារបញ្ចេញសំឡេងអូតូ (Auto-play Audio) ---
-function autoPlayAudio(text, langSelect) {
-  const langCode = langSelect.split('-')[0];
-  const cleanText = encodeURIComponent(text.substring(0, 200));
-  const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${cleanText}&tl=${langCode}&client=tw-ob`;
-  
-  player.src = audioUrl;
-  player.style.display = "block";
-  
-  // បង្ខំឱ្យលេងសំឡេងអូតូ
-  player.play().catch(error => {
-    console.log("Autoplay restricted by browser:", error);
-  });
+// --- ៤. មុខងារបញ្ចេញសំឡេងផ្ទាល់របស់ Browser (Web Speech API) ---
+function speakTextNative(text, langCode) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel(); // បញ្ឈប់សំឡេងចាស់បើកំពុងនិយាយ
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = langCode; // កំណត់ភាសា (km-KH, en-US, etc.)
+    utterance.rate = 0.95; // ផ្ទៃល្បឿនអានសមរម្យ
+    utterance.pitch = 1.0;
+
+    window.speechSynthesis.speak(utterance);
+  } else {
+    alert("Browser របស់អ្នកមិនគាំទ្រមុខងារអានសំឡេងនេះទេ!");
+  }
 }
 
-// --- 5. គ្រប់គ្រងប្រវត្តិ និងមុខងារផ្សេងៗ ---
-function saveToHistory(title, url) {
+function playAudio() {
+  const text = document.getElementById('textInput').value.trim();
+  const lang = document.getElementById('langSelect').value;
+  if (!text) return;
+  speakTextNative(text, lang);
+}
+
+function stopAudio() { 
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+}
+
+// --- ៥. ប្រវត្តិ និងមុខងារផ្សេងៗ ---
+function saveToHistory(title) {
   let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
-  history.unshift({ title: title || "បទចម្រៀង AI", url: url });
+  history.unshift({ title: title || "បទចម្រៀង AI", date: new Date().toLocaleTimeString() });
   if (history.length > 15) history.pop();
   localStorage.setItem('suno_song_history', JSON.stringify(history));
   loadSongHistory();
@@ -183,32 +196,14 @@ function loadSongHistory() {
   history.forEach((item) => {
     const div = document.createElement('div');
     div.className = 'history-item';
-    div.innerHTML = `<span>🎵 ${item.title}</span><div><button class="btn-play-hist" onclick="playHistorySong('${item.url}')">▶️</button><a href="${item.url}" target="_blank" class="btn-download">📥</a></div>`;
+    div.innerHTML = `<span>🎵 ${item.title}</span>`;
     historyList.appendChild(div);
   });
-}
-
-function playHistorySong(url) { 
-  player.src = url; 
-  player.style.display = "block"; 
-  player.play(); 
 }
 
 function clearHistory() { 
   localStorage.removeItem('suno_song_history'); 
   loadSongHistory(); 
-}
-
-function playAudio() {
-  const text = document.getElementById('textInput').value.trim();
-  const lang = document.getElementById('langSelect').value;
-  if (!text) return;
-  autoPlayAudio(text, lang);
-}
-
-function stopAudio() { 
-  player.pause(); 
-  player.currentTime = 0; 
 }
 
 function clearAll() { 
@@ -227,5 +222,4 @@ function showStatus(msg) {
 function hideStatus() { 
   const statusBox = document.getElementById('statusBox'); 
   if (statusBox) statusBox.style.display = 'none'; 
-        }
-    
+}
