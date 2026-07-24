@@ -31,7 +31,7 @@ function initSpeechRecognition() {
       const transcript = event.results[0][0].transcript;
       document.getElementById('textInput').value = transcript;
       hideStatus();
-      askAI(); // បញ្ជូនសំណួរទៅ AI ភ្លាមៗពេលនិយាយចប់
+      askAI(); 
     };
 
     recognition.onerror = function(event) { 
@@ -55,13 +55,13 @@ function startVoiceInput() {
     recognition.stop(); 
     return; 
   }
-  isContinuousMode = true; // បើក Mode ឆ្លើយឆ្លង
+  isContinuousMode = true; 
   recognition.lang = document.getElementById('langSelect').value;
   stopAudio();
   recognition.start();
 }
 
-// --- ២. មុខងារសួរ AI និងឆ្លើយតប ---
+// --- ២. មុខងារសួរ AI ---
 async function askAI() {
   const prompt = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
@@ -82,7 +82,7 @@ async function askAI() {
         model: "llama-3.3-70b-versatile",
         temperature: 0.5,
         messages: [
-          { role: "system", content: `You are a helpful AI voice assistant. Respond naturally and concisely in language code: ${lang}. Keep answers short for speech.` }, 
+          { role: "system", content: `You are a helpful AI voice assistant. Respond accurately and concisely in language code: ${lang}. Keep response short.` }, 
           { role: "user", content: prompt }
         ]
       })
@@ -94,7 +94,7 @@ async function askAI() {
       hideStatus();
       
       // 📣 ចាក់សំឡេងឆ្លើយតប
-      playNativeSpeech(aiReply, lang);
+      speakText(aiReply, lang);
 
     } else if (data.error) {
       hideStatus();
@@ -106,36 +106,41 @@ async function askAI() {
   }
 }
 
-// --- ៣. មុខងារបញ្ចេញសំឡេងទូរស័ព្ទ (TTS) + ឆ្លើយឆ្លងបន្ត ---
-function playNativeSpeech(text, langSelect) {
-  if (!('speechSynthesis' in window)) {
-    alert("ទូរស័ព្ទរបស់អ្នកមិនគាំទ្រប្រព័ន្ធបញ្ចេញសំឡេង Text-to-Speech ទេ!");
-    return;
+// --- ៣. មុខងារបំប្លែងអក្សរទៅជាសំឡេង (TTS ឆ្លើយឆ្លង) ---
+function speakText(text, langSelect) {
+  stopAudio();
+
+  let voiceName = "Khmer Female";
+  const langCode = langSelect.split('-')[0];
+
+  if (langCode === 'en') voiceName = "US English Female";
+  else if (langCode === 'th') voiceName = "Thai Female";
+
+  // ប្រសិនបើមាន ResponsiveVoice
+  if (typeof responsiveVoice !== 'undefined') {
+    responsiveVoice.speak(text, voiceName, {
+      rate: 0.95,
+      pitch: 1,
+      onend: function() {
+        // 🔄 ពេលនិយាយចប់ បើកមីក្រូស្ដាប់សំណួរថ្មីភ្លាមៗ (ឆ្លើយឆ្លង)
+        if (isContinuousMode) {
+          setTimeout(() => { startVoiceInput(); }, 500);
+        }
+      }
+    });
+  } else if ('speechSynthesis' in window) {
+    // ករណីគ្មាន responsiveVoice ឱ្យប្រើប្រព័ន្ធទូរស័ព្ទជំនួស
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = langSelect;
+    utterance.onend = function() {
+      if (isContinuousMode) {
+        setTimeout(() => { startVoiceInput(); }, 500);
+      }
+    };
+    window.speechSynthesis.speak(utterance);
+  } else {
+    alert("មិនអាចចាក់សំឡេងបានទេ!");
   }
-
-  window.speechSynthesis.cancel(); // ឈប់និយាយសំឡេងចាស់
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  
-  let langCode = langSelect;
-  if (langSelect === 'km-KH' || langSelect === 'km') langCode = 'km-KH';
-  else if (langSelect === 'en-US' || langSelect === 'en') langCode = 'en-US';
-  else if (langSelect === 'th-TH' || langSelect === 'th') langCode = 'th-TH';
-
-  utterance.lang = langCode;
-  utterance.rate = 0.95; // ល្បឿននិយាយ
-  utterance.pitch = 1.0;
-
-  // 🔄 ពេល AI និយាយចប់ វានឹងបើកមីក្រូស្ដាប់សំណួរថ្មីដោយស្វ័យប្រវត្តិ (ឆ្លើយឆ្លងគ្នា)
-  utterance.onend = function() {
-    if (isContinuousMode) {
-      setTimeout(() => {
-        startVoiceInput();
-      }, 500);
-    }
-  };
-
-  window.speechSynthesis.speak(utterance);
 }
 
 // --- ៤. មុខងារបង្កើតបទចម្រៀង ---
@@ -170,8 +175,8 @@ async function generateSunoMusic() {
       document.getElementById('textInput').value = lyrics;
       hideStatus();
       
-      isContinuousMode = false; // បិទ Mode ឆ្លើយឆ្លងពេលចាក់ចម្រៀង
-      playNativeSpeech(lyrics, lang);
+      isContinuousMode = false;
+      speakText(lyrics, lang);
       saveToHistory(prompt);
 
     } else if (data.error) {
@@ -223,11 +228,14 @@ function playAudio() {
     return;
   }
   isContinuousMode = false;
-  playNativeSpeech(text, lang);
+  speakText(text, lang);
 }
 
 function stopAudio() { 
-  isContinuousMode = false; // បញ្ឈប់ការឆ្លើយឆ្លងតគ្នា
+  isContinuousMode = false;
+  if (typeof responsiveVoice !== 'undefined') {
+    responsiveVoice.cancel();
+  }
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
   }
@@ -249,5 +257,5 @@ function showStatus(msg) {
 function hideStatus() { 
   const statusBox = document.getElementById('statusBox'); 
   if (statusBox) statusBox.style.display = 'none'; 
-          }
+    }
   
