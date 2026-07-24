@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khuon Thavan - File to Text Extractor</title>
-  <!-- ប្រើប្រាស់ Tesseract.js សម្រាប់ទាញយកអត្ថបទពីរូបភាព -->
+  <title>Khuon Thavan - PDF & Image Text Extractor</title>
+  <!-- នាំយកបណ្ណាល័យ PDF.js សម្រាប់អានហ្វាល់ PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <!-- នាំយកបណ្ណាល័យ Tesseract.js សម្រាប់អានអក្សរពីរូបភាព (OCR) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.0.2/tesseract.min.js"></script>
   <style>
     :root {
@@ -28,7 +30,7 @@
 
     .container {
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       background: var(--card-bg);
       backdrop-filter: blur(15px);
       padding: 20px;
@@ -41,7 +43,7 @@
       text-align: center;
       color: var(--accent);
       margin-top: 0;
-      font-size: 20px;
+      font-size: 19px;
       margin-bottom: 15px;
     }
 
@@ -51,7 +53,7 @@
       text-align: center;
       border-radius: 12px;
       background: rgba(26, 26, 46, 0.6);
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       cursor: pointer;
       transition: 0.2s;
     }
@@ -69,7 +71,7 @@
 
     textarea {
       width: 100%;
-      height: 150px;
+      height: 180px;
       padding: 12px;
       border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.15);
@@ -110,33 +112,37 @@
       color: #facc15;
       margin-bottom: 10px;
       display: none;
+      font-weight: 500;
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>📂 បម្លែងឯកសារជាអត្ថបទ (Text Extractor)</h2>
+  <h2>📄 ទាញយកអត្ថបទពី PDF និងរូបភាព</h2>
 
   <div class="upload-box" onclick="document.getElementById('fileInput').click()">
     <div class="upload-label">
       📁 <b>ចុចទីនេះដើម្បីជ្រើសរើសហ្វាល់</b><br>
-      <span style="font-size: 12px; color: #aaa;">(គាំទ្ររូបភាព PNG, JPG ឬឯកសារអត្ថបទ)</span>
+      <span style="font-size: 12px; color: #aaa;">(គាំទ្រហ្វាល់ PDF និងរូបភាព PNG, JPG)</span>
     </div>
-    <input type="file" id="fileInput" accept="image/*,.txt" onchange="handleFile(this)">
+    <input type="file" id="fileInput" accept=".pdf,image/*" onchange="handleFile(this)">
   </div>
 
-  <div id="status">កំពុងអានអត្ថបទ... សូមរង់ចាំបន្តិច</div>
+  <div id="status">កំពុងដំណើរការ...</div>
   
   <textarea id="resultText" placeholder="អត្ថបទដែលទាញយកបាននឹងបង្ហាញទីនេះ..."></textarea>
 
   <div class="btn-grid">
     <button class="btn-copy" onclick="copyText()">📋 ចម្លងអត្ថបទ (Copy)</button>
     <button class="btn-clear" onclick="clearAll()">🗑️ សម្អាត</button>
-</div>
+  </div>
 </div>
 
 <script>
+  // កំណត់ Worker សម្រាប់ PDF.js
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
   function showStatus(msg) {
     const s = document.getElementById('status');
     s.style.display = 'block';
@@ -146,22 +152,36 @@
     document.getElementById('status').style.display = 'none';
   }
 
-  function handleFile(input) {
+  async function handleFile(input) {
     const file = input.files[0];
     if (!file) return;
 
-    showStatus("📂 កំពុងដំណើរការហ្វាល់...");
+    document.getElementById('resultText').value = '';
 
-    // ប្រសិនបើជា Text File (.txt)
-    if (file.type === "text/plain") {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('resultText').value = e.target.result;
+    // ប្រសិនបើជាហ្វាល់ PDF
+    if (file.type === "application/pdf") {
+      showStatus("📖 កំពុងអានហ្វាល់ PDF...");
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = "";
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          showStatus(`📖 កំពុងអានទំព័រទី ${i} នៃ ${pdf.numPages}...`);
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items.map(item => item.str).join(" ");
+          fullText += `--- ទំព័រទី ${i} ---\n` + pageText + "\n\n";
+        }
+
+        document.getElementById('resultText').value = fullText.trim();
         hideStatus();
-      };
-      reader.readAsText(file, "UTF-8");
+      } catch (err) {
+        hideStatus();
+        alert("មានបញ្ហាក្នុងការអាន PDF: " + err.message);
+      }
     } 
-    // ប្រសិនបើជារូបភាព (PNG, JPG) ប្រើ OCR ដើម្បីទាញយកអក្សរ
+    // ប្រសិនបើជារូបភាព (PNG, JPG)
     else if (file.type.startsWith("image/")) {
       showStatus("🔍 កំពុងទាញយកអក្សរពីរូបភាព (OCR)...");
       Tesseract.recognize(
@@ -179,11 +199,10 @@
         hideStatus();
       }).catch(err => {
         hideStatus();
-        alert("មានបញ្កាក្នុងการអានរូបភាព: " + err);
+        alert("មានបញ្ហាក្នុងការអានរូបភាព: " + err.message);
       });
     } else {
-      hideStatus();
-      alert("សូមជ្រើសរើសយករូបភាព ឬឯកសារ .txt ជាមុនសិន!");
+      alert("សូមជ្រើសរើសយករូបភាព ឬហ្វាល់ PDF ជាមុនសិន!");
     }
   }
 
@@ -194,7 +213,7 @@
       return;
     }
     text.select();
-    text.setSelectionRange(0, 99999); // សម្រាប់ទូរស័ព្ទដៃ
+    text.setSelectionRange(0, 99999);
     navigator.clipboard.writeText(text.value).then(() => {
       alert("✅ បានចម្លងអត្ថបទជោគជ័យ!");
     });
@@ -207,4 +226,5 @@
   }
 </script>
 </body>
-</html>
+      </html>
+      
