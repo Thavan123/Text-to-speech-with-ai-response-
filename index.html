@@ -320,19 +320,27 @@
   let mediaStream = null;
   let base64Img = null;
 
-  // 🎵 ភ្លេង Background (ចាក់ស្វ័យប្រវត្តិតាំងពីបើកវេបសាយ)
+  // 🎵 ភ្លេង Background ឮតិចៗស្រទន់ (Volume: 0.3)
   let bgMusic = new Audio("https://commondatastorage.googleapis.com/codesign-bucket/chill-lofi.mp3");
-  bgMusic.loop = true;
+  bgMusic.loop = false;
+  bgMusic.volume = 0.3; // ឮតិចៗស្រទន់
 
-  // ⏱️ ប្រព័ន្ធរាប់ថយក្រោយ ៣ វិនាទីពេលចូលវេបសាយ
   let countdownTimer = 3;
   const enterBtn = document.getElementById('enterBtn');
 
   window.addEventListener('DOMContentLoaded', () => {
-    // ចាក់ភ្លេង Background ភ្លាមពេលចូលដល់វេបសាយ
+    // ចាក់ភ្លេង Background ភ្លាមពេលបើកវេបសាយ
     bgMusic.play().catch(e => console.log("Audio autoplay restricted:", e));
 
-    // បង្កើតកាដូាប់ថយក្រោយ ៣ វិនាទី
+    // ⏱️ កំណត់ឱ្យភ្លេងបិទដោយស្វ័យប្រវត្តិបន្ទាប់ពីលេងបាន ១០ វិនាទីគត់
+    setTimeout(() => {
+      if (!bgMusic.paused) {
+        bgMusic.pause();
+        bgMusic.currentTime = 0;
+      }
+    }, 10000);
+
+    // ប្រព័ន្ធរាប់ថយក្រោយ ៣ វិនាទី
     const interval = setInterval(() => {
       countdownTimer--;
       if (countdownTimer > 0) {
@@ -603,5 +611,5 @@
   function hideStatus() { document.getElementById('status').style.display = 'none'; }
 </script>
 </body>
-      </html>
-      
+  </html>
+  
