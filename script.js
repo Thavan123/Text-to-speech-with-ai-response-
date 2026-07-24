@@ -1,11 +1,13 @@
 // 🔑 ពុះ Key ជា ២ កង់ ដាក់ក្នុងសញ្ញា " " ទាំងពីរនេះ (ដើម្បីការពារប្រព័ន្ធ Scan)
-const KEY_PART1 = "ភាគទី១_របស់_Key"; gsk_PCW01u5eY0
-const KEY_PART2 = "ភាគទី២_របស់_Key"; XyJ3zRyK9NWGdyb3FY0K5C5iC6TjIk1Bqpy14SAAab
+const KEY_PART1 = "ភាគទី១_របស់_Key"; 
+const KEY_PART2 = "ភាគទី២_របស់_Key"; 
+
 // ផ្គុំ Key ឡើងវិញដោយស្វ័យប្រវត្តិ
 const GROQ_API_KEY = (KEY_PART1 + KEY_PART2).trim();
 
 let recognition = null;
 let isListening = false;
+let isContinuousMode = false; // ប្រព័ន្ធឆ្លើយឆ្លងតៗគ្នា
 
 document.addEventListener('DOMContentLoaded', () => {
   loadSongHistory();
@@ -29,7 +31,7 @@ function initSpeechRecognition() {
       const transcript = event.results[0][0].transcript;
       document.getElementById('textInput').value = transcript;
       hideStatus();
-      askAI(); 
+      askAI(); // បញ្ជូនសំណួរទៅ AI ភ្លាមៗពេលនិយាយចប់
     };
 
     recognition.onerror = function(event) { 
@@ -53,12 +55,13 @@ function startVoiceInput() {
     recognition.stop(); 
     return; 
   }
+  isContinuousMode = true; // បើក Mode ឆ្លើយឆ្លង
   recognition.lang = document.getElementById('langSelect').value;
   stopAudio();
   recognition.start();
 }
 
-// --- ២. មុខងារសួរ AI ---
+// --- ២. មុខងារសួរ AI និងឆ្លើយតប ---
 async function askAI() {
   const prompt = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
@@ -77,9 +80,9 @@ async function askAI() {
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
-        temperature: 0.3,
+        temperature: 0.5,
         messages: [
-          { role: "system", content: `Respond accurately in language code: ${lang}. Keep it short and concise.` }, 
+          { role: "system", content: `You are a helpful AI voice assistant. Respond naturally and concisely in language code: ${lang}. Keep answers short for speech.` }, 
           { role: "user", content: prompt }
         ]
       })
@@ -90,7 +93,8 @@ async function askAI() {
       document.getElementById('textInput').value = aiReply;
       hideStatus();
       
-      playAudioText(aiReply, lang);
+      // 📣 ចាក់សំឡេងឆ្លើយតប
+      playNativeSpeech(aiReply, lang);
 
     } else if (data.error) {
       hideStatus();
@@ -102,7 +106,39 @@ async function askAI() {
   }
 }
 
-// --- ៣. មុខងារបង្កើតបទចម្រៀង ---
+// --- ៣. មុខងារបញ្ចេញសំឡេងទូរស័ព្ទ (TTS) + ឆ្លើយឆ្លងបន្ត ---
+function playNativeSpeech(text, langSelect) {
+  if (!('speechSynthesis' in window)) {
+    alert("ទូរស័ព្ទរបស់អ្នកមិនគាំទ្រប្រព័ន្ធបញ្ចេញសំឡេង Text-to-Speech ទេ!");
+    return;
+  }
+
+  window.speechSynthesis.cancel(); // ឈប់និយាយសំឡេងចាស់
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  
+  let langCode = langSelect;
+  if (langSelect === 'km-KH' || langSelect === 'km') langCode = 'km-KH';
+  else if (langSelect === 'en-US' || langSelect === 'en') langCode = 'en-US';
+  else if (langSelect === 'th-TH' || langSelect === 'th') langCode = 'th-TH';
+
+  utterance.lang = langCode;
+  utterance.rate = 0.95; // ល្បឿននិយាយ
+  utterance.pitch = 1.0;
+
+  // 🔄 ពេល AI និយាយចប់ វានឹងបើកមីក្រូស្ដាប់សំណួរថ្មីដោយស្វ័យប្រវត្តិ (ឆ្លើយឆ្លងគ្នា)
+  utterance.onend = function() {
+    if (isContinuousMode) {
+      setTimeout(() => {
+        startVoiceInput();
+      }, 500);
+    }
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
+// --- ៤. មុខងារបង្កើតបទចម្រៀង ---
 async function generateSunoMusic() {
   const prompt = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
@@ -134,7 +170,8 @@ async function generateSunoMusic() {
       document.getElementById('textInput').value = lyrics;
       hideStatus();
       
-      playAudioText(lyrics, lang);
+      isContinuousMode = false; // បិទ Mode ឆ្លើយឆ្លងពេលចាក់ចម្រៀង
+      playNativeSpeech(lyrics, lang);
       saveToHistory(prompt);
 
     } else if (data.error) {
@@ -147,28 +184,7 @@ async function generateSunoMusic() {
   }
 }
 
-// --- ៤. មុខងារបំប្លែងអត្ថបទទៅជាសំឡេង MP3 ---
-function playAudioText(text, langSelect) {
-  const player = document.getElementById('audioPlayer');
-  const langCode = langSelect.split('-')[0];
-  const cleanText = encodeURIComponent(text.substring(0, 200));
-  
-  let voiceName = "Setha";
-  if (langCode === 'en') voiceName = "Brian";
-  else if (langCode === 'th') voiceName = "Nirvana";
-
-  const audioUrl = `https://api.streamelements.com/kappa/v2/speech?voice=${voiceName}&text=${cleanText}`;
-
-  if (player) {
-    player.src = audioUrl;
-    player.style.display = "block";
-    player.play().catch(error => {
-      console.log("Autoplay blocked:", error);
-    });
-  }
-}
-
-// --- ៥. គ្រប់គ្រងប្រវត្តិ និង Player ---
+// --- ៥. គ្រប់គ្រងប្រវត្តិ និង បញ្ជាសំឡេង ---
 function saveToHistory(title) {
   let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
   history.unshift({ title: title || "បទចម្រៀង AI", date: new Date().toLocaleTimeString() });
@@ -206,14 +222,14 @@ function playAudio() {
     alert("សូមបញ្ចូលអត្ថបទដើម្បីចាក់សំឡេង!");
     return;
   }
-  playAudioText(text, lang);
+  isContinuousMode = false;
+  playNativeSpeech(text, lang);
 }
 
 function stopAudio() { 
-  const player = document.getElementById('audioPlayer');
-  if (player) {
-    player.pause(); 
-    player.currentTime = 0; 
+  isContinuousMode = false; // បញ្ឈប់ការឆ្លើយឆ្លងតគ្នា
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
   }
 }
 
@@ -233,4 +249,5 @@ function showStatus(msg) {
 function hideStatus() { 
   const statusBox = document.getElementById('statusBox'); 
   if (statusBox) statusBox.style.display = 'none'; 
-}
+          }
+  
