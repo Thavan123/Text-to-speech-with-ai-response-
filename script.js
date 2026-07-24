@@ -1,9 +1,21 @@
-// 🔑 ដាក់ Groq API Key ពុះជា ២ កង់នៅទីនេះ (ត្រូវតែជាអក្សរអង់គ្លេស និងលេខសុទ្ធ)
-const KEY_PART1 = "gsk_ដាក់ភាគទី១នៅទីនេះ"; 
-const KEY_PART2 = "ដាក់ភាគទី២នៅទីនេះ"; 
+// --- មុខងារទាញយក API Key ដោយសុវត្ថិភាព ---
+function getGroqApiKey() {
+  let key = localStorage.getItem('GROQ_API_KEY');
+  if (!key) {
+    key = prompt("សូមបញ្ចូល Groq API Key របស់អ្នក (ផ្តើមដោយ gsk_):");
+    if (key) {
+      key = key.trim();
+      localStorage.setItem('GROQ_API_KEY', key);
+    }
+  }
+  return key;
+}
 
-// ផ្គុំ Key និងលុប Space ឬតួរអក្សរមិនរៀបរយចេញដោយស្វ័យប្រវត្តិ
-const GROQ_API_KEY = (KEY_PART1 + KEY_PART2).replace(/[^\x00-\x7F]/g, "").trim();
+// មុខងារដូរ Key បើចង់ប្តូរថ្មី
+function resetApiKey() {
+  localStorage.removeItem('GROQ_API_KEY');
+  alert("បានលុប API Key ចាស់រួចរាល់! ពេលសួរ AI វានឹងសួរ Key ថ្មី។");
+}
 
 let recognition = null;
 let isListening = false;
@@ -63,30 +75,39 @@ function startVoiceInput() {
 
 // --- ២. មុខងារសួរ AI ---
 async function askAI() {
-  const prompt = document.getElementById('textInput').value.trim();
+  const apiKey = getGroqApiKey();
+  if (!apiKey) {
+    alert("សូមបញ្ចូល API Key ដើម្បីប្រើប្រាស់!");
+    return;
+  }
+
+  const promptText = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
-  if (!prompt) { 
+  if (!promptText) { 
     alert("សូមបញ្ចូលសំណួរជាមុនសិន!"); 
     return; 
   }
+  
   stopAudio();
   showStatus("🤖 AI កំពុងគិត និងត្រៀមឆ្លើយតប...");
+  
   try {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json', 
-        'Authorization': `Bearer ${GROQ_API_KEY}` 
+        'Authorization': 'Bearer ' + apiKey.replace(/[^\x00-\x7F]/g, "").trim()
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         temperature: 0.5,
         messages: [
           { role: "system", content: `You are a helpful AI voice assistant. Respond accurately and concisely in language code: ${lang}. Keep response short.` }, 
-          { role: "user", content: prompt }
+          { role: "user", content: promptText }
         ]
       })
     });
+
     const data = await response.json();
     if (data.choices && data.choices[0].message.content) {
       const aiReply = data.choices[0].message.content.trim();
@@ -97,7 +118,12 @@ async function askAI() {
 
     } else if (data.error) {
       hideStatus();
-      alert("Groq Error: " + data.error.message);
+      if (data.error.message.includes("API key")) {
+        alert("API Key មិនត្រឹមត្រូវ! សូមបញ្ចូល Key ថ្មី។");
+        resetApiKey();
+      } else {
+        alert("Groq Error: " + data.error.message);
+      }
     }
   } catch (error) { 
     hideStatus(); 
@@ -141,30 +167,39 @@ function speakText(text, langSelect) {
 
 // --- ៤. មុខងារបង្កើតបទចម្រៀង ---
 async function generateSunoMusic() {
-  const prompt = document.getElementById('textInput').value.trim();
+  const apiKey = getGroqApiKey();
+  if (!apiKey) {
+    alert("សូមបញ្ចូល API Key ដើម្បីប្រើប្រាស់!");
+    return;
+  }
+
+  const promptText = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
-  if (!prompt) { 
+  if (!promptText) { 
     alert("សូមបញ្ចូលប្រធានបទចម្រៀង!"); 
     return; 
   }
+  
   stopAudio();
   showStatus("🎵 AI កំពុងតែងបទចម្រៀង...");
+  
   try {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json', 
-        'Authorization': `Bearer ${GROQ_API_KEY}` 
+        'Authorization': 'Bearer ' + apiKey.replace(/[^\x00-\x7F]/g, "").trim()
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         temperature: 0.7,
         messages: [
           { role: "system", content: `Write short catchy lyrics in language code: ${lang}. Output ONLY lyrics.` }, 
-          { role: "user", content: prompt }
+          { role: "user", content: promptText }
         ]
       })
     });
+
     const data = await response.json();
     if (data.choices && data.choices[0].message.content) {
       const lyrics = data.choices[0].message.content.trim();
@@ -173,7 +208,7 @@ async function generateSunoMusic() {
       
       isContinuousMode = false;
       speakText(lyrics, lang);
-      saveToHistory(prompt);
+      saveToHistory(promptText);
 
     } else if (data.error) {
       hideStatus();
@@ -253,5 +288,4 @@ function showStatus(msg) {
 function hideStatus() { 
   const statusBox = document.getElementById('statusBox'); 
   if (statusBox) statusBox.style.display = 'none'; 
-           }
-                   
+}
