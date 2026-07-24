@@ -1,5 +1,5 @@
-// 🔑 Groq API Key
-const GROQ_API_KEY = "Gsk_C9S9o7j7eYnreNjSBAQAWGdyb3FY3fUqDPlT0qhe6Nm9V6nVZ23f";
+// 🔑 ដាក់ API Key ថ្មីរបស់បងនៅចន្លោះសញ្ញា " " ខាងក្រោម (កុំភ្លេចថាត្រូវផ្តើមដោយ gsk_ តូច)
+const GROQ_API_KEY = "gsk_ដាក់_API_KEY_ថ្មី_របស់បងនៅត្រង់នេះ";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
 
 const player = document.getElementById('audioPlayer');
 let recognition = null;
@@ -88,7 +88,6 @@ async function askAI() {
       document.getElementById('textInput').value = aiReply;
       hideStatus();
       
-      // ចាក់សំឡេងតាម Audio Player ផ្ទាល់
       playAudioText(aiReply, lang);
 
     } else if (data.error) {
@@ -146,17 +145,15 @@ async function generateSunoMusic() {
   }
 }
 
-// --- ៤. មុខងារបំប្លែងអត្ថបទទៅជាសំឡេង MP3 ຜ່ານ API ជំនួស (ResponsiveVoice / Streamlabs TTS) ---
+// --- ៤. មុខងារបំប្លែងអត្ថបទទៅជាសំឡេង MP3 ---
 function playAudioText(text, langSelect) {
-  const langCode = langSelect.split('-')[0]; // km, en, th
+  const langCode = langSelect.split('-')[0];
   const cleanText = encodeURIComponent(text.substring(0, 200));
   
-  // ប្រើ Streamlabs Text-to-Speech API (ដំណើរការបានល្អបំផុតលើទូរស័ព្ទ និងមិនសូវរងការប្លុក)
-  let voiceName = "Setha"; // ភាសាខ្មែរ ឬសំឡេងស្តង់ដារ
+  let voiceName = "Setha";
   if (langCode === 'en') voiceName = "Brian";
   else if (langCode === 'th') voiceName = "Nirvana";
 
-  // បង្កើត Audio URL ជំនួស Google TTS ธรรมดา
   const audioUrl = `https://api.streamelements.com/kappa/v2/speech?voice=${voiceName}&text=${cleanText}`;
 
   player.src = audioUrl;
@@ -164,7 +161,6 @@ function playAudioText(text, langSelect) {
   
   player.play().catch(error => {
     console.log("Autoplay blocked:", error);
-    alert("សូមចុចលើរូបសញ្ញា Play នៅលើ Player ដើម្បីស្តាប់សំឡេង!");
   });
 }
 
@@ -233,5 +229,5 @@ function showStatus(msg) {
 function hideStatus() { 
   const statusBox = document.getElementById('statusBox'); 
   if (statusBox) statusBox.style.display = 'none'; 
-}
-  
+        }
+    
