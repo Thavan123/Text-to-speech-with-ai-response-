@@ -26,7 +26,7 @@
       overflow-x: hidden;
     }
 
-    /* 📱 កម្មវិធីหลัก Container */
+    /* 📱 Container គ្រប់គ្រងកម្មវិធី */
     .container {
       width: 100%;
       max-width: 500px;
@@ -166,18 +166,40 @@
       border: 1px solid #00d2ff;
     }
     
+    .media-box {
+      position: relative;
+      margin-bottom: 10px;
+      display: none;
+    }
     #generatedImageResult, #generatedVideoResult {
       width: 100%;
       max-height: 250px;
       object-fit: contain;
       border-radius: 12px;
-      margin-bottom: 10px;
-      display: none;
       border: 2px solid #f97316;
       box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     }
     #generatedVideoResult {
       border-color: #6366f1;
+    }
+    
+    /* 📥 ប៊ូតុងទាញយក */
+    .btn-download {
+      display: none;
+      width: 100%;
+      background: #10b981;
+      color: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 8px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    }
+    .btn-download:hover {
+      background: #059669;
     }
   </style>
 </head>
@@ -223,8 +245,17 @@
     <img id="imagePreview" class="preview-img" alt="Preview">
   </div>
 
-  <img id="generatedImageResult" alt="AI Generated Image">
-  <video id="generatedVideoResult" controls autoplay loop style="display:none;"></video>
+  <!-- 🖼️ ប្រអប់បង្ហាញរូបភាព និងប៊ូតុង Download -->
+  <div id="imageBox" class="media-box">
+    <img id="generatedImageResult" alt="AI Generated Image">
+    <button class="btn-download" onclick="downloadMedia('image')">📥 ទាញយករូបភាពចូលទូរស័ព្ទ</button>
+  </div>
+
+  <!-- 🎬 ប្រអប់បង្ហាញវីដេអូ/ចលនា និងប៊ូតុង Download -->
+  <div id="videoBox" class="media-box">
+    <img id="generatedVideoResult" alt="AI Generated Animation/Video">
+    <button class="btn-download" onclick="downloadMedia('video')">📥 ទាញយកវីដេអូ/ចលនាចូលទូរស័ព្ទ</button>
+  </div>
   
   <textarea id="inputText" placeholder="វាយអក្សរ, ពណ៌នាពីរូបភាព ឬវីដេអូដែលចង់បង្កើត, ឬចុចនិយាយ..."></textarea>
   <textarea id="outputText" readonly placeholder="លទ្ធផលចម្លើយ AI..."></textarea>
@@ -425,8 +456,8 @@
     }
 
     showStatus("🎨 AI កំពុងរៀបចំបង្កើតរូបភាព...");
-    document.getElementById('generatedImageResult').style.display = 'none';
-    document.getElementById('generatedVideoResult').style.display = 'none';
+    document.getElementById('imageBox').style.display = 'none';
+    document.getElementById('videoBox').style.display = 'none';
 
     try {
       const transRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -452,7 +483,7 @@
       
       imgElement.onload = () => {
         hideStatus();
-        imgElement.style.display = 'block';
+        document.getElementById('imageBox').style.display = 'block';
         document.getElementById('outputText').value = "✅ រូបភាពត្រូវបានបង្កើតដោយជោគជ័យ!";
       };
 
@@ -474,9 +505,9 @@
       return;
     }
 
-    showStatus("🎬 AI កំពុងរៀបចំបង្កើតវីដេអូ (សូមរង់ចាំបន្តិច)...");
-    document.getElementById('generatedImageResult').style.display = 'none';
-    document.getElementById('generatedVideoResult').style.display = 'none';
+    showStatus("🎬 AI កំពុងរៀបចំបង្កើតវីដេអូ/ចលនា...");
+    document.getElementById('imageBox').style.display = 'none';
+    document.getElementById('videoBox').style.display = 'none';
 
     try {
       const transRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -485,7 +516,7 @@
         body: JSON.stringify({
           model: "llama-3.3-70b-versatile",
           messages: [
-            { role: "system", content: "Translate into a short cinematic English prompt for video generation. Return ONLY the prompt." },
+            { role: "system", content: "Translate into a cinematic dynamic English prompt for visual animation style. Return ONLY the prompt." },
             { role: "user", content: promptText }
           ]
         })
@@ -496,15 +527,15 @@
         engPrompt = transData.choices[0].message.content.trim();
       }
 
-      const videoUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(engPrompt + " cinematic movement, high quality")}?width=512&height=512&model=flux&nologo=true`;
+      const videoUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(engPrompt + ", cinematic motion, dynamic movement, 4k")}?width=512&height=512&model=flux&nologo=true`;
       
       const vidElement = document.getElementById('generatedVideoResult');
       vidElement.src = videoUrl;
       
-      vidElement.onloadeddata = () => {
+      vidElement.onload = () => {
         hideStatus();
-        vidElement.style.display = 'block';
-        document.getElementById('outputText').value = "✅ វីដេអូត្រូវបានបង្កើតរួចរាល់ហើយ!";
+        document.getElementById('videoBox').style.display = 'block';
+        document.getElementById('outputText').value = "✅ វីដេអូ/ចលនា ត្រូវបានបង្កើតរួចរាល់ហើយ!";
       };
 
       vidElement.onerror = () => {
@@ -515,6 +546,32 @@
     } catch(e) {
       hideStatus();
       alert("មានបញ្ហា: " + e.message);
+    }
+  }
+
+  /* 📥 មុខងារទាញយករូបភាព ឬវីដេអូចូលទូរស័ព្ទ */
+  async function downloadMedia(type) {
+    const el = type === 'image' ? document.getElementById('generatedImageResult') : document.getElementById('generatedVideoResult');
+    const url = el.src;
+    if (!url) return;
+
+    showStatus("📥 កំពុងទាញយក...");
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = type === 'image' ? 'AI_Image_' + Date.now() + '.jpg' : 'AI_Video_' + Date.now() + '.jpg';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(blobUrl);
+      hideStatus();
+    } catch (e) {
+      hideStatus();
+      // បើទាញយកតាម Blob ติด CORS អាចបើកតំណជា Tab ថ្មីជំនួស
+      window.open(url, '_blank');
     }
   }
 
@@ -563,63 +620,4 @@
       return;
     }
 
-    const langMap = { km: 'km-KH', en: 'en-US', fr: 'fr-FR', zh: 'zh-CN', th: 'th-TH', vi: 'vi-VN', ja: 'ja-JP', ko: 'ko-KR', es: 'es-ES', ar: 'ar-SA' };
-    const cleanText = text.replace(/[*#_`]/g, '');
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = langMap[lang] || 'en-US';
-    utterance.rate = 1.0;
-    
-    utterance.onstart = () => {
-      isAiSpeaking = true; 
-      if (isListening && recognition) { recognition.stop(); }
-    };
-
-    utterance.onend = () => {
-      isAiSpeaking = false; 
-      if (onEndCallback) onEndCallback();
-    };
-    
-    utterance.onerror = () => {
-      isAiSpeaking = false;
-      if (onEndCallback) onEndCallback();
-    };
-
-    window.speechSynthesis.speak(utterance);
-  }
-
-  function playAudio() {
-    const text = document.getElementById('outputText').value;
-    const lang = document.getElementById('targetLang').value;
-    speak(text, lang);
-  }
-
-  function stopAudio() {
-    isAiSpeaking = false;
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
-  }
-
-  function clearAll() {
-    stopAudio();
-    isLive = false;
-    document.getElementById('liveBtn').style.background = '#db2777';
-    document.getElementById('inputText').value = '';
-    document.getElementById('outputText').value = '';
-    document.getElementById('imagePreview').style.display = 'none';
-    document.getElementById('generatedImageResult').style.display = 'none';
-    document.getElementById('generatedVideoResult').style.display = 'none';
-    base64Img = null;
-    hideStatus();
-  }
-
-  function showStatus(msg) {
-    const s = document.getElementById('status');
-    s.style.display = 'block';
-    s.innerText = msg;
-  }
-  function hideStatus() { document.getElementById('status').style.display = 'none'; }
-</script>
-</body>
-  </html>
-        
+    const langMap = { km: 'km-KH', en
