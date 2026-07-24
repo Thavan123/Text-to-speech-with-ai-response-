@@ -26,7 +26,7 @@
       overflow-x: hidden;
     }
 
-    /* 🌟 ផ្ទាំងស្វាគមន៍ Splash Screen (គ្មានជាប់ពាក់ព័ន្ធនឹងសំឡេងរារាំងទេ គឺចុចចូលបានរលូន) */
+    /* 🌟 ផ្ទាំងស្វាគមន៍ Splash Screen */
     #splashScreen {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -180,6 +180,7 @@
     .btn-live { background: #db2777; }
     .btn-song { background: #8b5cf6; }
     .btn-image { background: #f97316; }
+    .btn-video { background: #6366f1; } /* 🎬 ប៊ូតុងបង្កើតវីដេអូថ្មី */
     .btn-play { background: #16a34a; }
     .btn-stop { background: #dc2626; }
     
@@ -244,7 +245,7 @@
       border: 1px solid #00d2ff;
     }
     
-    #generatedImageResult {
+    #generatedImageResult, #generatedVideoResult {
       width: 100%;
       max-height: 250px;
       object-fit: contain;
@@ -253,6 +254,9 @@
       display: none;
       border: 2px solid #f97316;
       box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+    #generatedVideoResult {
+      border-color: #6366f1;
     }
   </style>
 </head>
@@ -275,6 +279,14 @@
       <select id="srcLang">
         <option value="km">🇰🇭 ភាសាខ្មែរ</option>
         <option value="en">🇺🇸 English</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="zh">🇨🇳 中文</option>
+        <option value="th">🇹🇭 ไทย</option>
+        <option value="vi">🇻🇳 Tiếng Việt</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="ko">🇰🇷 한국어</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ar">🇸🇦 العربية</option>
       </select>
     </div>
     <div class="lang-group">
@@ -282,6 +294,14 @@
       <select id="targetLang">
         <option value="en">🇺🇸 English</option>
         <option value="km">🇰🇭 ភាសាខ្មែរ</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="zh">🇨🇳 中文</option>
+        <option value="th">🇹🇭 ไทย</option>
+        <option value="vi">🇻🇳 Tiếng Việt</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="ko">🇰🇷 한국어</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ar">🇸🇦 العربية</option>
       </select>
     </div>
   </div>
@@ -293,8 +313,9 @@
   </div>
 
   <img id="generatedImageResult" alt="AI Generated Image">
+  <video id="generatedVideoResult" controls autoplay loop style="display:none;"></video>
   
-  <textarea id="inputText" placeholder="វាយអក្សរ, ពណ៌នាពីរូបភាពដែលចង់បង្កើត, ឬចុចនិយាយ..."></textarea>
+  <textarea id="inputText" placeholder="វាយអក្សរ, ពណ៌នាពីរូបភាព ឬវីដេអូដែលចង់បង្កើត, ឬចុចនិយាយ..."></textarea>
   <textarea id="outputText" readonly placeholder="លទ្ធផលចម្លើយ AI..."></textarea>
 
   <div class="btn-grid">
@@ -305,6 +326,7 @@
     <button class="btn-live" id="liveBtn" onclick="toggleLive()">🔴 និយាយផ្ទាល់</button>
     <button class="btn-song" onclick="makeSong()">🎵 ចម្រៀង</button>
     <button class="btn-image" onclick="generateAIImage()">🎨 បង្កើតរូប</button>
+    <button class="btn-video" onclick="generateAIVideo()">🎬 បង្កើតវីដេអូ</button>
     <button class="btn-play" onclick="playAudio()">▶️ ស្តាប់</button>
     <button class="btn-stop" onclick="stopAudio()">⏹️ បញ្ឈប់</button>
   </div>
@@ -336,7 +358,6 @@
   let mediaStream = null;
   let base64Img = null;
 
-  // 🚀 ប៊ូតុងបញ្ជាឱ្យបិទផ្ទាំងស្វាគមន៍ និងចូលទៅកាន់វេបសាយភ្លាមៗ
   function enterWebsite() {
     const splash = document.getElementById('splashScreen');
     splash.style.opacity = '0';
@@ -413,7 +434,7 @@
     isLive = false;
     document.getElementById('liveBtn').style.background = '#db2777';
     if (isListening) { recognition.stop(); return; }
-    recognition.lang = document.getElementById('srcLang').value === 'km' ? 'km-KH' : 'en-US';
+    updateRecognitionLang();
     stopAudio();
     recognition.start();
   }
@@ -425,13 +446,20 @@
     if (isLive) {
       btn.style.background = '#16a34a';
       showStatus("🔴 កំពុងឡាយផ្ទាល់ជាមួយ AI...");
-      recognition.lang = document.getElementById('srcLang').value === 'km' ? 'km-KH' : 'en-US';
+      updateRecognitionLang();
       recognition.start();
     } else {
       btn.style.background = '#db2777';
       hideStatus();
       recognition.stop();
     }
+  }
+
+  function updateRecognitionLang() {
+    if (!recognition) return;
+    const langMap = { km: 'km-KH', en: 'en-US', fr: 'fr-FR', zh: 'zh-CN', th: 'th-TH', vi: 'vi-VN', ja: 'ja-JP', ko: 'ko-KR', es: 'es-ES', ar: 'ar-SA' };
+    const val = document.getElementById('srcLang').value;
+    recognition.lang = langMap[val] || 'en-US';
   }
 
   async function askAI() {
@@ -456,7 +484,7 @@
         body: JSON.stringify({
           model: model,
           messages: [
-            { role: "system", content: "អ្នកគឺជាជំនួយការ AI ដ៏ឆ្លាតវៃ។ សូមឆ្លើយតបជាភាសាខ្មែរឱ្យបានខ្លី និងច្បាស់លាស់។" },
+            { role: "system", content: "អ្នកគឺជាជំនួយការ AI ដ៏ឆ្លាតវៃ។ សូមឆ្លើយតបជាភាសាដែលបានកំណត់។" },
             { role: "user", content: content }
           ],
           temperature: 0.7
@@ -468,7 +496,7 @@
         document.getElementById('outputText').value = reply;
         hideStatus();
         
-        const langCode = document.getElementById('srcLang').value === 'km' ? 'km' : 'en';
+        const langCode = document.getElementById('srcLang').value;
         speak(reply, langCode, () => {
           if (isLive) {
             setTimeout(() => { if (isLive && !isAiSpeaking) recognition.start(); }, 600);
@@ -493,6 +521,7 @@
 
     showStatus("🎨 AI កំពុងរៀបចំបង្កើតរូបភាព...");
     document.getElementById('generatedImageResult').style.display = 'none';
+    document.getElementById('generatedVideoResult').style.display = 'none';
 
     try {
       const transRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -512,9 +541,7 @@
         englishPrompt = transData.choices[0].message.content.trim();
       }
 
-      const encodedPrompt = encodeURIComponent(englishPrompt);
-      const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1024&height=1024&nologo=true`;
-
+      const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(englishPrompt)}?width=1024&height=1024&nologo=true`;
       const imgElement = document.getElementById('generatedImageResult');
       imgElement.src = imageUrl;
       
@@ -522,12 +549,63 @@
         hideStatus();
         imgElement.style.display = 'block';
         document.getElementById('outputText').value = "✅ រូបភាពត្រូវបានបង្កើតដោយជោគជ័យ!";
-        speak("រូបភាពត្រូវបានបង្កើតរួចរាល់ហើយ!", document.getElementById('srcLang').value);
       };
 
       imgElement.onerror = () => {
         hideStatus();
         alert("មិនអាចបង្កើតរូបភាពបានទេ!");
+      };
+
+    } catch(e) {
+      hideStatus();
+      alert("មានបញ្ហា: " + e.message);
+    }
+  }
+
+  async function generateAIVideo() {
+    let promptText = document.getElementById('inputText').value.trim();
+    if (!promptText) {
+      alert("សូមវាយបញ្ចូលការពណ៌នាសម្រាប់បង្កើតវីដេអូ!");
+      return;
+    }
+
+    showStatus("🎬 AI កំពុងរៀបចំបង្កើតវីដេអូ (សូមរង់ចាំបន្តិច)...");
+    document.getElementById('generatedImageResult').style.display = 'none';
+    document.getElementById('generatedVideoResult').style.display = 'none';
+
+    try {
+      const transRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + getKey(), "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            { role: "system", content: "Translate into a short cinematic English prompt for video generation. Return ONLY the prompt." },
+            { role: "user", content: promptText }
+          ]
+        })
+      });
+      const transData = await transRes.json();
+      let engPrompt = promptText;
+      if (transData.choices && transData.choices[0]) {
+        engPrompt = transData.choices[0].message.content.trim();
+      }
+
+      // ប្រើប្រាស់ Pollinations Video / Animation Generation Endpoint
+      const videoUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(engPrompt + " cinematic movement, high quality")}?width=512&height=512&model=flux&nologo=true`;
+      
+      const vidElement = document.getElementById('generatedVideoResult');
+      vidElement.src = videoUrl;
+      
+      vidElement.onloadeddata = () => {
+        hideStatus();
+        vidElement.style.display = 'block';
+        document.getElementById('outputText').value = "✅ វីដេអូត្រូវបានបង្កើតរួចរាល់ហើយ!";
+      };
+
+      vidElement.onerror = () => {
+        hideStatus();
+        alert("មិនអាចបង្កើតវីដេអូបានទេ!");
       };
 
     } catch(e) {
@@ -549,93 +627,4 @@
         body: JSON.stringify({
           model: "llama-3.3-70b-versatile",
           messages: [
-            { role: "system", content: `Translate accurately into ${target === 'km' ? 'Khmer' : 'English'}. Return only translation.` },
-            { role: "user", content: text }
-          ]
-        })
-      });
-      const data = await res.json();
-      if (data.choices) {
-        const translated = data.choices[0].message.content.trim();
-        document.getElementById('outputText').value = translated;
-        hideStatus();
-        speak(translated, target);
-      }
-    } catch(e) { hideStatus(); alert("Error: " + e.message); }
-  }
-
-  function makeSong() {
-    document.getElementById('inputText').value = "សូមแต่งบทเพลงสั้นๆ เกี่ยวกับความสุขและความหวัง";
-    askAI();
-  }
-
-  function speak(text, lang, onEndCallback) {
-    if (!('speechSynthesis' in window)) {
-      if (onEndCallback) onEndCallback();
-      return;
-    }
-    window.speechSynthesis.cancel();
-    
-    if (!text) {
-      if (onEndCallback) onEndCallback();
-      return;
-    }
-
-    const cleanText = text.replace(/[*#_`]/g, '');
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = (lang === 'km') ? 'km-KH' : 'en-US';
-    utterance.rate = 1.0;
-    
-    utterance.onstart = () => {
-      isAiSpeaking = true; 
-      if (isListening && recognition) { recognition.stop(); }
-    };
-
-    utterance.onend = () => {
-      isAiSpeaking = false; 
-      if (onEndCallback) onEndCallback();
-    };
-    
-    utterance.onerror = () => {
-      isAiSpeaking = false;
-      if (onEndCallback) onEndCallback();
-    };
-
-    window.speechSynthesis.speak(utterance);
-  }
-
-  function playAudio() {
-    const text = document.getElementById('outputText').value;
-    const lang = document.getElementById('targetLang').value;
-    speak(text, lang);
-  }
-
-  function stopAudio() {
-    isAiSpeaking = false;
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
-  }
-
-  function clearAll() {
-    stopAudio();
-    isLive = false;
-    document.getElementById('liveBtn').style.background = '#db2777';
-    document.getElementById('inputText').value = '';
-    document.getElementById('outputText').value = '';
-    document.getElementById('imagePreview').style.display = 'none';
-    document.getElementById('generatedImageResult').style.display = 'none';
-    base64Img = null;
-    hideStatus();
-  }
-
-  function showStatus(msg) {
-    const s = document.getElementById('status');
-    s.style.display = 'block';
-    s.innerText = msg;
-  }
-  function hideStatus() { document.getElementById('status').style.display = 'none'; }
-</script>
-</body>
-      </html>
-  
+            { ro
