@@ -203,7 +203,8 @@
     s.innerText = msg;
   }
   function hideStatus() {
-    document.getElementById('status'].style.display = 'none';
+    const s = document.getElementById('status');
+    if (s) s.style.display = 'none';
   }
 
   async function handleFile(input) {
@@ -273,7 +274,6 @@
       return;
     }
 
-    // បែងចែកអត្ថបទជាផ្នែកៗ (ប្រហែល 3000 អក្សរក្នុងមួយកំណាត់) ដើម្បីកុំឱ្យលើសកម្រិត API Limit
     const chunkSize = 3000;
     let chunks = [];
     for (let i = 0; i < rawText.length; i += chunkSize) {
