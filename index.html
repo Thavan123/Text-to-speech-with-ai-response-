@@ -261,6 +261,8 @@
     }
   }
 
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
   async function formatWithAI() {
     const apiKey = localStorage.getItem('groq_api_key') || document.getElementById('apiKeyInput').value.trim();
     if (!apiKey) {
@@ -274,7 +276,7 @@
       return;
     }
 
-    const chunkSize = 3000;
+    const chunkSize = 1500;
     let chunks = [];
     for (let i = 0; i < rawText.length; i += chunkSize) {
       chunks.push(rawText.substring(i, i + chunkSize));
@@ -283,41 +285,61 @@
     let finalFormattedResult = "";
 
     for (let index = 0; index < chunks.length; index++) {
-      showStatus(`🤖 AI កំពុងកែសម្រួលផ្នែកទី ${index + 1} នៃ ${chunks.length}...`);
+      showStatus(`🤖 AI កំពុងកែសម្រួលផ្នែកទី ${index + 1} នៃ ${chunks.length}... (រង់ចាំបន្តិច)`);
       
-      try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-          method: "POST",
-          headers: { 
-            "Authorization": "Bearer " + apiKey, 
-            "Content-Type": "application/json" 
-          },
-          body: JSON.stringify({
-            model: "llama-3.3-70b-versatile",
-            messages: [
-              { 
-                role: "system", 
-                content: "អ្នកគឺជាជំនួយការផ្នែកកែសម្រួលអត្ថបទវេជ្ជសាស្ត្រ។ សូមជួយរៀបចំ និងតម្រៀបអត្ថបទសំណួរ និងចម្លើយខាងក្រោមឱ្យបានត្រឹមត្រូវតាមលំដាប់លំដោយលេខរៀង ដោយកែតម្រូវអក្ខរាវិរុទ្ធដែលរាយប៉ាយឱ្យបានស្អាត និងងាយស្រួលអានបំផុត។" 
-              },
-              { role: "user", content: chunks[index] }
-            ],
-            temperature: 0.3
-          })
-        });
+      let success = false;
+      let retries = 3;
 
-        const data = await res.json();
+      while (retries > 0 && !success) {
+        try {
+          const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: { 
+              "Authorization": "Bearer " + apiKey, 
+              "Content-Type": "application/json" 
+            },
+            body: JSON.stringify({
+              model: "llama-3.3-70b-versatile",
+              messages: [
+                { 
+                  role: "system", 
+                  content: "អ្នកគឺជាជំនួយការផ្នែកកែសម្រួលអត្ថបទវេជ្ជសាស្ត្រ។ សូមជួយរៀបចំ និងតម្រៀបអត្ថបទសំណួរ និងចម្លើយខាងក្រោមឱ្យបានត្រឹមត្រូវតាមលំដាប់លំដោយលេខរៀង ដោយកែតម្រូវអក្ខរាវិរុទ្ធដែលរាយប៉ាយឱ្យបានស្អាត និងងាយស្រួលអានបំផុត។" 
+                },
+                { role: "user", content: chunks[index] }
+              ],
+              temperature: 0.3
+            })
+          });
 
-        if (data.choices && data.choices[0]) {
-          finalFormattedResult += data.choices[0].message.content.trim() + "\n\n";
-        } else {
-          alert("Error: " + (data.error?.message || "មានបញ្ហា API"));
-          hideStatus();
-          return;
+          const data = await res.json();
+
+          if (data.choices && data.choices[0]) {
+            finalFormattedResult += data.choices[0].message.content.trim() + "\n\n";
+            success = true;
+          } else if (data.error && data.error.message.includes("Rate limit")) {
+            showStatus(`⏳ ជាប់ Rate Limit, កំពុងរង់ចាំ ១៣ វិនាទីដើម្បីបន្ត... (សល់ដងព្យាយាម: ${retries})`);
+            await sleep(13000);
+            retries--;
+          } else {
+            alert("Error: " + (data.error?.message || "មានបញ្ហា API"));
+            hideStatus();
+            return;
+          }
+        } catch(e) {
+          retries--;
+          await sleep(5000);
         }
-      } catch(e) {
+      }
+
+      if (!success) {
+        alert("⚠️ លើសកម្រិតកំណត់ (Rate Limit) ញឹកញាប់ពេក។ សូមរង់ចាំប្រហែល ១ នាទីសឹមចុចម្ដងទៀត!");
         hideStatus();
-        alert("Network Error: " + e.message);
         return;
+      }
+
+      if (index < chunks.length - 1) {
+        showStatus(`⏳ រង់ចាំ ១២ វិនាទី មុននឹងបន្តទៅផ្នែកបន្ទាប់...`);
+        await sleep(12000);
       }
     }
 
@@ -346,5 +368,4 @@
   }
 </script>
 </body>
-        </html>
-  
+</html>
