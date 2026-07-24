@@ -227,7 +227,6 @@
   let recognition = null;
   let isListening = false;
   let isLive = false;
-  let audioPlayer = new Audio();
   let mediaStream = null;
   let base64Img = null;
 
@@ -409,15 +408,29 @@
     askAI();
   }
 
+  // 🔊 មុខងារបញ្ចេញសំឡេងតាមបាសទូរស័ព្ទ (Text-to-Speech)
   function speak(text, lang) {
-    stopAudio();
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel(); // បញ្ឈប់សំឡេងចាស់ដែលកំពុងនិយាយค้าง
+    
     if (!text) return;
-    audioPlayer.src = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text.substring(0, 300))}&tl=${lang}&client=tw-ob`;
-    audioPlayer.play().catch(()=>{});
+    const cleanText = text.replace(/[*#_`]/g, ''); // លុបសញ្ញាพิเศษออก
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = (lang === 'km') ? 'km-KH' : 'en-US';
+    utterance.rate = 1.0; // ល្បឿននិយាយធម្មតា
+    window.speechSynthesis.speak(utterance);
   }
 
-  function playAudio() { audioPlayer.play(); }
-  function stopAudio() { audioPlayer.pause(); audioPlayer.currentTime = 0; }
+  function playAudio() {
+    const text = document.getElementById('outputText').value;
+    speak(text, 'km');
+  }
+
+  function stopAudio() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  }
 
   function clearAll() {
     stopAudio();
@@ -438,5 +451,5 @@
   function hideStatus() { document.getElementById('status').style.display = 'none'; }
 </script>
 </body>
-      </html>
-        
+  </html>
+  
