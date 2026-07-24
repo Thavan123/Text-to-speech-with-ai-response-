@@ -3,8 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khuon Thavan - AI Assistant</title>
+  <title>Khuon Thavan - Pro AI Assistant</title>
   <style>
+    :root {
+      --primary: #7c3aed;
+      --secondary: #db2777;
+      --accent: #00d2ff;
+      --bg-dark: #0f0c29;
+      --card-bg: rgba(37, 37, 56, 0.85);
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #1e1e2f, #2a2a40);
@@ -18,51 +26,106 @@
       overflow-x: hidden;
     }
 
-    /* 🌟 Splash Screen ផ្ទាំងស្វាគមន៍ដំបូង */
+    /* 🌟 លំអផ្ទាំងស្វាគមន៍ Splash Screen បែបអាជីព */
     #splashScreen {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      background: radial-gradient(circle at center, #24243e 0%, #0f0c29 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 9999;
       text-align: center;
-      padding: 20px;
-      transition: opacity 1.5s ease;
+      padding: 25px;
+      transition: opacity 1.2s ease, visibility 1.2s ease;
     }
+
+    .splash-card {
+      background: rgba(25, 25, 40, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 40px 30px;
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(124, 58, 237, 0.2);
+      max-width: 420px;
+      width: 100%;
+      animation: floatCard 4s ease-in-out infinite;
+    }
+
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .splash-icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+      animation: pulseGlow 2s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0,210,255,0.5)); }
+      50% { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(0,210,255,0.8)); }
+      100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0,210,255,0.5)); }
+    }
+
     #splashScreen h1 {
-      font-size: 24px;
-      color: #00d2ff;
-      margin-bottom: 25px;
-      line-height: 1.5;
-      text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      font-size: 20px;
+      color: #ffffff;
+      margin-bottom: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
+
+    #splashScreen h2 {
+      font-size: 22px;
+      background: linear-gradient(90deg, #00d2ff, #7c3aed, #db2777);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 25px;
+      font-weight: 700;
+    }
+
     .btn-enter {
       background: linear-gradient(135deg, #7c3aed, #db2777);
       color: #fff;
       border: none;
-      padding: 14px 30px;
-      font-size: 16px;
+      padding: 14px 28px;
+      font-size: 15px;
       font-weight: bold;
       border-radius: 30px;
       cursor: pointer;
-      box-shadow: 0 5px 20px rgba(219,39,119,0.4);
-      transition: 0.3s;
-    }
-    .btn-enter:active {
-      transform: scale(0.95);
+      box-shadow: 0 8px 25px rgba(219,39,119,0.4);
+      transition: all 0.3s ease;
+      width: 100%;
+      letter-spacing: 0.5px;
     }
 
+    .btn-enter:disabled {
+      background: #4a4a6a;
+      color: #8888aa;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none !important;
+    }
+
+    .btn-enter:not(:disabled):active {
+      transform: scale(0.96);
+    }
+
+    /* 📱 កម្មវិធីหลัก Container */
     .container {
       width: 100%;
       max-width: 500px;
-      background: #252538;
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
       padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
     }
+
     .lang-selects {
       display: flex;
       gap: 12px;
@@ -79,17 +142,21 @@
     }
     select, textarea {
       width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #444;
-      background: #1a1a2e;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(26, 26, 46, 0.9);
       color: #fff;
       font-size: 14px;
       box-sizing: border-box;
       outline: none;
+      transition: 0.2s;
+    }
+    select:focus, textarea:focus {
+      border-color: var(--accent);
     }
     textarea {
-      height: 90px;
+      height: 95px;
       resize: vertical;
       margin-bottom: 12px;
     }
@@ -102,13 +169,14 @@
     button {
       padding: 12px 6px;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 13px;
       font-weight: bold;
       cursor: pointer;
       color: #fff;
       transition: 0.2s;
       text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     button:active {
       transform: scale(0.95);
@@ -121,7 +189,7 @@
     .btn-song { background: #8b5cf6; }
     .btn-play { background: #16a34a; }
     .btn-stop { background: #dc2626; }
-    .btn-clear { background: #64748b; width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; font-weight: bold; color: #fff; border: none; cursor: pointer;}
+    .btn-clear { background: #64748b; width: 100%; padding: 12px; margin-top: 5px; border-radius: 12px; font-weight: bold; color: #fff; border: none; cursor: pointer;}
 
     /* 📷 Camera Modal */
     .cam-modal {
@@ -139,14 +207,15 @@
       max-width: 400px;
       background: #252538;
       padding: 15px;
-      border-radius: 12px;
+      border-radius: 16px;
       text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
     }
     video {
       width: 100%;
       height: 280px;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 12px;
       background: #000;
     }
     canvas { display: none; }
@@ -164,6 +233,7 @@
       color: #facc15;
       margin-bottom: 10px;
       display: none;
+      font-weight: 500;
     }
     .preview-img {
       max-width: 100%;
@@ -177,10 +247,14 @@
 </head>
 <body>
 
-<!-- 🌟 ផ្ទាំងស្វាគមន៍ដំបូង -->
+<!-- 🌟 ផ្ទាំងស្វាគមន៍រចនាបែបប្រណិត (Splash Screen) -->
 <div id="splashScreen">
-  <h1>🙏 សូមស្វាគមន៍មកកាន់វេបសាយរបស់លោក ឃួន ថាវ៉ាន់</h1>
-  <button class="btn-enter" onclick="enterWebsite()">ចូលទៅកាន់វេបសាយ</button>
+  <div class="splash-card">
+    <div class="splash-icon">🤖✨</div>
+    <h1>សូមស្វាគមន៍មកកាន់វេបសាយរបស់</h1>
+    <h2>លោក ឃួន ថាវ៉ាន់</h2>
+    <button id="enterBtn" class="btn-enter" disabled onclick="enterWebsite()">សូមរង់ចាំ (3)...</button>
+  </div>
 </div>
 
 <div class="container">
@@ -201,7 +275,7 @@
     </div>
   </div>
 
-  <div id="status">កំពុងដំណើរการ...</div>
+  <div id="status">កំពុងដំណើរការ...</div>
   
   <img id="imagePreview" class="preview-img" alt="Preview">
   
@@ -242,30 +316,35 @@
   let recognition = null;
   let isListening = false;
   let isLive = false;
-  let isAiSpeaking = false; // 🛡️ ទប់ស្កាត់កុំឱ្យចាប់សំឡេងខ្លួនឯង
+  let isAiSpeaking = false; 
   let mediaStream = null;
   let base64Img = null;
 
-  // 🎵 ភ្លេងស្វាគមន៍ ១០វិនាទី
-  let introMusic = new Audio("https://commondatastorage.googleapis.com/codesign-bucket/chill-lofi.mp3");
+  // 🎵 ភ្លេង Background (ចាក់ស្វ័យប្រវត្តិតាំងពីបើកវេបសាយ)
+  let bgMusic = new Audio("https://commondatastorage.googleapis.com/codesign-bucket/chill-lofi.mp3");
+  bgMusic.loop = true;
 
-  function enterWebsite() {
-    const splash = document.getElementById('splashScreen');
-    splash.style.opacity = '0'; // រលាយផ្ទាំងបន្តិចម្ដងៗ
-    
-    // ចាក់ភ្លេងរយៈពេល ១០ វិនាទី
-    introMusic.play().catch(e => console.log(e));
-    setTimeout(() => {
-      introMusic.pause();
-      introMusic.currentTime = 0;
-    }, 10000);
+  // ⏱️ ប្រព័ន្ធរាប់ថយក្រោយ ៣ វិនាទីពេលចូលវេបសាយ
+  let countdownTimer = 3;
+  const enterBtn = document.getElementById('enterBtn');
 
-    setTimeout(() => {
-      splash.style.display = 'none';
-    }, 1500);
-  }
+  window.addEventListener('DOMContentLoaded', () => {
+    // ចាក់ភ្លេង Background ភ្លាមពេលចូលដល់វេបសាយ
+    bgMusic.play().catch(e => console.log("Audio autoplay restricted:", e));
 
-  document.addEventListener('DOMContentLoaded', () => {
+    // បង្កើតកាដូាប់ថយក្រោយ ៣ វិនាទី
+    const interval = setInterval(() => {
+      countdownTimer--;
+      if (countdownTimer > 0) {
+        enterBtn.innerText = `សូមរង់ចាំ (${countdownTimer})...`;
+      } else {
+        clearInterval(interval);
+        enterBtn.disabled = false;
+        enterBtn.innerText = "🚀 ចូលទៅកាន់វេបសាយ";
+      }
+    }, 1000);
+
+    // Setup Speech Recognition
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRec();
@@ -274,7 +353,7 @@
       
       recognition.onstart = () => { 
         if (isAiSpeaking) {
-          recognition.stop(); // បើ AI កំពុងនិយាយ ហាមឃាត់ Mic មិនឱ្យចាប់
+          recognition.stop(); 
           return;
         }
         isListening = true; 
@@ -282,12 +361,11 @@
       };
       
       recognition.onresult = (e) => {
-        if (isAiSpeaking) return; // បដិសេធប្រសិនបើជាសំឡេង AI
+        if (isAiSpeaking) return; 
         const spokenText = e.results[0][0].transcript;
         document.getElementById('inputText').value = spokenText;
         hideStatus();
         isListening = false;
-        
         askAI();
       };
       
@@ -305,13 +383,20 @@
     }
   });
 
+  // 🚀 ប៊ូតុងចូលទៅកាន់វេបសាយ
+  function enterWebsite() {
+    const splash = document.getElementById('splashScreen');
+    splash.style.opacity = '0';
+    splash.style.visibility = 'hidden';
+  }
+
   async function openCam() {
     document.getElementById('camModal').style.display = 'flex';
     try {
       mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
       document.getElementById('video').srcObject = mediaStream;
     } catch(e) {
-      alert("មិនអាចបើកកាមេរ៉ាបានទេ: " + e.message);
+      alert("មិនអាចបើកកាមេរ៉ាได้ទេ: " + e.message);
       closeCam();
     }
   }
@@ -400,7 +485,6 @@
         
         const langCode = document.getElementById('srcLang').value === 'km' ? 'km' : 'en';
         speak(reply, langCode, () => {
-          // បន្ទាប់ពី AI និយាយចប់ ទើបបើក Mic ឱ្យស្តាប់បន្តបើស្ថិតក្នុងរបៀប Live
           if (isLive) {
             setTimeout(() => {
               if (isLive && !isAiSpeaking) recognition.start();
@@ -450,7 +534,6 @@
     askAI();
   }
 
-  // 🔊 មុខងារនិយាយ និងការពារមិនឱ្យ Mic ចាប់សំឡេង AI ខ្លួនឯង
   function speak(text, lang, onEndCallback) {
     if (!('speechSynthesis' in window)) {
       if (onEndCallback) onEndCallback();
@@ -469,14 +552,14 @@
     utterance.rate = 1.0;
     
     utterance.onstart = () => {
-      isAiSpeaking = true; // 🔒 បិទសិទ្ធិ Mic ពេល AI កំពុងនិយាយ
+      isAiSpeaking = true; 
       if (isListening && recognition) {
         recognition.stop();
       }
     };
 
     utterance.onend = () => {
-      isAiSpeaking = false; // 🔓 បើកសិទ្ធិឱ្យ Mic ដំណើរការវិញក្រោយ AI និយាយចប់
+      isAiSpeaking = false; 
       if (onEndCallback) onEndCallback();
     };
     
@@ -520,4 +603,5 @@
   function hideStatus() { document.getElementById('status').style.display = 'none'; }
 </script>
 </body>
-</html>
+      </html>
+      
