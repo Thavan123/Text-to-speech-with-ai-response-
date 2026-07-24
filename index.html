@@ -273,10 +273,8 @@
 </div>
 
 <script>
-// ==========================================
-// 🔑 ដាក់ API Key របស់បងត្រង់នេះ (ប្តូរ gsk_YOUR_GROQ_API_KEY_HERE)
-// ==========================================
-const SYSTEM_GROQ_API_KEY = "gsk_YOUR_GROQ_API_KEY_HERE"; 
+// API Key ត្រូវបានភ្ជាប់រួចស្រេច (គ្មានការលោត Alert ស្ទះទៀតទេ)
+const SYSTEM_GROQ_API_KEY = "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"; 
 
 const bgMusic = document.getElementById('bgMusic');
 
@@ -369,11 +367,6 @@ function startVoiceInput() {
 // --- ២. មុខងារសួរ AI ---
 async function askAI() {
   const apiKey = getGroqApiKey();
-  if (!apiKey || apiKey.includes("YOUR_GROQ_API_KEY_HERE")) {
-    alert("សូមដាក់បញ្ចូល Groq API Key ក្នុងកូដជាមុនសិន!");
-    return;
-  }
-
   const promptText = document.getElementById('inputText').value.trim();
   const srcLang = document.getElementById('srcLangSelect').value;
   
@@ -422,11 +415,6 @@ async function askAI() {
 // --- ៣. មុខងារបកប្រែភាសា ---
 async function translateText() {
   const apiKey = getGroqApiKey();
-  if (!apiKey || apiKey.includes("YOUR_GROQ_API_KEY_HERE")) {
-    alert("សូមដាក់បញ្ចូល Groq API Key ក្នុងកូដជាមុនសិន!");
-    return;
-  }
-
   const promptText = document.getElementById('inputText').value.trim();
   const targetLang = document.getElementById('targetLangSelect').value;
   
@@ -511,13 +499,9 @@ function speakText(text, langSelect) {
 // --- ៥. មុខងារបង្កើតបទចម្រៀង ---
 async function generateSunoMusic() {
   const apiKey = getGroqApiKey();
-  if (!apiKey || apiKey.includes("YOUR_GROQ_API_KEY_HERE")) {
-    alert("សូមដាក់បញ្ចូល Groq API Key ក្នុងកូដជាមុនសិន!");
-    return;
-  }
-
   const promptText = document.getElementById('inputText').value.trim();
   const lang = document.getElementById('srcLangSelect').value;
+  
   if (!promptText) { 
     alert("សូមបញ្ចូលប្រធានបទចម្រៀងក្នុងប្រអប់ខាងលើ!"); 
     return; 
@@ -632,5 +616,5 @@ function hideStatus() {
 }
 </script>
 </body>
-  </html>
-  
+                                                      </html>
+    
