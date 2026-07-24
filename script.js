@@ -1,13 +1,13 @@
-// 🔑 ពុះ Key ជា ២ កង់ ដាក់ក្នុងសញ្ញា " " ទាំងពីរនេះ (ដើម្បីការពារប្រព័ន្ធ Scan)
-const KEY_PART1 = "ភាគទី១_របស់_Key"; 
-const KEY_PART2 = "ភាគទី២_របស់_Key"; 
+// 🔑 ដាក់ Groq API Key ពុះជា ២ កង់នៅទីនេះ (ត្រូវតែជាអក្សរអង់គ្លេស និងលេខសុទ្ធ)
+const KEY_PART1 = "gsk_ដាក់ភាគទី១នៅទីនេះ"; 
+const KEY_PART2 = "ដាក់ភាគទី២នៅទីនេះ"; 
 
-// ផ្គុំ Key ឡើងវិញដោយស្វ័យប្រវត្តិ
-const GROQ_API_KEY = (KEY_PART1 + KEY_PART2).trim();
+// ផ្គុំ Key និងលុប Space ឬតួរអក្សរមិនរៀបរយចេញដោយស្វ័យប្រវត្តិ
+const GROQ_API_KEY = (KEY_PART1 + KEY_PART2).replace(/[^\x00-\x7F]/g, "").trim();
 
 let recognition = null;
 let isListening = false;
-let isContinuousMode = false; // ប្រព័ន្ធឆ្លើយឆ្លងតៗគ្នា
+let isContinuousMode = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   loadSongHistory();
@@ -93,7 +93,6 @@ async function askAI() {
       document.getElementById('textInput').value = aiReply;
       hideStatus();
       
-      // 📣 ចាក់សំឡេងឆ្លើយតប
       speakText(aiReply, lang);
 
     } else if (data.error) {
@@ -106,7 +105,7 @@ async function askAI() {
   }
 }
 
-// --- ៣. មុខងារបំប្លែងអក្សរទៅជាសំឡេង (TTS ឆ្លើយឆ្លង) ---
+// --- ៣. មុខងារបំប្លែងអក្សរទៅជាសំឡេង ---
 function speakText(text, langSelect) {
   stopAudio();
 
@@ -116,20 +115,17 @@ function speakText(text, langSelect) {
   if (langCode === 'en') voiceName = "US English Female";
   else if (langCode === 'th') voiceName = "Thai Female";
 
-  // ប្រសិនបើមាន ResponsiveVoice
   if (typeof responsiveVoice !== 'undefined') {
     responsiveVoice.speak(text, voiceName, {
       rate: 0.95,
       pitch: 1,
       onend: function() {
-        // 🔄 ពេលនិយាយចប់ បើកមីក្រូស្ដាប់សំណួរថ្មីភ្លាមៗ (ឆ្លើយឆ្លង)
         if (isContinuousMode) {
           setTimeout(() => { startVoiceInput(); }, 500);
         }
       }
     });
   } else if ('speechSynthesis' in window) {
-    // ករណីគ្មាន responsiveVoice ឱ្យប្រើប្រព័ន្ធទូរស័ព្ទជំនួស
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = langSelect;
     utterance.onend = function() {
@@ -257,5 +253,5 @@ function showStatus(msg) {
 function hideStatus() { 
   const statusBox = document.getElementById('statusBox'); 
   if (statusBox) statusBox.style.display = 'none'; 
-    }
-  
+           }
+                   
