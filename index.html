@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thavan AI - Fast PDF & Q&A Formatter</title>
+  <title>Thavan AI - Ultra Fast Formatter</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.0.2/tesseract.min.js"></script>
   <style>
@@ -148,7 +148,7 @@
 <body>
 
 <div class="container">
-  <h2>⚡ កែសម្រួល និងរៀបចំសំណួរ-ចម្លើយ (Fast Mode)</h2>
+  <h2>⚡ កែសម្រួល និងរៀបចំសំណួរ-ចម្លើយ (Ultra Fast)</h2>
 
   <div class="api-box">
     <label for="apiKeyInput">🔑 បញ្ចូល Groq API Key របស់អ្នកទីនេះ៖</label>
@@ -161,7 +161,7 @@
   <div class="upload-box" onclick="document.getElementById('fileInput').click()">
     <div class="upload-label">
       📁 <b>ចុចទីនេះដើម្បីជ្រើសរើសហ្វាល់ PDF ឬរូបភាព</b><br>
-      <span style="font-size: 12px; color: #aaa;">(រៀបចំអត្ថបទលឿនរហ័ស មិនបាច់រង់ចាំយូរ)</span>
+      <span style="font-size: 12px; color: #aaa;">(ដំណើរការភ្លាមៗ មិនបាច់ចាំរង់ចាំយូរ)</span>
     </div>
     <input type="file" id="fileInput" accept=".pdf,image/*" onchange="handleFile(this)">
   </div>
@@ -171,7 +171,7 @@
   <textarea id="resultText" placeholder="លទ្ធផលអត្ថបទដែលបានរៀបចំរួចនឹងបង្ហាញទីនេះ..."></textarea>
 
   <div class="btn-grid">
-    <button class="action-btn btn-ai" onclick="formatWithAI()">⚡ តម្រៀបសំណួរដោយ AI (Fast)</button>
+    <button class="action-btn btn-ai" onclick="formatWithAI()">⚡ តម្រៀបសំណួរដោយ AI</button>
     <button class="action-btn btn-copy" onclick="copyText()">📋 ចម្លងអត្ថបទ</button>
   </div>
   <button class="action-btn btn-clear" onclick="clearAll()">🗑️ សម្អាតទិន្នន័យ</button>
@@ -261,8 +261,6 @@
     }
   }
 
-  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
   async function formatWithAI() {
     const apiKey = localStorage.getItem('groq_api_key') || document.getElementById('apiKeyInput').value.trim();
     if (!apiKey) {
@@ -276,61 +274,43 @@
       return;
     }
 
-    // ពង្រីក Chunk ទំហំធំបានព្រោះ llama-3.1-8b-instant មាន limit ខ្ពស់
-    const chunkSize = 3500;
-    let chunks = [];
-    for (let i = 0; i < rawText.length; i += chunkSize) {
-      chunks.push(rawText.substring(i, i + chunkSize));
-    }
+    showStatus("⚡ AI កំពុងរៀបចំ និងតម្រៀបអត្ថបទទាំងមូល... (លឿនរហ័ស)");
 
-    let finalFormattedResult = "";
+    try {
+      // ផ្ញើអត្ថបទទាំងមូលក្នុងពេលតែមួយ (Single Request - Ultra Fast)
+      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { 
+          "Authorization": "Bearer " + apiKey, 
+          "Content-Type": "application/json" 
+        },
+        body: JSON.stringify({
+          model: "llama-3.1-8b-instant", // Model លឿនបំផុត និង Context ធំ 128k tokens
+          messages: [
+            { 
+              role: "system", 
+              content: "អ្នកគឺជាជំនួយការផ្នែកកែសម្រួលអត្ថបទវេជ្ជសាស្ត្រ។ សូមជួយរៀបចំ និងតម្រៀបអត្ថបទសំណួរ និងចម្លើយខាងក្រោមឱ្យបានត្រឹមត្រូវតាមលំដាប់លំដោយលេខរៀង ដោយកែតម្រូវអក្ខរាវិរុទ្ធដែលរាយប៉ាយឱ្យបានស្អាត និងងាយស្រួលអានបំផុត។" 
+            },
+            { role: "user", content: rawText }
+          ],
+          temperature: 0.3
+        })
+      });
 
-    for (let index = 0; index < chunks.length; index++) {
-      showStatus(`⚡ AI កំពុងកែសម្រួលផ្នែកទី ${index + 1} នៃ ${chunks.length}...`);
-      
-      try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-          method: "POST",
-          headers: { 
-            "Authorization": "Bearer " + apiKey, 
-            "Content-Type": "application/json" 
-          },
-          body: JSON.stringify({
-            model: "llama-3.1-8b-instant", // ប្តូរមកប្រើ Model ដើរលឿនបំផុត និងមាន TPM ខ្ពស់
-            messages: [
-              { 
-                role: "system", 
-                content: "អ្នកគឺជាជំនួយការផ្នែកកែសម្រួលអត្ថបទវេជ្ជសាស្ត្រ។ សូមជួយរៀបចំ និងតម្រៀបអត្ថបទសំណួរ និងចម្លើយខាងក្រោមឱ្យបានត្រឹមត្រូវតាមលំដាប់លំដោយលេខរៀង ដោយកែតម្រូវអក្ខរាវិរុទ្ធដែលរាយប៉ាយឱ្យបានស្អាត និងងាយស្រួលអានបំផុត។" 
-              },
-              { role: "user", content: chunks[index] }
-            ],
-            temperature: 0.3
-          })
-        });
+      const data = await res.json();
 
-        const data = await res.json();
-
-        if (data.choices && data.choices[0]) {
-          finalFormattedResult += data.choices[0].message.content.trim() + "\n\n";
-        } else if (data.error && data.error.message.includes("Rate limit")) {
-          showStatus(`⏳ ជាប់ Rate Limit តិចតួច កំពុងរង់ចាំ ៣ វិនាទី...`);
-          await sleep(3000);
-          index--; // សាកល្បងម្ដងទៀត
-        } else {
-          alert("Error: " + (data.error?.message || "មានបញ្ហា API"));
-          hideStatus();
-          return;
-        }
-      } catch(e) {
-        alert("Network Error: " + e.message);
+      if (data.choices && data.choices[0]) {
+        document.getElementById('resultText').value = data.choices[0].message.content.trim();
         hideStatus();
-        return;
+        alert("✅ រៀបចំរួចរាល់យ៉ាងលឿន!");
+      } else {
+        hideStatus();
+        alert("Error: " + (data.error?.message || "មានបញ្ហា API"));
       }
+    } catch(e) {
+      hideStatus();
+      alert("Network Error: " + e.message);
     }
-
-    hideStatus();
-    document.getElementById('resultText').value = finalFormattedResult.trim();
-    alert("✅ បានកែសម្រួលរួចរាល់យ៉ាងលឿន!");
   }
 
   function copyText() {
@@ -353,5 +333,4 @@
   }
 </script>
 </body>
-  </html>
-  
+</html>
