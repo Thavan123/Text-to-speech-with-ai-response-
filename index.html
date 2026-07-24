@@ -156,21 +156,23 @@
       border-color: var(--accent);
     }
     textarea {
-      height: 95px;
+      height: 85px;
       resize: vertical;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
+    
+    /* ក្រឡាចត្រង្គប៊ូតុងបញ្ជា */
     .btn-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     button {
-      padding: 12px 6px;
+      padding: 10px 4px;
       border: none;
       border-radius: 12px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
       cursor: pointer;
       color: #fff;
@@ -187,8 +189,10 @@
     .btn-cam { background: #14b8a6; }
     .btn-live { background: #db2777; }
     .btn-song { background: #8b5cf6; }
+    .btn-image { background: #f97316; } /* 🎨 ប៊ូតុងបង្កើតរូបភាពថ្មី */
     .btn-play { background: #16a34a; }
     .btn-stop { background: #dc2626; }
+    
     .btn-clear { background: #64748b; width: 100%; padding: 12px; margin-top: 5px; border-radius: 12px; font-weight: bold; color: #fff; border: none; cursor: pointer;}
 
     /* 📷 Camera Modal */
@@ -235,13 +239,31 @@
       display: none;
       font-weight: 500;
     }
-    .preview-img {
-      max-width: 100%;
-      max-height: 100px;
-      border-radius: 8px;
+    
+    /* 🖼️ ការបង្ហាញរូបភាព និង Preview */
+    .preview-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
       margin-bottom: 10px;
+    }
+    .preview-img {
+      max-width: 80px;
+      max-height: 80px;
+      border-radius: 8px;
       display: none;
       border: 1px solid #00d2ff;
+    }
+    
+    #generatedImageResult {
+      width: 100%;
+      max-height: 250px;
+      object-fit: contain;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      display: none;
+      border: 2px solid #f97316;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     }
   </style>
 </head>
@@ -277,9 +299,14 @@
 
   <div id="status">កំពុងដំណើរការ...</div>
   
-  <img id="imagePreview" class="preview-img" alt="Preview">
+  <div class="preview-container">
+    <img id="imagePreview" class="preview-img" alt="Preview">
+  </div>
+
+  <!-- 🖼️ កន្លែងបង្ហាញរូបភាពដែល AI បង្កើតបាន -->
+  <img id="generatedImageResult" alt="AI Generated Image">
   
-  <textarea id="inputText" placeholder="វាយអក្សរ, ថតរូប ឬចុចនិយាយ..."></textarea>
+  <textarea id="inputText" placeholder="វាយអក្សរ, ពណ៌នាពីរូបភាពដែលចង់បង្កើត, ឬចុចនិយាយ..."></textarea>
   <textarea id="outputText" readonly placeholder="លទ្ធផលចម្លើយ AI..."></textarea>
 
   <div class="btn-grid">
@@ -289,7 +316,8 @@
     <button class="btn-cam" onclick="openCam()">📸 ថតរូប</button>
     <button class="btn-live" id="liveBtn" onclick="toggleLive()">🔴 និយាយផ្ទាល់</button>
     <button class="btn-song" onclick="makeSong()">🎵 ចម្រៀង</button>
-    <button class="btn-play" onclick="playAudio()">▶️ ចាក់សំឡេង</button>
+    <button class="btn-image" onclick="generateAIImage()">🎨 បង្កើតរូប</button>
+    <button class="btn-play" onclick="playAudio()">▶️ ស្តាប់</button>
     <button class="btn-stop" onclick="stopAudio()">⏹️ បញ្ឈប់</button>
   </div>
 
@@ -323,16 +351,14 @@
   // 🎵 ភ្លេង Background ឮតិចៗស្រទន់ (Volume: 0.3)
   let bgMusic = new Audio("https://commondatastorage.googleapis.com/codesign-bucket/chill-lofi.mp3");
   bgMusic.loop = false;
-  bgMusic.volume = 0.3; // ឮតិចៗស្រទន់
+  bgMusic.volume = 0.3;
 
   let countdownTimer = 3;
   const enterBtn = document.getElementById('enterBtn');
 
   window.addEventListener('DOMContentLoaded', () => {
-    // ចាក់ភ្លេង Background ភ្លាមពេលបើកវេបសាយ
     bgMusic.play().catch(e => console.log("Audio autoplay restricted:", e));
 
-    // ⏱️ កំណត់ឱ្យភ្លេងបិទដោយស្វ័យប្រវត្តិបន្ទាប់ពីលេងបាន ១០ វិនាទីគត់
     setTimeout(() => {
       if (!bgMusic.paused) {
         bgMusic.pause();
@@ -340,7 +366,6 @@
       }
     }, 10000);
 
-    // ប្រព័ន្ធរាប់ថយក្រោយ ៣ វិនាទី
     const interval = setInterval(() => {
       countdownTimer--;
       if (countdownTimer > 0) {
@@ -352,7 +377,6 @@
       }
     }, 1000);
 
-    // Setup Speech Recognition
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRec();
@@ -360,10 +384,7 @@
       recognition.interimResults = false;
       
       recognition.onstart = () => { 
-        if (isAiSpeaking) {
-          recognition.stop(); 
-          return;
-        }
+        if (isAiSpeaking) { recognition.stop(); return; }
         isListening = true; 
         showStatus("🎤 កំពុងស្ដាប់សំឡេង..."); 
       };
@@ -377,11 +398,7 @@
         askAI();
       };
       
-      recognition.onerror = () => { 
-        hideStatus(); 
-        isListening = false; 
-      };
-      
+      recognition.onerror = () => { hideStatus(); isListening = false; };
       recognition.onend = () => {
         isListening = false;
         if (isLive && !isAiSpeaking) {
@@ -391,7 +408,6 @@
     }
   });
 
-  // 🚀 ប៊ូតុងចូលទៅកាន់វេបសាយ
   function enterWebsite() {
     const splash = document.getElementById('splashScreen');
     splash.style.opacity = '0';
@@ -404,7 +420,7 @@
       mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
       document.getElementById('video').srcObject = mediaStream;
     } catch(e) {
-      alert("មិនអាចបើកកាមេរ៉ាได้ទេ: " + e.message);
+      alert("មិនអាចបើកកាមេរ៉ាបានទេ: " + e.message);
       closeCam();
     }
   }
@@ -494,9 +510,7 @@
         const langCode = document.getElementById('srcLang').value === 'km' ? 'km' : 'en';
         speak(reply, langCode, () => {
           if (isLive) {
-            setTimeout(() => {
-              if (isLive && !isAiSpeaking) recognition.start();
-            }, 600);
+            setTimeout(() => { if (isLive && !isAiSpeaking) recognition.start(); }, 600);
           }
         });
       } else {
@@ -506,6 +520,62 @@
     } catch(e) {
       hideStatus();
       alert("Network Error: " + e.message);
+    }
+  }
+
+  // 🎨 មុខងារបង្កើតរូបភាពដោយប្រើ AI (Image Generation)
+  async function generateAIImage() {
+    let promptText = document.getElementById('inputText').value.trim();
+    if (!promptText) {
+      alert("សូមវាយបញ្ចូលការពណ៌នាពីរូបភាពដែលលោកអ្នកចង់បង្កើត (ឧទាហរណ៍: ទេសភាពព្រះអាទិត្យអស្ចារ្យ)");
+      return;
+    }
+
+    showStatus("🎨 AI កំពុងរៀបចំបង្កើតរូបភាព...");
+    document.getElementById('generatedImageResult').style.display = 'none';
+
+    try {
+      // បើកការបកប្រែ Prompt ទៅជាភាសាអង់គ្លេសស្វ័យប្រវត្តិតាមរយៈ Groq ដើម្បីឱ្យ AI គូររូបបានស្រស់ស្អាតនិងត្រូវម៉ត់
+      const transRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + getKey(), "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            { role: "system", content: "Translate the following description into a detailed English prompt for AI image generation. Return ONLY the translated English prompt text." },
+            { role: "user", content: promptText }
+          ]
+        })
+      });
+      const transData = await transRes.json();
+      let englishPrompt = promptText;
+      if (transData.choices && transData.choices[0]) {
+        englishPrompt = transData.choices[0].message.content.trim();
+      }
+
+      // បង្កើត URL រូបភាពដោយផ្អែកលើ Prompt
+      const encodedPrompt = encodeURIComponent(englishPrompt);
+      const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1024&height=1024&nologo=true`;
+
+      // ពិនិត្យមើលថាតើរូបភាពផ្ទុកបានសម្រេចឬអត់
+      const imgElement = document.getElementById('generatedImageResult');
+      imgElement.src = imageUrl;
+      
+      imgElement.onload = () => {
+        hideStatus();
+        imgElement.style.display = 'block';
+        document.getElementById('outputText').value = "✅ រូបភាពត្រូវបានបង្កើតដោយជោគជ័យ!";
+        speak("រូបភាពត្រូវបានបង្កើតរួចរាល់ហើយ!", document.getElementById('srcLang').value);
+      };
+
+      imgElement.onerror = () => {
+        hideStatus();
+        alert("សូមអភ័យទោស មិនអាចបង្កើតរូបភាពបានទេ!");
+      };
+
+    } catch(e) {
+      hideStatus();
+      alert("មានបញ្ហាក្នុងការបង្កើតរូបភាព: " + e.message);
     }
   }
 
@@ -561,9 +631,7 @@
     
     utterance.onstart = () => {
       isAiSpeaking = true; 
-      if (isListening && recognition) {
-        recognition.stop();
-      }
+      if (isListening && recognition) { recognition.stop(); }
     };
 
     utterance.onend = () => {
@@ -580,36 +648,4 @@
   }
 
   function playAudio() {
-    const text = document.getElementById('outputText').value;
-    const lang = document.getElementById('targetLang').value;
-    speak(text, lang);
-  }
-
-  function stopAudio() {
-    isAiSpeaking = false;
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
-  }
-
-  function clearAll() {
-    stopAudio();
-    isLive = false;
-    document.getElementById('liveBtn').style.background = '#db2777';
-    document.getElementById('inputText').value = '';
-    document.getElementById('outputText').value = '';
-    document.getElementById('imagePreview').style.display = 'none';
-    base64Img = null;
-    hideStatus();
-  }
-
-  function showStatus(msg) {
-    const s = document.getElementById('status');
-    s.style.display = 'block';
-    s.innerText = msg;
-  }
-  function hideStatus() { document.getElementById('status').style.display = 'none'; }
-</script>
-</body>
-  </html>
-  
+    const text = d
