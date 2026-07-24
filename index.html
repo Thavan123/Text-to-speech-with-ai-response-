@@ -26,6 +26,85 @@
       overflow-x: hidden;
     }
 
+    /* 🌟 ផ្ទាំងស្វាគមន៍ Splash Screen (គ្មានជាប់ពាក់ព័ន្ធនឹងសំឡេងរារាំងទេ គឺចុចចូលបានរលូន) */
+    #splashScreen {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at center, #24243e 0%, #0f0c29 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      text-align: center;
+      padding: 25px;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .splash-card {
+      background: rgba(25, 25, 40, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 40px 30px;
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(124, 58, 237, 0.3);
+      max-width: 420px;
+      width: 100%;
+      animation: floatCard 4s ease-in-out infinite;
+    }
+
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .splash-icon {
+      font-size: 55px;
+      margin-bottom: 15px;
+      animation: pulseGlow 2s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0,210,255,0.5)); }
+      50% { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(0,210,255,0.8)); }
+      100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0,210,255,0.5)); }
+    }
+
+    #splashScreen h1 {
+      font-size: 16px;
+      color: #cbd5e1;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    #splashScreen h2 {
+      font-size: 22px;
+      background: linear-gradient(90deg, #00d2ff, #7c3aed, #db2777);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 25px;
+      font-weight: 700;
+    }
+
+    .btn-enter {
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      color: #fff;
+      border: none;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(219,39,119,0.4);
+      transition: all 0.3s ease;
+      width: 100%;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-enter:active {
+      transform: scale(0.95);
+    }
+
     /* 📱 កម្មវិធីหลัก Container */
     .container {
       width: 100%;
@@ -179,6 +258,16 @@
 </head>
 <body>
 
+<!-- 🌟 ផ្ទាំងស្វាគមន៍ (Splash Screen) -->
+<div id="splashScreen">
+  <div class="splash-card">
+    <div class="splash-icon">🤖✨</div>
+    <h1>សូមស្វាគមន៍មកកាន់វេបសាយរបស់</h1>
+    <h2>លោក ឃួន ថាវ៉ាន់</h2>
+    <button class="btn-enter" onclick="enterWebsite()">🚀 ចូលទៅកាន់វេបសាយ</button>
+  </div>
+</div>
+
 <div class="container">
   <div class="lang-selects">
     <div class="lang-group">
@@ -246,6 +335,13 @@
   let isAiSpeaking = false; 
   let mediaStream = null;
   let base64Img = null;
+
+  // 🚀 ប៊ូតុងបញ្ជាឱ្យបិទផ្ទាំងស្វាគមន៍ និងចូលទៅកាន់វេបសាយភ្លាមៗ
+  function enterWebsite() {
+    const splash = document.getElementById('splashScreen');
+    splash.style.opacity = '0';
+    splash.style.visibility = 'hidden';
+  }
 
   window.addEventListener('DOMContentLoaded', () => {
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
@@ -541,5 +637,5 @@
   function hideStatus() { document.getElementById('status').style.display = 'none'; }
 </script>
 </body>
-  </html>
+      </html>
   
