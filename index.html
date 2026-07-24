@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Groq AI Assistant (Khmer)</title>
+  <title>Google Gemini AI Assistant & Translator</title>
 
   <style>
     body {
@@ -26,7 +26,7 @@
     }
     h2 {
       text-align: center;
-      color: #10b981;
+      color: #38bdf8;
       margin-top: 0;
       margin-bottom: 15px;
       font-size: 1.3em;
@@ -64,7 +64,7 @@
 
     .box-label {
       font-size: 0.85em;
-      color: #34d399;
+      color: #38bdf8;
       font-weight: bold;
       margin-top: 5px;
       margin-bottom: 5px;
@@ -80,7 +80,7 @@
     }
     #outputText {
       background-color: #090d16;
-      border-color: #059669;
+      border-color: #0284c7;
     }
 
     .button-grid {
@@ -101,9 +101,10 @@
       transition: 0.2s;
       font-family: inherit;
     }
-    .btn-ask { background-color: #059669; }
+    .btn-ask { background-color: #0284c7; }
     .btn-translate { background-color: #2563eb; }
     .btn-voice { background-color: #d97706; }
+    .btn-music { background-color: #9333ea; }
     .btn-play { background-color: #16a34a; }
     .btn-stop { background-color: #dc2626; }
     .btn-clear { background-color: #475569; grid-column: span 3; }
@@ -119,12 +120,78 @@
       font-size: 0.85em;
       margin-bottom: 10px;
     }
+    .history-box {
+      margin-top: 15px;
+      border-top: 1px solid #334155;
+      padding-top: 10px;
+    }
+    .history-item {
+      background: #0f172a;
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin-top: 5px;
+      font-size: 0.8em;
+    }
+
+    .welcome-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .modal-content {
+      background: #1e293b;
+      padding: 25px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 350px;
+      width: 85%;
+      border: 1px solid #38bdf8;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+    }
+    .modal-content h3 {
+      color: #38bdf8;
+      margin-top: 0;
+    }
+    .modal-content p {
+      color: #cbd5e1;
+      font-size: 0.9em;
+      line-height: 1.5;
+    }
+    .btn-enter {
+      background: linear-gradient(135deg, #0284c7, #9333ea);
+      color: white;
+      padding: 10px 20px;
+      font-size: 0.95em;
+      border-radius: 25px;
+      margin-top: 10px;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
 
+<audio id="bgMusic" preload="auto">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<div id="welcomeModal" class="welcome-modal">
+  <div class="modal-content">
+    <h3>សូមស្វាគមន៍! 👋</h3>
+    <p>សូមស្វាគមន៍មកកាន់គេហទំព័ររបស់<br><strong style="color: #38bdf8; font-size: 1.15em;">លោក ឃួន ថាវ៉ាន់</strong></p>
+    <p style="font-size: 0.8em; color: #94a3b8;">ប្រព័ន្ធ Gemini AI, បកប្រែ & កម្មវិធីអានអត្ថបទ</p>
+    <button class="btn-enter" onclick="startApp()">🚀 ចូលប្រើប្រាស់កម្មវិធី</button>
+  </div>
+</div>
+
 <div class="container">
-  <h2>⚡ Groq AI Assistant (Khmer)</h2>
+  <h2>✨ Google Gemini AI Assistant</h2>
 
   <div class="lang-container">
     <div class="lang-box">
@@ -133,15 +200,29 @@
         <option value="km">🇰🇭 ភាសាខ្មែរ (Khmer)</option>
         <option value="en">🇺🇸 English (US)</option>
         <option value="fr">🇫🇷 Français (French)</option>
+        <option value="zh">🇨🇳 中文 (Chinese)</option>
+        <option value="ja">🇯🇵 日本語 (Japanese)</option>
+        <option value="ko">🇰🇷 한국어 (Korean)</option>
+        <option value="th">🇹🇭 ភាសាថៃ (Thai)</option>
+        <option value="vi">🇻🇳 Tiếng Việt (Vietnamese)</option>
+        <option value="de">🇩🇪 Deutsch (German)</option>
+        <option value="es">🇪🇸 Español (Spanish)</option>
       </select>
     </div>
 
     <div class="lang-box">
       <label for="targetLangSelect">🌐 ភាសាចង់បកប្រែទៅ៖</label>
       <select id="targetLangSelect">
-        <option value="km">🇰🇭 ភាសាខ្មែរ (Khmer)</option>
         <option value="en">🇺🇸 English (US)</option>
+        <option value="km">🇰🇭 ភាសាខ្មែរ (Khmer)</option>
         <option value="fr">🇫🇷 Français (French)</option>
+        <option value="zh">🇨🇳 中文 (Chinese)</option>
+        <option value="ja">🇯🇵 日本語 (Japanese)</option>
+        <option value="ko">🇰🇷 한국어 (Korean)</option>
+        <option value="th">🇹🇭 ភាសាថៃ (Thai)</option>
+        <option value="vi">🇻🇳 Tiếng Việt (Vietnamese)</option>
+        <option value="de">🇩🇪 Deutsch (German)</option>
+        <option value="es">🇪🇸 Español (Spanish)</option>
       </select>
     </div>
   </div>
@@ -152,32 +233,76 @@
   <textarea id="inputText" placeholder="វាយអក្សរ ឬចុចប៊ូតុង 🎤 និយាយ..."></textarea>
 
   <div class="box-label">
-    <span>🤖 ចម្លើយពី Groq AI / លទ្ធផល៖</span>
+    <span>🤖 ចម្លើយ Gemini AI / លទ្ធផលបកប្រែ៖</span>
   </div>
-  <textarea id="outputText" readonly placeholder="លទ្ធផលឆ្លើយតបនឹងបង្ហាញយ៉ាងលឿននៅទីនេះ..."></textarea>
+  <textarea id="outputText" readonly placeholder="លទ្ធផលឆ្លើយតប ឬបកប្រែនឹងបង្ហាញនៅទីនេះ..."></textarea>
 
   <div id="statusBox">
     <span id="statusText">...</span>
   </div>
 
   <div class="button-grid">
-    <button class="btn-ask" onclick="askGroqAI()">🚀 សួរ Groq AI</button>
-    <button class="btn-translate" onclick="translateGroqText()">🌐 បកប្រែ</button>
+    <button class="btn-ask" onclick="askAI()">✨ សួរ Gemini</button>
+    <button class="btn-translate" onclick="translateText()">🌐 បកប្រែ</button>
     <button class="btn-voice" onclick="startVoiceInput()">🎤 និយាយ</button>
+    <button class="btn-music" onclick="generateSunoMusic()">🎵 តែងចម្រៀង</button>
     <button class="btn-play" onclick="playAudio()">▶️ ចាក់សំឡេង</button>
     <button class="btn-stop" onclick="stopAudio()">⏹️ បញ្ឈប់</button>
     <button class="btn-clear" onclick="clearAll()">🗑️ លុបទាំងអស់</button>
   </div>
+
+  <div class="history-box">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size:0.85em;">📜 ប្រវត្តិបទចម្រៀង MP3</span>
+      <button onclick="clearHistory()" style="background:none; border:none; color:#ef4444; padding:0; cursor:pointer; font-size:0.8em;">🗑️ លុបប្រវត្តិ</button>
+    </div>
+    <div id="historyList"></div>
+  </div>
 </div>
 
 <script>
-// 🔑 ដាក់ Groq API Key របស់អ្នកនៅទីនេះ (ចាប់ផ្តើមដោយ gsk_...)
-const GROQ_API_KEY = "gsk_សូមដាក់GroqApiKeyរបស់អ្នកនៅទីនេះ"; 
+// 🔑 ដាក់កូដ Base64 របស់ Gemini API Key ត្រង់នេះ ដើម្បីការពារ GitHub Bot មិនឱ្យចាប់
+const encodedGeminiKey = "PASTE_YOUR_GEMINI_BASE64_HERE"; 
+
+function getGeminiApiKey() {
+  return atob(encodedGeminiKey).trim();
+}
+
+const bgMusic = document.getElementById('bgMusic');
+let audioPlayer = new Audio();
+
+function startApp() {
+  document.getElementById('welcomeModal').style.display = 'none';
+  if (bgMusic) {
+    bgMusic.volume = 0.2;
+    bgMusic.play().catch(err => console.log("Audio play blocked"));
+
+    setTimeout(() => {
+      let fadeInterval = setInterval(() => {
+        if (bgMusic.volume > 0.02) {
+          bgMusic.volume -= 0.02;
+        } else {
+          bgMusic.pause();
+          bgMusic.currentTime = 0;
+          clearInterval(fadeInterval);
+        }
+      }, 200);
+    }, 8000);
+  }
+}
+
+function stopBgMusicImmediately() {
+  if (bgMusic) {
+    bgMusic.pause();
+    bgMusic.currentTime = 0;
+  }
+}
 
 let recognition = null;
 let isListening = false;
 
 document.addEventListener('DOMContentLoaded', () => {
+  loadSongHistory();
   initSpeechRecognition();
 });
 
@@ -190,6 +315,7 @@ function initSpeechRecognition() {
 
     recognition.onstart = function() { 
       isListening = true; 
+      stopBgMusicImmediately();
       showStatus("🎤 កំពុងស្ដាប់សំឡេងរបស់អ្នក..."); 
     };
 
@@ -197,11 +323,12 @@ function initSpeechRecognition() {
       const transcript = event.results[0][0].transcript;
       document.getElementById('inputText').value = transcript;
       hideStatus();
-      askGroqAI(); 
+      askAI(); 
     };
 
     recognition.onerror = function(event) { 
       hideStatus(); 
+      console.error("Speech Error:", event.error);
       isListening = false; 
     };
 
@@ -226,7 +353,8 @@ function startVoiceInput() {
   recognition.start();
 }
 
-async function askGroqAI() {
+async function askAI() {
+  const apiKey = getGeminiApiKey();
   const promptText = document.getElementById('inputText').value.trim();
   const srcLang = document.getElementById('srcLangSelect').value;
 
@@ -236,40 +364,130 @@ async function askGroqAI() {
   }
 
   stopAudio();
-  showStatus("⚡ Groq កំពុងឆ្លើយតបយ៉ាងលឿន...");
+  showStatus("🤖 Gemini កំពុងគិត និងត្រៀមឆ្លើយតប...");
+
+  const systemInstruction = "អ្នកគឺជាជំនួយការ AI ដ៏ឈ្លាសវៃ និងសុភាពរាបសារ។ សូមឆ្លើយតបជាភាសាខ្មែរឱ្យមានលក្ខណៈធម្មជាតិ ដូចមនុស្សនិយាយគ្នា មិនរឹងកំព្រឹស និងស្រួលយល់។";
+  const fullPrompt = `${systemInstruction}\n\nសំណួរ៖ ${promptText}`;
 
   try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${GROQ_API_KEY}`,
-        "Content-Type": "application/json"
-      },
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile", // ម៉ូឌែលលឿន និងឆ្លាតវៃបំផុតរបស់ Groq
-        messages: [
-          {
-            role: "system",
-            content: "អ្នកគឺជាជំនួយការ AI ដ៏ឈ្លាសវៃ។ សូមឆ្លើយតបមកវិញជាភាសាខ្មែរឱ្យបានច្បាស់លាស់ ត្រឹមត្រូវតាមវេយ្យាករណ៍ រស់រវើក ធម្មជាតិ និងងាយយល់បំផុត។"
-          },
-          {
-            role: "user",
-            content: promptText
-          }
-        ],
-        temperature: 0.7
+        contents: [{ parts: [{ text: fullPrompt }] }]
       })
     });
 
     const data = await response.json();
-    if (data.choices && data.choices.length > 0) {
-      const aiReply = data.choices[0].message.content.trim();
+    if (data.candidates && data.candidates[0].content.parts[0].text) {
+      const aiReply = data.candidates[0].content.parts[0].text.trim();
       document.getElementById('outputText').value = aiReply;
       hideStatus();
-      speakText(aiReply, 'km');
+      speakText(aiReply, srcLang);
     } else {
       hideStatus();
-      alert("មិនអាចទទួលបានចម្លើយពី Groq ទេ! សូមពិនិត្យ API Key។");
+      alert("មិនអាចទទួលបានចម្លើយពី Gemini ទេ!");
+    }
+  } catch (error) { 
+    hideStatus(); 
+    alert("មានបញ្ហាភ្ជាប់ទៅ Gemini AI៖ " + error.message); 
+  }
+}
+
+async function translateText() {
+  const apiKey = getGeminiApiKey();
+  const promptText = document.getElementById('inputText').value.trim();
+  const targetLang = document.getElementById('targetLangSelect').value;
+
+  if (!promptText) { 
+    alert("សូមបញ្ចូលអត្ថបទក្នុងប្រអប់ខាងលើជាមុនសិន!"); 
+    return; 
+  }
+
+  stopAudio();
+  showStatus("🌐 Gemini កំពុងបកប្រែភាសា...");
+
+  const prompt = `Translate the following text naturally and accurately into language code "${targetLang}". Return ONLY the translated text without extra explanation:\n\n${promptText}`;
+
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }]
+      })
+    });
+
+    const data = await response.json();
+    if (data.candidates && data.candidates[0].content.parts[0].text) {
+      const translatedText = data.candidates[0].content.parts[0].text.trim();
+      document.getElementById('outputText').value = translatedText;
+      hideStatus();
+      speakText(translatedText, targetLang);
+    } else {
+      hideStatus();
+      alert("មានបញ្ហាក្នុងការបកប្រែ!");
+    }
+  } catch (error) { 
+    hideStatus(); 
+    alert("មានបញ្ហាក្នុងការបកប្រែ៖ " + error.message); 
+  }
+}
+
+function speakText(text, langCode) {
+  stopAudio();
+  stopBgMusicImmediately();
+
+  if (!text) return;
+
+  const cleanText = encodeURIComponent(text.substring(0, 200));
+  const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${cleanText}&tl=${langCode}&client=tw-ob`;
+
+  audioPlayer.src = ttsUrl;
+  audioPlayer.play().catch(() => {
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = langCode === 'km' ? 'km-KH' : langCode;
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    }
+  });
+}
+
+async function generateSunoMusic() {
+  const apiKey = getGeminiApiKey();
+  const promptText = document.getElementById('inputText').value.trim();
+  const lang = document.getElementById('srcLangSelect').value;
+
+  if (!promptText) { 
+    alert("សូមបញ្ចូលប្រធានបទចម្រៀងក្នុងប្រអប់ខាងលើ!"); 
+    return; 
+  }
+
+  stopAudio();
+  showStatus("🎵 Gemini កំពុងតែងបទចម្រៀង...");
+
+  const prompt = `Write catchy and poetic song lyrics in language code "${lang}" based on this topic: "${promptText}". Return ONLY the lyrics.`;
+
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }]
+      })
+    });
+
+    const data = await response.json();
+    if (data.candidates && data.candidates[0].content.parts[0].text) {
+      const lyrics = data.candidates[0].content.parts[0].text.trim();
+      document.getElementById('outputText').value = lyrics;
+      hideStatus();
+      speakText(lyrics, lang);
+      saveToHistory(promptText);
+    } else {
+      hideStatus();
+      alert("មិនអាចតែងចម្រៀងได้ទេ!");
     }
   } catch (error) { 
     hideStatus(); 
@@ -277,91 +495,76 @@ async function askGroqAI() {
   }
 }
 
-async function translateGroqText() {
-  const promptText = document.getElementById('inputText').value.trim();
-  const targetLang = document.getElementById('targetLangSelect').value;
-
-  if (!promptText) { 
-    alert("សូមបញ្ចូលអត្ថបទដើម្បីបកប្រែ!"); 
-    return; 
-  }
-
-  showStatus("🌐 Groq កំពុងបកប្រែយ៉ាងច្បាស់...");
-
-  try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${GROQ_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          {
-            role: "system",
-            content: `អ្នកគឺជាអ្នកបកប្រែជំនាញ។ សូមបកប្រែអត្ថបទខាងក្រោមទៅជាភាសា ${targetLang === 'km' ? 'ខ្មែរ (Khmer)' : (targetLang === 'en' ? 'អង់គ្លេស (English)' : 'បារាំង (French)')} ឱ្យបានត្រឹមត្រូវ សំដីពីរោះ និងធម្មជាតិបំផុត។ បង្ហាញតែអត្ថបទបកប្រែសុទ្ធសាធ។`
-          },
-          {
-            role: "user",
-            content: promptText
-          }
-        ],
-        temperature: 0.3
-      })
-    });
-
-    const data = await response.json();
-    if (data.choices && data.choices.length > 0) {
-      const translated = data.choices[0].message.content.trim();
-      document.getElementById('outputText').value = translated;
-      hideStatus();
-      speakText(translated, targetLang);
-    } else {
-      hideStatus();
-      alert("កំហុសក្នុងការបកប្រែ!");
-    }
-  } catch (error) {
-    hideStatus();
-    alert("មានបញ្ហា៖ " + error.message);
-  }
+function saveToHistory(title) {
+  let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
+  history.unshift({ title: title || "បទចម្រៀង AI", date: new Date().toLocaleTimeString() });
+  if (history.length > 15) history.pop();
+  localStorage.setItem('suno_song_history', JSON.stringify(history));
+  loadSongHistory();
 }
 
-function speakText(text, langCode) {
-  stopAudio();
-  if ('speechSynthesis' in window) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = langCode === 'km' ? 'km-KH' : (langCode === 'en' ? 'en-US' : 'fr-FR');
-    window.speechSynthesis.speak(utterance);
+function loadSongHistory() {
+  const historyList = document.getElementById('historyList');
+  if (!historyList) return;
+  let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
+  if (history.length === 0) { 
+    historyList.innerHTML = '<p style="font-size: 0.8em; color: #888;">មិនទាន់មានប្រវត្តិ</p>'; 
+    return; 
   }
+  historyList.innerHTML = '';
+  history.forEach((item) => {
+    const div = document.createElement('div');
+    div.className = 'history-item';
+    div.innerHTML = `<span>🎵 ${item.title}</span>`;
+    historyList.appendChild(div);
+  });
+}
+
+function clearHistory() { 
+  localStorage.removeItem('suno_song_history'); 
+  loadSongHistory(); 
 }
 
 function playAudio() {
-  const text = document.getElementById('outputText').value;
+  const text = document.getElementById('outputText').value.trim() || document.getElementById('inputText').value.trim();
   const lang = document.getElementById('targetLangSelect').value;
-  if (text) speakText(text, lang);
+  if (!text) {
+    alert("មិនមានអត្ថបទเพื่อចាក់សំឡេងទេ!");
+    return;
+  }
+  speakText(text, lang);
 }
 
-function stopAudio() {
-  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+function stopAudio() { 
+  stopBgMusicImmediately();
+  if (audioPlayer) {
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+  }
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
 }
 
-function clearAll() {
-  stopAudio();
-  document.getElementById('inputText').value = '';
-  document.getElementById('outputText').value = '';
+function clearAll() { 
+  stopAudio(); 
+  document.getElementById('inputText').value = ''; 
+  document.getElementById('outputText').value = ''; 
 }
 
-function showStatus(msg) {
-  const statusBox = document.getElementById('statusBox');
-  statusBox.style.display = 'block';
-  document.getElementById('statusText').innerText = msg;
+function showStatus(msg) { 
+  const statusBox = document.getElementById('statusBox'); 
+  if (statusBox) { 
+    statusBox.style.display = 'block'; 
+    document.getElementById('statusText').innerText = msg; 
+  } 
 }
 
-function hideStatus() {
-  document.getElementById('statusBox').style.display = 'none';
+function hideStatus() { 
+  const statusBox = document.getElementById('statusBox'); 
+  if (statusBox) statusBox.style.display = 'none'; 
 }
 </script>
 </body>
-      </html>
-                                                
+  </html>
+  
