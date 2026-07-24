@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thavan AI - PDF & Q&A Formatter</title>
-  <!-- PDF.js សម្រាប់អានហ្វាល់ PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-  <!-- Tesseract.js សម្រាប់អានរូបភាព OCR -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.0.2/tesseract.min.js"></script>
   <style>
     :root {
@@ -15,7 +13,6 @@
       --bg-dark: #0f0c29;
       --card-bg: rgba(37, 37, 56, 0.95);
     }
-
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #1e1e2f, #2a2a40);
@@ -27,7 +24,6 @@
       align-items: center;
       min-height: 100vh;
     }
-
     .container {
       width: 100%;
       max-width: 550px;
@@ -38,7 +34,6 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 15px 35px rgba(0,0,0,0.6);
     }
-
     h2 {
       text-align: center;
       color: var(--accent);
@@ -46,8 +41,6 @@
       font-size: 19px;
       margin-bottom: 15px;
     }
-
-    /* ប្រអប់សម្រាប់ដាក់ API Key */
     .api-box {
       background: rgba(26, 26, 46, 0.8);
       padding: 10px;
@@ -84,7 +77,6 @@
       cursor: pointer;
       font-size: 13px;
     }
-
     .upload-box {
       border: 2px dashed rgba(0, 210, 255, 0.4);
       padding: 15px;
@@ -106,7 +98,6 @@
       font-size: 14px;
       color: #ddd;
     }
-
     textarea {
       width: 100%;
       height: 180px;
@@ -121,7 +112,6 @@
       resize: vertical;
       margin-bottom: 12px;
     }
-    
     .btn-grid {
       display: flex;
       gap: 10px;
@@ -145,7 +135,6 @@
     .btn-ai { background: #0284c7; }
     .btn-copy { background: #16a34a; }
     .btn-clear { background: #64748b; width: 100%; }
-
     #status {
       text-align: center;
       font-size: 13px;
@@ -161,7 +150,6 @@
 <div class="container">
   <h2>📄 កែសម្រួល និងរៀបចំសំណួរ-ចម្លើយ</h2>
 
-  <!-- ប្រអប់បញ្ចូល API Key -->
   <div class="api-box">
     <label for="apiKeyInput">🔑 បញ្ចូល Groq API Key របស់អ្នកទីនេះ៖</label>
     <div class="api-row">
@@ -173,7 +161,7 @@
   <div class="upload-box" onclick="document.getElementById('fileInput').click()">
     <div class="upload-label">
       📁 <b>ចុចទីនេះដើម្បីជ្រើសរើសហ្វាល់ PDF ឬរូបភាព</b><br>
-      <span style="font-size: 12px; color: #aaa;">(កម្មវិធីនឹងទាញយក និងតម្រៀបលេខរៀងជូនស្វ័យប្រវត្ត)</span>
+      <span style="font-size: 12px; color: #aaa;">(កម្មវិធីនឹងកាត់បែងចែកទំហំ និងតម្រៀបលេខរៀងជូនស្វ័យប្រវត្ត)</span>
     </div>
     <input type="file" id="fileInput" accept=".pdf,image/*" onchange="handleFile(this)">
   </div>
@@ -192,7 +180,6 @@
 <script>
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-  // ផ្ទុក API Key ដែលធ្លាប់រក្សាទុកក្នុងเครื่อง (LocalStorage) មកដាក់ក្នុងប្រអប់ស្រាប់
   window.onload = function() {
     const savedKey = localStorage.getItem('groq_api_key');
     if (savedKey) {
@@ -216,7 +203,7 @@
     s.innerText = msg;
   }
   function hideStatus() {
-    document.getElementById('status').style.display = 'none';
+    document.getElementById('status'].style.display = 'none';
   }
 
   async function handleFile(input) {
@@ -286,41 +273,57 @@
       return;
     }
 
-    showStatus("🤖 AI កំពុងកែសម្រួល និងតម្រៀបសំណួរ-ចម្លើយ...");
-
-    try {
-      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: { 
-          "Authorization": "Bearer " + apiKey, 
-          "Content-Type": "application/json" 
-        },
-        body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          messages: [
-            { 
-              role: "system", 
-              content: "អ្នកគឺជាជំនួយការផ្នែកកែសម្រួលអត្ថបទវេជ្ជសាស្ត្រ។ សូមជួយរៀបចំ និងតម្រៀបអត្ថបទសំណួរ និងចម្លើយខាងក្រោមឱ្យបានត្រឹមត្រូវតាមលំដាប់លំដោយលេខរៀងពី ១ រហូតដល់ចប់ ដោយកែតម្រូវអក្ខរាវិរុទ្ធដែលរាយប៉ាយឱ្យបានស្អាត និងងាយស្រួលអានបំផុត។" 
-            },
-            { role: "user", content: rawText }
-          ],
-          temperature: 0.3
-        })
-      });
-
-      const data = await res.json();
-      hideStatus();
-
-      if (data.choices && data.choices[0]) {
-        const formatted = data.choices[0].message.content.trim();
-        document.getElementById('resultText').value = formatted;
-      } else {
-        alert("Error: " + (data.error?.message || "API Key មិនត្រឹមត្រូវ ឬអស់កូតាប្រើប្រាស់"));
-      }
-    } catch(e) {
-      hideStatus();
-      alert("Network Error: " + e.message);
+    // បែងចែកអត្ថបទជាផ្នែកៗ (ប្រហែល 3000 អក្សរក្នុងមួយកំណាត់) ដើម្បីកុំឱ្យលើសកម្រិត API Limit
+    const chunkSize = 3000;
+    let chunks = [];
+    for (let i = 0; i < rawText.length; i += chunkSize) {
+      chunks.push(rawText.substring(i, i + chunkSize));
     }
+
+    let finalFormattedResult = "";
+
+    for (let index = 0; index < chunks.length; index++) {
+      showStatus(`🤖 AI កំពុងកែសម្រួលផ្នែកទី ${index + 1} នៃ ${chunks.length}...`);
+      
+      try {
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: { 
+            "Authorization": "Bearer " + apiKey, 
+            "Content-Type": "application/json" 
+          },
+          body: JSON.stringify({
+            model: "llama-3.3-70b-versatile",
+            messages: [
+              { 
+                role: "system", 
+                content: "អ្នកគឺជាជំនួយការផ្នែកកែសម្រួលអត្ថបទវេជ្ជសាស្ត្រ។ សូមជួយរៀបចំ និងតម្រៀបអត្ថបទសំណួរ និងចម្លើយខាងក្រោមឱ្យបានត្រឹមត្រូវតាមលំដាប់លំដោយលេខរៀង ដោយកែតម្រូវអក្ខរាវិរុទ្ធដែលរាយប៉ាយឱ្យបានស្អាត និងងាយស្រួលអានបំផុត។" 
+              },
+              { role: "user", content: chunks[index] }
+            ],
+            temperature: 0.3
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.choices && data.choices[0]) {
+          finalFormattedResult += data.choices[0].message.content.trim() + "\n\n";
+        } else {
+          alert("Error: " + (data.error?.message || "មានបញ្ហា API"));
+          hideStatus();
+          return;
+        }
+      } catch(e) {
+        hideStatus();
+        alert("Network Error: " + e.message);
+        return;
+      }
+    }
+
+    hideStatus();
+    document.getElementById('resultText').value = finalFormattedResult.trim();
+    alert("✅ បានកែសម្រួល និងតម្រៀបរួចរាល់ជាស្រេច!");
   }
 
   function copyText() {
@@ -343,4 +346,5 @@
   }
 </script>
 </body>
-</html>
+  </html>
+  
