@@ -95,7 +95,7 @@
       transform: scale(0.95);
     }
     .btn-ask { background: #0284c7; }
-    .btn-trans { background: #0ea5e9; }
+    .btn-trans { background: #0ea5e9 !important; color: #fff !important; }
     .btn-voice { background: #eab308; color: #000; }
     .btn-cam { background: #14b8a6; }
     .btn-live { background: #db2777; }
@@ -549,7 +549,6 @@
     }
   }
 
-  /* 📥 មុខងារទាញយករូបភាព ឬវីដេអូចូលទូរស័ព្ទ */
   async function downloadMedia(type) {
     const el = type === 'image' ? document.getElementById('generatedImageResult') : document.getElementById('generatedVideoResult');
     const url = el.src;
@@ -570,7 +569,6 @@
       hideStatus();
     } catch (e) {
       hideStatus();
-      // បើទាញយកតាម Blob ติด CORS អាចបើកតំណជា Tab ថ្មីជំនួស
       window.open(url, '_blank');
     }
   }
@@ -620,4 +618,4 @@
       return;
     }
 
-    const langMap = { km: 'km-KH', en
+    const langMap = { km: 'km-KH', en: 'en-US', fr: 'fr-FR', zh: 'zh-CN', th: 'th-TH', vi: 'vi-VN', ja: 'ja-JP
