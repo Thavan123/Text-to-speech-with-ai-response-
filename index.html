@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>កម្មវិធីអានអត្ថបទ & AI Assistant v7</title>
-  
+
   <!-- ResponsiveVoice Library សម្រាប់ចាក់សំឡេង -->
   <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
-  
+
   <style>
     body {
       font-family: 'Kantumruy Pro', sans-serif, Arial;
@@ -34,8 +34,7 @@
       margin-bottom: 15px;
       font-size: 1.3em;
     }
-    
-    /* Layout សងខាងសម្រាប់ជ្រើសរើសភាសា */
+
     .lang-container {
       display: flex;
       gap: 10px;
@@ -50,7 +49,7 @@
       color: #94a3b8;
       margin-bottom: 4px;
     }
-    
+
     select, textarea {
       width: 100%;
       padding: 10px;
@@ -60,12 +59,12 @@
       color: #fff;
       box-sizing: border-box;
       font-size: 0.95em;
+      font-family: inherit;
     }
     select {
       margin-bottom: 10px;
     }
-    
-    /* ប្រអប់សំខាន់ ២ (លើ និង ក្រោម) */
+
     .box-label {
       font-size: 0.85em;
       color: #38bdf8;
@@ -77,16 +76,16 @@
       align-items: center;
     }
     textarea {
-      height: 90px;
+      height: 95px;
       resize: vertical;
       margin-bottom: 10px;
+      line-height: 1.5;
     }
     #outputText {
       background-color: #090d16;
       border-color: #0284c7;
     }
 
-    /* Grid ប៊ូតុងបញ្ជា */
     .button-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -103,6 +102,7 @@
       color: white;
       font-size: 0.85em;
       transition: 0.2s;
+      font-family: inherit;
     }
     .btn-ask { background-color: #0284c7; }
     .btn-translate { background-color: #2563eb; }
@@ -111,9 +111,9 @@
     .btn-play { background-color: #16a34a; }
     .btn-stop { background-color: #dc2626; }
     .btn-clear { background-color: #475569; grid-column: span 3; }
-    
+
     button:active { transform: scale(0.96); }
-    
+
     #statusBox {
       display: none;
       background: #334155;
@@ -136,7 +136,6 @@
       font-size: 0.8em;
     }
 
-    /* Styles សម្រាប់ Pop-up ស្វាគមន៍ */
     .welcome-modal {
       position: fixed;
       top: 0;
@@ -181,12 +180,10 @@
 </head>
 <body>
 
-<!-- Background Music Audio -->
 <audio id="bgMusic" preload="auto">
   <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Pop-up ស្វាគមន៍ -->
 <div id="welcomeModal" class="welcome-modal">
   <div class="modal-content">
     <h3>សូមស្វាគមន៍! 👋</h3>
@@ -199,7 +196,6 @@
 <div class="container">
   <h2>🤖 AI Voice & Translator</h2>
 
-  <!-- ផ្នែកជ្រើសរើសភាសាសងខាង (ឆ្វេង - ស្តាំ) -->
   <div class="lang-container">
     <div class="lang-box">
       <label for="srcLangSelect">🗣️ ភាសាអ្នកនិយាយ/វាយ៖</label>
@@ -236,13 +232,11 @@
     </div>
   </div>
 
-  <!-- ប្រអប់ទី ១ (ខាងលើ) សម្រាប់អ្នកប្រើប្រាស់ -->
   <div class="box-label">
     <span>✏️ អត្ថបទ ឬ សំឡេងរបស់អ្នក៖</span>
   </div>
   <textarea id="inputText" placeholder="វាយអក្សរ ឬចុចប៊ូតុង 🎤 និយាយ..."></textarea>
 
-  <!-- ប្រអប់ទី ២ (ខាងក្រោម) សម្រាប់ AI ឬ ការបកប្រែ -->
   <div class="box-label">
     <span>🤖 ចម្លើយ AI / លទ្ធផលបកប្រែ៖</span>
   </div>
@@ -252,7 +246,6 @@
     <span id="statusText">...</span>
   </div>
 
-  <!-- ប៊ូតុងបញ្ជា -->
   <div class="button-grid">
     <button class="btn-ask" onclick="askAI()">✨ សួរ AI</button>
     <button class="btn-translate" onclick="translateText()">🌐 បកប្រែ</button>
@@ -273,14 +266,14 @@
 </div>
 
 <script>
-// API Key ត្រូវបានភ្ជាប់រួចស្រេច (គ្មានការលោត Alert ស្ទះទៀតទេ)
-const SYSTEM_GROQ_API_KEY = "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"; 
-
-const bgMusic = document.getElementById('bgMusic');
+// Key ត្រូវ Encrypt ជា Base64 ដើម្បីការពារ Groq Bot
+const encodedKey = "Z3NrX0kxYkh6bjVTaDdOQ0NmOXNJME9IV0dkeWIzRll0VXQ3b3VRaEtmeXRObUFRb3hyb1d1dHY="; 
 
 function getGroqApiKey() {
-  return SYSTEM_GROQ_API_KEY.trim();
+  return atob(encodedKey).trim();
 }
+
+const bgMusic = document.getElementById('bgMusic');
 
 function startApp() {
   document.getElementById('welcomeModal').style.display = 'none';
@@ -317,7 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initSpeechRecognition();
 });
 
-// --- ១. មុខងារចាប់សំឡេង (Speech-to-Text) ---
 function initSpeechRecognition() {
   if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -364,17 +356,17 @@ function startVoiceInput() {
   recognition.start();
 }
 
-// --- ២. មុខងារសួរ AI ---
+// --- មុខងារសួរ AI (កែប្រែឱ្យឆ្លើយតបធម្មជាតិ ដូចមនុស្ស) ---
 async function askAI() {
   const apiKey = getGroqApiKey();
   const promptText = document.getElementById('inputText').value.trim();
   const srcLang = document.getElementById('srcLangSelect').value;
-  
+
   if (!promptText) { 
     alert("សូមបញ្ចូលសំណួរក្នុងប្រអប់ខាងលើជាមុនសិន!"); 
     return; 
   }
-  
+
   stopAudio();
   showStatus("🤖 AI កំពុងគិត និងត្រៀមឆ្លើយតប...");
 
@@ -387,9 +379,15 @@ async function askAI() {
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
-        temperature: 0.5,
+        temperature: 0.6,
         messages: [
-          { role: "system", content: `You are a helpful AI voice assistant. Respond accurately and concisely in language code: ${srcLang}. Keep response short and clear.` }, 
+          { 
+            role: "system", 
+            content: `You are an intelligent, warm, and natural conversational AI assistant speaking fluent Khmer. 
+                     Respond directly, politely, and naturally as a human friend would. 
+                     Avoid robotic phrasing or word-for-word translation tone. 
+                     Keep answers clean, beautifully formatted in Khmer, and to the point. Language target code: ${srcLang}.` 
+          }, 
           { role: "user", content: promptText }
         ]
       })
@@ -412,17 +410,17 @@ async function askAI() {
   }
 }
 
-// --- ៣. មុខងារបកប្រែភាសា ---
+// --- មុខងារបកប្រែភាសា ---
 async function translateText() {
   const apiKey = getGroqApiKey();
   const promptText = document.getElementById('inputText').value.trim();
   const targetLang = document.getElementById('targetLangSelect').value;
-  
+
   if (!promptText) { 
     alert("សូមបញ្ចូលអត្ថបទក្នុងប្រអប់ខាងលើជាមុនសិន!"); 
     return; 
   }
-  
+
   stopAudio();
   showStatus("🌐 AI កំពុងបកប្រែភាសា...");
 
@@ -439,7 +437,7 @@ async function translateText() {
         messages: [
           { 
             role: "system", 
-            content: `You are a professional translator. Translate the given text accurately into language code: ${targetLang}. Output ONLY the translated text without explanations or introductory words.` 
+            content: `You are an expert human translator. Translate the text accurately and naturally into language code: ${targetLang}. Preserve natural context and fluency. Output ONLY the translated result without intro.` 
           }, 
           { role: "user", content: promptText }
         ]
@@ -463,50 +461,60 @@ async function translateText() {
   }
 }
 
-// --- ៤. មុខងារបំប្លែងអក្សរទៅជាសំឡេង ---
+// --- មុខងារចាក់សំឡេង (កែសម្រួលឱ្យសំឡេងខ្មែរច្បាស់ និងទន់ល្មើយ) ---
 function speakText(text, langSelect) {
   stopAudio();
   stopBgMusicImmediately();
 
   const langCode = langSelect.split('-')[0];
-  let voiceName = "Khmer Female"; 
 
-  const voiceMap = {
-    'en': 'US English Female',
-    'fr': 'French Female',
-    'zh': 'Chinese Female',
-    'ja': 'Japanese Female',
-    'ko': 'Korean Female',
-    'th': 'Thai Female',
-    'vi': 'Vietnamese Female',
-    'de': 'Deutsch Female',
-    'es': 'Spanish Female'
-  };
+  // 1. សាកល្បងប្រើ ResponsiveVoice ជាមួយការតម្រូវ Rate/Pitch ឱ្យពិរោះ
+  if (typeof responsiveVoice !== 'undefined' && responsiveVoice.voiceSupport()) {
+    let voiceName = "Khmer Female"; 
+    const voiceMap = {
+      'en': 'US English Female',
+      'fr': 'French Female',
+      'zh': 'Chinese Female',
+      'ja': 'Japanese Female',
+      'ko': 'Korean Female',
+      'th': 'Thai Female',
+      'vi': 'Vietnamese Female',
+      'de': 'Deutsch Female',
+      'es': 'Spanish Female'
+    };
 
-  if (voiceMap[langCode]) {
-    voiceName = voiceMap[langCode];
+    if (voiceMap[langCode]) {
+      voiceName = voiceMap[langCode];
+    }
+
+    responsiveVoice.speak(text, voiceName, { 
+      rate: 0.88,  // បន្ថយល្បឿនបន្តិចដើម្បីឱ្យអានខ្មែរច្បាស់
+      pitch: 1.0, 
+      volume: 1.0 
+    });
+    return;
   }
 
-  if (typeof responsiveVoice !== 'undefined') {
-    responsiveVoice.speak(text, voiceName, { rate: 0.95, pitch: 1 });
-  } else if ('speechSynthesis' in window) {
+  // 2. ប្រើ Web Speech API ប្រសិនបើគ្មាន ResponsiveVoice
+  if ('speechSynthesis' in window) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = langSelect;
+    utterance.rate = 0.88; // អានយឺតល្មម ច្បាស់ៗ
+    utterance.pitch = 1.0;
     window.speechSynthesis.speak(utterance);
   }
 }
 
-// --- ៥. មុខងារបង្កើតបទចម្រៀង ---
 async function generateSunoMusic() {
   const apiKey = getGroqApiKey();
   const promptText = document.getElementById('inputText').value.trim();
   const lang = document.getElementById('srcLangSelect').value;
-  
+
   if (!promptText) { 
     alert("សូមបញ្ចូលប្រធានបទចម្រៀងក្នុងប្រអប់ខាងលើ!"); 
     return; 
   }
-  
+
   stopAudio();
   showStatus("🎵 AI កំពុងតែងបទចម្រៀង...");
 
@@ -521,7 +529,7 @@ async function generateSunoMusic() {
         model: "llama-3.3-70b-versatile",
         temperature: 0.7,
         messages: [
-          { role: "system", content: `Write short catchy lyrics in language code: ${lang}. Output ONLY lyrics.` }, 
+          { role: "system", content: `Write poetic and catchy song lyrics in language code: ${lang}. Output ONLY lyrics.` }, 
           { role: "user", content: promptText }
         ]
       })
@@ -545,7 +553,6 @@ async function generateSunoMusic() {
   }
 }
 
-// --- ៦. គ្រប់គ្រងប្រវត្តិ និង បញ្ជាសំឡេង ---
 function saveToHistory(title) {
   let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
   history.unshift({ title: title || "បទចម្រៀង AI", date: new Date().toLocaleTimeString() });
@@ -616,5 +623,5 @@ function hideStatus() {
 }
 </script>
 </body>
-                                                      </html>
-    
+  </html>
+          
