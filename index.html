@@ -10,7 +10,7 @@
       background: linear-gradient(135deg, #1e1e2f, #2a2a40);
       color: #ffffff;
       margin: 0;
-      padding: 20px;
+      padding: 15px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -18,88 +18,16 @@
     }
     .container {
       width: 100%;
-      max-width: 600px;
+      max-width: 500px;
       background: #252538;
-      padding: 25px;
+      padding: 20px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-    h2 {
-      text-align: center;
-      color: #00d2ff;
-      margin-bottom: 5px;
-    }
-    .welcome-text {
-      text-align: center;
-      color: #ffeb3b;
-      font-size: 15px;
-      margin-bottom: 20px;
-      font-weight: bold;
-    }
-    .lang-selects {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-    .lang-group {
-      flex: 1;
-    }
-    label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 5px;
-      color: #aaa;
-    }
-    select, textarea {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #444;
-      background: #1a1a2e;
-      color: #fff;
-      font-size: 15px;
-      box-sizing: border-box;
-      outline: none;
-    }
-    textarea {
-      height: 100px;
-      resize: vertical;
-      margin-bottom: 15px;
-    }
-    .btn-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-    button {
-      padding: 12px 10px;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      color: #fff;
-      transition: 0.2s;
-    }
-    button:active {
-      transform: scale(0.95);
-    }
-    .btn-ask { background: #007bff; }
-    .btn-trans { background: #17a2b8; }
-    .btn-voice { background: #ffc107; color: #000; }
-    .btn-cam { background: #20c997; }
-    .btn-live { background: #e83e8c; }
-    .btn-song { background: #6f42c1; }
-    .btn-play { background: #28a745; }
-    .btn-stop { background: #dc3545; }
-    .btn-clear { background: #6c757d; grid-column: span 3; }
-
-    /* 🎵 ផ្នែកបញ្ជាភ្លេងផ្ទៃខាងក្រោយ */
     .music-bar {
       background: #1a1a2e;
-      padding: 10px;
-      border-radius: 8px;
+      padding: 10px 15px;
+      border-radius: 10px;
       margin-bottom: 15px;
       display: flex;
       align-items: center;
@@ -111,11 +39,74 @@
       color: #00d2ff;
     }
     .btn-bg-music {
-      background: #6f42c1;
-      padding: 6px 12px;
+      background: #7c3aed;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
       font-size: 12px;
-      border-radius: 6px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
     }
+    .lang-selects {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .lang-group {
+      flex: 1;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 5px;
+      color: #aaa;
+    }
+    select, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #1a1a2e;
+      color: #fff;
+      font-size: 14px;
+      box-sizing: border-box;
+      outline: none;
+    }
+    textarea {
+      height: 90px;
+      resize: vertical;
+      margin-bottom: 12px;
+    }
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 12px 6px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #fff;
+      transition: 0.2s;
+      text-align: center;
+    }
+    button:active {
+      transform: scale(0.95);
+    }
+    .btn-ask { background: #0284c7; }
+    .btn-trans { background: #0ea5e9; }
+    .btn-voice { background: #eab308; color: #000; }
+    .btn-cam { background: #14b8a6; }
+    .btn-live { background: #db2777; }
+    .btn-song { background: #8b5cf6; }
+    .btn-play { background: #16a34a; }
+    .btn-stop { background: #dc2626; }
+    .btn-clear { background: #64748b; width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; font-weight: bold; color: #fff; border: none; cursor: pointer;}
 
     /* 📷 Camera Modal */
     .cam-modal {
@@ -149,19 +140,19 @@
       justify-content: space-around;
       margin-top: 15px;
     }
-    .btn-capture { background: #28a745; padding: 10px 20px; border-radius: 20px; border: none; color: #fff; font-weight: bold; cursor: pointer; }
-    .btn-close { background: #dc3545; padding: 10px 20px; border-radius: 20px; border: none; color: #fff; font-weight: bold; cursor: pointer; }
+    .btn-capture { background: #16a34a; padding: 10px 20px; border-radius: 20px; border: none; color: #fff; font-weight: bold; cursor: pointer; }
+    .btn-close { background: #dc2626; padding: 10px 20px; border-radius: 20px; border: none; color: #fff; font-weight: bold; cursor: pointer; }
 
     #status {
       text-align: center;
       font-size: 13px;
-      color: #ffeb3b;
+      color: #facc15;
       margin-bottom: 10px;
       display: none;
     }
     .preview-img {
       max-width: 100%;
-      max-height: 120px;
+      max-height: 100px;
       border-radius: 8px;
       margin-bottom: 10px;
       display: none;
@@ -172,11 +163,7 @@
 <body>
 
 <div class="container">
-  <h2>🤖 Groq AI Assistant</h2>
-  <!-- 🌟 ពាក្យស្វាគមន៍ឈ្មោះបង -->
-  <div id="welcomeMessage" class="welcome-text">👋 សូមស្វាគមន៍មកកាន់ប្រព័ន្ធ AI របស់អ្នកបង!</div>
-
-  <!-- 🎵 ប៊ូតុងបញ្ជាភ្លេងផ្ទៃខាងក្រោយ -->
+  <!-- 🎵 ប៊ូតុងភ្លេងផ្ទៃខាងក្រោយ -->
   <div class="music-bar">
     <span>🎶 ភ្លេងផ្ទៃខាងក្រោយ (Background Music)</span>
     <button class="btn-bg-music" id="bgMusicBtn" onclick="toggleBgMusic()">▶️ ចាក់ភ្លេង</button>
@@ -215,8 +202,9 @@
     <button class="btn-song" onclick="makeSong()">🎵 ចម្រៀង</button>
     <button class="btn-play" onclick="playAudio()">▶️ ចាក់សំឡេង</button>
     <button class="btn-stop" onclick="stopAudio()">⏹️ បញ្ឈប់</button>
-    <button class="btn-clear" onclick="clearAll()">🗑️ សម្អាតទាំងអស់</button>
   </div>
+
+  <button class="btn-clear" onclick="clearAll()">🗑️ សម្អាតទាំងអស់</button>
 </div>
 
 <!-- 📷 Camera Modal -->
@@ -243,8 +231,8 @@
   let mediaStream = null;
   let base64Img = null;
 
-  // 🎵 បង្កើត Background Music (ប្រើប្រាស់ Audio ដោយស្វ័យប្រវត្តិពី Lo-Fi Free Stream)
-  let bgMusic = new Audio("https://commondatastorage.googleapis.com/codesign-bucket/chill-lofi.mp3"); // ឬតំណភ្ជាប់ភ្លេងផ្សេងទៀត
+  // 🎵 Background Music Setup
+  let bgMusic = new Audio("https://commondatastorage.googleapis.com/codesign-bucket/chill-lofi.mp3");
   bgMusic.loop = true;
   let isMusicPlaying = false;
 
@@ -265,12 +253,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    // 🌟 បង្ហាញការស្វាគមន៍ផ្ទាល់ខ្លួន
-    const userName = prompt("សូមបញ្ចូលឈ្មោះរបស់អ្នកបង៖", "ท่าน");
-    if (userName) {
-      document.getElementById('welcomeMessage').innerText = `👋 សូមស្វាគមន៍វត្តមាន លោក/លោកស្រី ${userName} មកកាន់ប្រព័ន្ធ AI!`;
-    }
-
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRec();
@@ -327,7 +309,7 @@
   function toggleVoice() {
     if (!recognition) { alert("Browser មិនគាំទ្រសំឡេងទេ"); return; }
     isLive = false;
-    document.getElementById('liveBtn').style.background = '#e83e8c';
+    document.getElementById('liveBtn').style.background = '#db2777';
     if (isListening) { recognition.stop(); return; }
     recognition.lang = document.getElementById('srcLang').value === 'km' ? 'km-KH' : 'en-US';
     stopAudio();
@@ -339,12 +321,12 @@
     isLive = !isLive;
     const btn = document.getElementById('liveBtn');
     if (isLive) {
-      btn.style.background = '#28a745';
+      btn.style.background = '#16a34a';
       showStatus("🔴 កំពុងឡាយផ្ទាល់ជាមួយ AI...");
       recognition.lang = 'km-KH';
       recognition.start();
     } else {
-      btn.style.background = '#e83e8c';
+      btn.style.background = '#db2777';
       hideStatus();
       recognition.stop();
     }
@@ -440,7 +422,7 @@
   function clearAll() {
     stopAudio();
     isLive = false;
-    document.getElementById('liveBtn').style.background = '#e83e8c';
+    document.getElementById('liveBtn').style.background = '#db2777';
     document.getElementById('inputText').value = '';
     document.getElementById('outputText').value = '';
     document.getElementById('imagePreview').style.display = 'none';
@@ -457,4 +439,4 @@
 </script>
 </body>
       </html>
-      
+        
