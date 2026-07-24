@@ -1,7 +1,22 @@
-// 🔑 ដាក់ API Key ថ្មីរបស់បងនៅចន្លោះសញ្ញា " " ខាងក្រោម (កុំភ្លេចថាត្រូវផ្តើមដោយ gsk_ តូច)
-const GROQ_API_KEY = "gsk_ដាក់_API_KEY_ថ្មី_របស់បងនៅត្រង់នេះ";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
+// 🔐 ទាញយក API Key ពី LocalStorage (មិនលេចធ្លាយលើ GitHub ឡើយ)
+function getApiKey() {
+  let key = localStorage.getItem('user_groq_key');
+  if (!key) {
+    key = prompt("សូមបញ្ចូល Groq API Key របស់អ្នក (ផ្តើមដោយ gsk_):");
+    if (key) {
+      key = key.trim();
+      localStorage.setItem('user_groq_key', key);
+    }
+  }
+  return key;
+}
 
-const player = document.getElementById('audioPlayer');
+// មុខងារដូរ API Key ថ្មី
+function resetApiKey() {
+  localStorage.removeItem('user_groq_key');
+  alert("បានលុប API Key ចាស់រួចរាល់! សូមចុចប្រើប្រាស់សារជាថ្មីដើម្បីបញ្ចូល Key ថ្មី។");
+}
+
 let recognition = null;
 let isListening = false;
 
@@ -58,10 +73,16 @@ function startVoiceInput() {
 
 // --- ២. មុខងារសួរ AI ---
 async function askAI() {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    alert("ត្រូវការ API Key ដើម្បីដំណើរការ!");
+    return;
+  }
+
   const prompt = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
   if (!prompt) { 
-    alert("សូមបញ្ចូលសំណួរ!"); 
+    alert("សូមបញ្ចូលសំណួរជាមុនសិន!"); 
     return; 
   }
   stopAudio();
@@ -71,7 +92,7 @@ async function askAI() {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json', 
-        'Authorization': `Bearer ${GROQ_API_KEY}` 
+        'Authorization': `Bearer ${apiKey}` 
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
@@ -92,7 +113,7 @@ async function askAI() {
 
     } else if (data.error) {
       hideStatus();
-      alert("Groq Error: " + data.error.message);
+      alert("Groq Error: " + data.error.message + "\nសូមពិនិត្យ API Key ឡើងវិញ!");
     }
   } catch (error) { 
     hideStatus(); 
@@ -102,6 +123,12 @@ async function askAI() {
 
 // --- ៣. មុខងារបង្កើតបទចម្រៀង ---
 async function generateSunoMusic() {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    alert("ត្រូវការ API Key ដើម្បីដំណើរការ!");
+    return;
+  }
+
   const prompt = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
   if (!prompt) { 
@@ -115,7 +142,7 @@ async function generateSunoMusic() {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json', 
-        'Authorization': `Bearer ${GROQ_API_KEY}` 
+        'Authorization': `Bearer ${apiKey}` 
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
@@ -133,7 +160,7 @@ async function generateSunoMusic() {
       hideStatus();
       
       playAudioText(lyrics, lang);
-      saveToHistory(prompt, player.src);
+      saveToHistory(prompt);
 
     } else if (data.error) {
       hideStatus();
@@ -147,6 +174,7 @@ async function generateSunoMusic() {
 
 // --- ៤. មុខងារបំប្លែងអត្ថបទទៅជាសំឡេង MP3 ---
 function playAudioText(text, langSelect) {
+  const player = document.getElementById('audioPlayer');
   const langCode = langSelect.split('-')[0];
   const cleanText = encodeURIComponent(text.substring(0, 200));
   
@@ -156,18 +184,19 @@ function playAudioText(text, langSelect) {
 
   const audioUrl = `https://api.streamelements.com/kappa/v2/speech?voice=${voiceName}&text=${cleanText}`;
 
-  player.src = audioUrl;
-  player.style.display = "block";
-  
-  player.play().catch(error => {
-    console.log("Autoplay blocked:", error);
-  });
+  if (player) {
+    player.src = audioUrl;
+    player.style.display = "block";
+    player.play().catch(error => {
+      console.log("Autoplay blocked:", error);
+    });
+  }
 }
 
 // --- ៥. គ្រប់គ្រងប្រវត្តិ និង Player ---
-function saveToHistory(title, url) {
+function saveToHistory(title) {
   let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
-  history.unshift({ title: title || "បទចម្រៀង AI", url: url });
+  history.unshift({ title: title || "បទចម្រៀង AI", date: new Date().toLocaleTimeString() });
   if (history.length > 15) history.pop();
   localStorage.setItem('suno_song_history', JSON.stringify(history));
   loadSongHistory();
@@ -185,15 +214,9 @@ function loadSongHistory() {
   history.forEach((item) => {
     const div = document.createElement('div');
     div.className = 'history-item';
-    div.innerHTML = `<span>🎵 ${item.title}</span><div><button class="btn-play-hist" onclick="playHistorySong('${item.url}')">▶️</button></div>`;
+    div.innerHTML = `<span>🎵 ${item.title}</span>`;
     historyList.appendChild(div);
   });
-}
-
-function playHistorySong(url) { 
-  player.src = url; 
-  player.style.display = "block"; 
-  player.play(); 
 }
 
 function clearHistory() { 
@@ -204,13 +227,19 @@ function clearHistory() {
 function playAudio() {
   const text = document.getElementById('textInput').value.trim();
   const lang = document.getElementById('langSelect').value;
-  if (!text) return;
+  if (!text) {
+    alert("សូមបញ្ចូលអត្ថបទដើម្បីចាក់សំឡេង!");
+    return;
+  }
   playAudioText(text, lang);
 }
 
 function stopAudio() { 
-  player.pause(); 
-  player.currentTime = 0; 
+  const player = document.getElementById('audioPlayer');
+  if (player) {
+    player.pause(); 
+    player.currentTime = 0; 
+  }
 }
 
 function clearAll() { 
@@ -230,4 +259,4 @@ function hideStatus() {
   const statusBox = document.getElementById('statusBox'); 
   if (statusBox) statusBox.style.display = 'none'; 
         }
-    
+  
