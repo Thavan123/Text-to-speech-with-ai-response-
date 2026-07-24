@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Groq AI Assistant & Translator</title>
+  <title>Groq AI Assistant & Translator - ឃួន ថាវ៉ាន់</title>
 
   <style>
     body {
@@ -132,12 +132,88 @@
       margin-top: 5px;
       font-size: 0.8em;
     }
+
+    /* 🌟 រចនាសម្ព័ន្ធផ្ទាំងស្វាគមន៍ (Welcome Modal) */
+    .welcome-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.98);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 1s ease;
+    }
+    .modal-content {
+      background: #1e293b;
+      padding: 30px 20px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 360px;
+      width: 85%;
+      border: 1px solid #38bdf8;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
+    }
+    .modal-content h3 {
+      color: #38bdf8;
+      margin-top: 0;
+      font-size: 1.4em;
+    }
+    .modal-content p {
+      color: #cbd5e1;
+      font-size: 0.95em;
+      line-height: 1.6;
+    }
+    .creator-name {
+      color: #38bdf8;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    .btn-enter {
+      background: linear-gradient(135deg, #0284c7, #9333ea);
+      color: white;
+      padding: 12px 20px;
+      font-size: 1em;
+      border-radius: 25px;
+      margin-top: 15px;
+      width: 100%;
+      cursor: pointer;
+      border: none;
+      font-weight: bold;
+    }
+    #countdownDisplay {
+      font-size: 1.8em;
+      color: #38bdf8;
+      font-weight: bold;
+      margin-top: 10px;
+      display: none;
+    }
   </style>
 </head>
 <body>
 
+<!-- 🎵 តន្ត្រីផ្ទៃខាងក្រោយពិរោះៗ -->
+<audio id="bgMusic" preload="auto">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ✨ ផ្ទាំងស្វាគមន៍ -->
+<div id="welcomeModal" class="welcome-modal">
+  <div class="modal-content">
+    <h3>សូមស្វាគមន៍! 👋</h3>
+    <p>វេបសាយនេះបង្កើតឡើងដោយ៖<br><span class="creator-name">លោក ឃួន ថាវ៉ាន់</span></p>
+    <p style="font-size: 0.85em; color: #94a3b8;">ប្រព័ន្ធ Groq AI Assistant & Translator</p>
+    
+    <button id="enterBtn" class="btn-enter" onclick="startCountdownAndMusic()">🚀 ចូលប្រើប្រាស់វេបសាយ</button>
+    <div id="countdownDisplay">3</div>
+  </div>
+</div>
+
 <div class="container">
-  <h2>✨ Groq AI Assistant & Translator</h2>
+  <h2>⚡ Groq AI Assistant & Translator</h2>
 
   <div class="lang-container">
     <div class="lang-box">
@@ -217,11 +293,60 @@
   let recognition = null;
   let isListening = false;
   let audioPlayer = new Audio();
+  const bgMusic = document.getElementById('bgMusic');
 
   document.addEventListener('DOMContentLoaded', () => {
     loadSongHistory();
     initSpeechRecognition();
   });
+
+  // 🌟 មុខងាររាប់ថយក្រោយ ៣ វិនាទី និងបើកភ្លេង ១០ វិនាទី រួចរលាយបាត់ផ្ទាំងស្វាគមន៍
+  function startCountdownAndMusic() {
+    const enterBtn = document.getElementById('enterBtn');
+    const countdownDisplay = document.getElementById('countdownDisplay');
+    
+    enterBtn.style.display = 'none';
+    countdownDisplay.style.display = 'block';
+
+    // ចាក់ភ្លេងផ្ទៃខាងក្រោយ
+    if (bgMusic) {
+      bgMusic.volume = 0.4;
+      bgMusic.play().catch(err => console.log("Audio play error:", err));
+
+      // បិទភ្លេងដោយស្វ័យប្រវត្តិបន្ទាប់ពី ១០ វិនាទី
+      setTimeout(() => {
+        let fadeInterval = setInterval(() => {
+          if (bgMusic.volume > 0.05) {
+            bgMusic.volume -= 0.05;
+          } else {
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
+            clearInterval(fadeInterval);
+          }
+        }, 150);
+      }, 10000);
+    }
+
+    let count = 3;
+    countdownDisplay.innerText = count;
+
+    let timer = setInterval(() => {
+      count--;
+      if (count > 0) {
+        countdownDisplay.innerText = count;
+      } else {
+        clearInterval(timer);
+        countdownDisplay.innerText = "🚀!";
+        
+        // ធ្វើឱ្យផ្ទាំងស្វាគមន៍រលាយបាត់បន្តិចម្ដងៗ (Fade Out)
+        const modal = document.getElementById('welcomeModal');
+        modal.style.opacity = '0';
+        setTimeout(() => {
+          modal.style.display = 'none';
+        }, 1000);
+      }
+    }, 1000);
+  }
 
   function initSpeechRecognition() {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
