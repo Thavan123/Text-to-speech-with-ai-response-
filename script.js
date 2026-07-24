@@ -1,83 +1,12 @@
-// 🔑 Firebase Configuration របស់បង
-const firebaseConfig = {
-  apiKey: "AIzaSyBRQUPJ5H6tsC5t3f-cEmU9OJBshmXtvqo",
-  authDomain: "thavan-1e082.firebaseapp.com",
-  projectId: "thavan-1e082",
-  storageBucket: "thavan-1e082.firebasestorage.app",
-  messagingSenderId: "810732909609",
-  appId: "1:810732909609:web:f8ea4ea21b41fea1385838",
-  measurementId: "G-RWVYWLX8P5"
-};
-
-// Initialize Firebase
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-
-const auth = firebase.auth();
-const db = firebase.firestore();
 const GROQ_API_KEY = "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";
-
 const player = document.getElementById('audioPlayer');
 let recognition = null;
 let isListening = false;
 
-// 1. ចាប់ស្កាត់ Event ពេលចុចប៊ូតុង Login ផ្ទាល់
+// ផ្ទុកប្រវត្តិបទចម្រៀងពេលបើក Web ភ្លាម
 document.addEventListener('DOMContentLoaded', () => {
-  const btnGoogle = document.getElementById('btnGoogleLogin');
-  if (btnGoogle) {
-    btnGoogle.addEventListener('click', () => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      // ប្រើ Redirect ត្រង់តែម្តង លែងបារម្ភរឿង Pop-up Block
-      auth.signInWithRedirect(provider);
-    });
-  }
+  loadSongHistory();
 });
-
-// 2. ពិនិត្យមើលលទ្ធផល Login ពេល Redirect មកវិញ
-auth.getRedirectResult().then((result) => {
-  if (result && result.user) {
-    console.log("Login Success:", result.user);
-  }
-}).catch((error) => {
-  if (error.code !== 'auth/popup-closed-by-user') {
-    alert("មានបញ្ហាក្នុងការ Login៖ " + error.message);
-  }
-});
-
-// 3. ពិនិត្យមើលស្ថានភាព User State
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    document.getElementById('loginOverlay').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
-    document.getElementById('userName').innerText = user.displayName || "អ្នកប្រើប្រាស់";
-    document.getElementById('userEmail').innerText = user.email || "";
-    document.getElementById('userAvatar').src = user.photoURL || "https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg";
-
-    saveUserToFirestore(user);
-    loadSongHistory();
-  } else {
-    document.getElementById('loginOverlay').style.display = 'flex';
-    document.getElementById('mainApp').style.display = 'none';
-  }
-});
-
-// 4. Logout
-function logout() {
-  auth.signOut();
-}
-
-// 5. Firestore Save
-function saveUserToFirestore(user) {
-  db.collection("users").doc(user.uid).set({
-    name: user.displayName,
-    email: user.email,
-    photoURL: user.photoURL,
-    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-  }, { merge: true }).catch((err) => {
-    console.error("Firestore Error:", err);
-  });
-}
 
 // --- AI, Speech, MP3 Functions ---
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -200,4 +129,4 @@ function stopAudio() { player.pause(); player.currentTime = 0; }
 function clearAll() { stopAudio(); document.getElementById('textInput').value = ''; }
 function showStatus(msg) { const statusBox = document.getElementById('statusBox'); if (statusBox) { statusBox.style.display = 'block'; document.getElementById('statusText').innerText = msg; } }
 function hideStatus() { const statusBox = document.getElementById('statusBox'); if (statusBox) statusBox.style.display = 'none'; }
-    
+                          
