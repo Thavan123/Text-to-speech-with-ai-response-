@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Groq AI Assistant</title>
+  <title>Khuon Thavan - AI Assistant</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,7 +15,46 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      overflow-x: hidden;
     }
+
+    /* 🌟 Splash Screen ផ្ទាំងស្វាគមន៍ដំបូង */
+    #splashScreen {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      text-align: center;
+      padding: 20px;
+      transition: opacity 1.5s ease;
+    }
+    #splashScreen h1 {
+      font-size: 24px;
+      color: #00d2ff;
+      margin-bottom: 25px;
+      line-height: 1.5;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    .btn-enter {
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      color: #fff;
+      border: none;
+      padding: 14px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(219,39,119,0.4);
+      transition: 0.3s;
+    }
+    .btn-enter:active {
+      transform: scale(0.95);
+    }
+
     .container {
       width: 100%;
       max-width: 500px;
@@ -23,30 +62,6 @@
       padding: 20px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    .music-bar {
-      background: #1a1a2e;
-      padding: 10px 15px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border: 1px solid #444;
-    }
-    .music-bar span {
-      font-size: 13px;
-      color: #00d2ff;
-    }
-    .btn-bg-music {
-      background: #7c3aed;
-      color: #fff;
-      border: none;
-      padding: 8px 14px;
-      font-size: 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
     }
     .lang-selects {
       display: flex;
@@ -162,13 +177,13 @@
 </head>
 <body>
 
-<div class="container">
-  <!-- 🎵 ប៊ូតុងភ្លេងផ្ទៃខាងក្រោយ -->
-  <div class="music-bar">
-    <span>🎶 ភ្លេងផ្ទៃខាងក្រោយ (Background Music)</span>
-    <button class="btn-bg-music" id="bgMusicBtn" onclick="toggleBgMusic()">▶️ ចាក់ភ្លេង</button>
-  </div>
+<!-- 🌟 ផ្ទាំងស្វាគមន៍ដំបូង -->
+<div id="splashScreen">
+  <h1>🙏 សូមស្វាគមន៍មកកាន់វេបសាយរបស់លោក ឃួន ថាវ៉ាន់</h1>
+  <button class="btn-enter" onclick="enterWebsite()">ចូលទៅកាន់វេបសាយ</button>
+</div>
 
+<div class="container">
   <div class="lang-selects">
     <div class="lang-group">
       <label>🗣️ ភាសាអ្នកនិយាយ</label>
@@ -186,7 +201,7 @@
     </div>
   </div>
 
-  <div id="status">កំពុងដំណើរការ...</div>
+  <div id="status">កំពុងដំណើរการ...</div>
   
   <img id="imagePreview" class="preview-img" alt="Preview">
   
@@ -227,28 +242,27 @@
   let recognition = null;
   let isListening = false;
   let isLive = false;
+  let isAiSpeaking = false; // 🛡️ ទប់ស្កាត់កុំឱ្យចាប់សំឡេងខ្លួនឯង
   let mediaStream = null;
   let base64Img = null;
 
-  // 🎵 Background Music Setup
-  let bgMusic = new Audio("https://commondatastorage.googleapis.com/codesign-bucket/chill-lofi.mp3");
-  bgMusic.loop = true;
-  let isMusicPlaying = false;
+  // 🎵 ភ្លេងស្វាគមន៍ ១០វិនាទី
+  let introMusic = new Audio("https://commondatastorage.googleapis.com/codesign-bucket/chill-lofi.mp3");
 
-  function toggleBgMusic() {
-    const btn = document.getElementById('bgMusicBtn');
-    if (isMusicPlaying) {
-      bgMusic.pause();
-      isMusicPlaying = false;
-      btn.innerText = "▶️ ចាក់ភ្លេង";
-    } else {
-      bgMusic.play().then(() => {
-        isMusicPlaying = true;
-        btn.innerText = "⏸️ ឈប់ភ្លេង";
-      }).catch(e => {
-        alert("មិនអាចចាក់ភ្លេងได้ទេ: " + e.message);
-      });
-    }
+  function enterWebsite() {
+    const splash = document.getElementById('splashScreen');
+    splash.style.opacity = '0'; // រលាយផ្ទាំងបន្តិចម្ដងៗ
+    
+    // ចាក់ភ្លេងរយៈពេល ១០ វិនាទី
+    introMusic.play().catch(e => console.log(e));
+    setTimeout(() => {
+      introMusic.pause();
+      introMusic.currentTime = 0;
+    }, 10000);
+
+    setTimeout(() => {
+      splash.style.display = 'none';
+    }, 1500);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -259,17 +273,21 @@
       recognition.interimResults = false;
       
       recognition.onstart = () => { 
+        if (isAiSpeaking) {
+          recognition.stop(); // បើ AI កំពុងនិយាយ ហាមឃាត់ Mic មិនឱ្យចាប់
+          return;
+        }
         isListening = true; 
         showStatus("🎤 កំពុងស្ដាប់សំឡេង..."); 
       };
       
       recognition.onresult = (e) => {
+        if (isAiSpeaking) return; // បដិសេធប្រសិនបើជាសំឡេង AI
         const spokenText = e.results[0][0].transcript;
         document.getElementById('inputText').value = spokenText;
         hideStatus();
         isListening = false;
         
-        // 🔗 ស្វ័យប្រវត្តិ៖ ពេលនិយាយចប់ អត់បាច់ចុចសួរ AI ទេ វាបញ្ជូនទៅ AI ភ្លាម
         askAI();
       };
       
@@ -280,8 +298,8 @@
       
       recognition.onend = () => {
         isListening = false;
-        if (isLive) {
-          setTimeout(() => { if(isLive) recognition.start(); }, 500);
+        if (isLive && !isAiSpeaking) {
+          setTimeout(() => { if(isLive && !isAiSpeaking) recognition.start(); }, 800);
         }
       };
     }
@@ -380,13 +398,13 @@
         document.getElementById('outputText').value = reply;
         hideStatus();
         
-        // 🔊 អានចម្លើយចេញមកក្រៅ ហើយបើកស្តាប់បន្តស្វ័យប្រវត្តិប្រសិនបើស្ថិតក្នុងរបៀប Live
         const langCode = document.getElementById('srcLang').value === 'km' ? 'km' : 'en';
         speak(reply, langCode, () => {
-          if (isLive && !isListening) {
+          // បន្ទាប់ពី AI និយាយចប់ ទើបបើក Mic ឱ្យស្តាប់បន្តបើស្ថិតក្នុងរបៀប Live
+          if (isLive) {
             setTimeout(() => {
-              if (isLive) recognition.start();
-            }, 1000);
+              if (isLive && !isAiSpeaking) recognition.start();
+            }, 600);
           }
         });
       } else {
@@ -432,7 +450,7 @@
     askAI();
   }
 
-  // 🔊 មុខងារនិយាយចេញសំឡេង និងបញ្ជូនសញ្ញាបន្ត (Callback)
+  // 🔊 មុខងារនិយាយ និងការពារមិនឱ្យ Mic ចាប់សំឡេង AI ខ្លួនឯង
   function speak(text, lang, onEndCallback) {
     if (!('speechSynthesis' in window)) {
       if (onEndCallback) onEndCallback();
@@ -450,11 +468,20 @@
     utterance.lang = (lang === 'km') ? 'km-KH' : 'en-US';
     utterance.rate = 1.0;
     
+    utterance.onstart = () => {
+      isAiSpeaking = true; // 🔒 បិទសិទ្ធិ Mic ពេល AI កំពុងនិយាយ
+      if (isListening && recognition) {
+        recognition.stop();
+      }
+    };
+
     utterance.onend = () => {
+      isAiSpeaking = false; // 🔓 បើកសិទ្ធិឱ្យ Mic ដំណើរការវិញក្រោយ AI និយាយចប់
       if (onEndCallback) onEndCallback();
     };
     
     utterance.onerror = () => {
+      isAiSpeaking = false;
       if (onEndCallback) onEndCallback();
     };
 
@@ -468,6 +495,7 @@
   }
 
   function stopAudio() {
+    isAiSpeaking = false;
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
@@ -492,5 +520,4 @@
   function hideStatus() { document.getElementById('status').style.display = 'none'; }
 </script>
 </body>
-  </html>
-  
+</html>
