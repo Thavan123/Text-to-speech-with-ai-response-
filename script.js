@@ -10,10 +10,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-try {
+if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
-} catch (e) {
-  alert("Firebase Init Error: " + e.message);
 }
 
 const auth = firebase.auth();
@@ -24,16 +22,30 @@ const player = document.getElementById('audioPlayer');
 let recognition = null;
 let isListening = false;
 
-// 1. ពិនិត្យមើលលទ្ធផល Login (Redirect Result)
-auth.getRedirectResult().then((result) => {
-  if (result && result.user) {
-    alert("Login ជោគជ័យ៖ " + result.user.displayName);
+// 1. ចាប់ស្កាត់ Event ពេលចុចប៊ូតុង Login ផ្ទាល់
+document.addEventListener('DOMContentLoaded', () => {
+  const btnGoogle = document.getElementById('btnGoogleLogin');
+  if (btnGoogle) {
+    btnGoogle.addEventListener('click', () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      // ប្រើ Redirect ត្រង់តែម្តង លែងបារម្ភរឿង Pop-up Block
+      auth.signInWithRedirect(provider);
+    });
   }
-}).catch((error) => {
-  alert("Redirect Error: " + error.code + "\n" + error.message);
 });
 
-// 2. ពិនិត្យមើលស្ថានភាព Auth State
+// 2. ពិនិត្យមើលលទ្ធផល Login ពេល Redirect មកវិញ
+auth.getRedirectResult().then((result) => {
+  if (result && result.user) {
+    console.log("Login Success:", result.user);
+  }
+}).catch((error) => {
+  if (error.code !== 'auth/popup-closed-by-user') {
+    alert("មានបញ្ហាក្នុងការ Login៖ " + error.message);
+  }
+});
+
+// 3. ពិនិត្យមើលស្ថានភាព User State
 auth.onAuthStateChanged((user) => {
   if (user) {
     document.getElementById('loginOverlay').style.display = 'none';
@@ -50,27 +62,12 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
-// 3. មុខងារ Login (ប្រើ Popup + Catch error បង្ហាញជា Alert)
-function loginWithGoogle() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  
-  // សាកល្បងជាមួយ Popup ជាមុន
-  auth.signInWithPopup(provider).catch((error) => {
-    // បើសិនជា Popup ត្រូវគេប្លុក វានឹងប្រើ Redirect ជំនួស
-    if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
-      auth.signInWithRedirect(provider);
-    } else {
-      alert(" Login បរាជ័យ!\n\nកូដ Error: " + error.code + "\nសារសារជូនដំណឹង: " + error.message);
-    }
-  });
-}
-
-// 4. មុខងារ Logout
+// 4. Logout
 function logout() {
   auth.signOut();
 }
 
-// 5. រក្សាទុកទិន្នន័យទៅ Firestore
+// 5. Firestore Save
 function saveUserToFirestore(user) {
   db.collection("users").doc(user.uid).set({
     name: user.displayName,
@@ -82,7 +79,7 @@ function saveUserToFirestore(user) {
   });
 }
 
-// --- ផ្នែក AI & Voice & Song Management ---
+// --- AI, Speech, MP3 Functions ---
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SpeechRecognition();
@@ -203,3 +200,4 @@ function stopAudio() { player.pause(); player.currentTime = 0; }
 function clearAll() { stopAudio(); document.getElementById('textInput').value = ''; }
 function showStatus(msg) { const statusBox = document.getElementById('statusBox'); if (statusBox) { statusBox.style.display = 'block'; document.getElementById('statusText').innerText = msg; } }
 function hideStatus() { const statusBox = document.getElementById('statusBox'); if (statusBox) statusBox.style.display = 'none'; }
+    
