@@ -1,82 +1,138 @@
 <!DOCTYPE html>
 <html lang="km">
-<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
-  
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>កម្មវិធីអានអត្ថបទ & AI Assistant</title>
-  <link rel="stylesheet" href="style.css">
+  
+  <!-- ResponsiveVoice Library សម្រាប់ចាក់សំឡេង -->
+  <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
+  
   <style>
-    .history-section { margin-top: 20px; text-align: left; background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 8px; }
-    .history-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.08); padding: 8px 12px; margin-top: 8px; border-radius: 5px; gap: 10px; }
-    .history-item span { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.9em; }
-    .btn-download { background-color: #27ae60; color: white; text-decoration: none; padding: 6px 12px; border-radius: 4px; font-size: 0.85em; font-weight: bold; }
-    .btn-play-hist { background-color: #2980b9; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 0.85em; }
+    body {
+      font-family: 'Kantumruy Pro', sans-serif, Arial;
+      background-color: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    h2 {
+      text-align: center;
+      color: #38bdf8;
+      margin-bottom: 20px;
+    }
+    label {
+      font-size: 0.9em;
+      color: #94a3b8;
+    }
+    select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background-color: #0f172a;
+      color: #fff;
+      box-sizing: border-box;
+      font-size: 1em;
+    }
+    textarea {
+      height: 120px;
+      resize: vertical;
+    }
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    button {
+      padding: 12px 8px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+      transition: 0.2s;
+    }
+    .btn-ask { background-color: #0284c7; }
+    .btn-voice { background-color: #d97706; }
+    .btn-music { background-color: #9333ea; }
+    .btn-play { background-color: #16a34a; }
+    .btn-stop { background-color: #dc2626; }
+    .btn-clear { background-color: #475569; }
+    button:active { transform: scale(0.96); }
+    
+    #statusBox {
+      display: none;
+      background: #334155;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.9em;
+      margin-bottom: 15px;
+    }
+    .history-box {
+      margin-top: 20px;
+      border-top: 1px solid #334155;
+      padding-top: 15px;
+    }
+    .history-item {
+      background: #0f172a;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-top: 6px;
+      font-size: 0.85em;
+    }
   </style>
 </head>
 <body>
 
-  <div class="container" id="mainApp">
-    <h2>🤖 កម្មវិធីអានអត្ថបទ & AI Assistant</h2>
-    <p>បញ្ចូលអត្ថបទអាន និយាយសួរ ឬបង្កើតបទចម្រៀង</p>
+<div class="container">
+  <h2>🤖 កម្មវិធីអានអត្ថបទ & AI Assistant</h2>
 
-    <!-- ជ្រើសរើសភាសា -->
-    <div class="form-group">
-      <label for="langSelect">🔤 ជ្រើសរើសភាសា (Language):</label>
-      <select id="langSelect" style="width: 100%; padding: 10px; border-radius: 5px; margin-top: 5px;">
-        <option value="km-KH" selected>🇰🇭 ភាសាខ្មែរ (Khmer)</option>
-        <option value="en-US">🇬🇧 English (US)</option>
-        <option value="th-TH">🇹🇭 ไทย (Thai)</option>
-        <option value="zh-CN">🇨🇳 中文 (Chinese Mandarin)</option>
-        <option value="vi-VN">🇻🇳 Tiếng Việt (Vietnamese)</option>
-        <option value="fr-FR">🇫🇷 Français (French)</option>
-        <option value="es-ES">🇪🇸 Español (Spanish)</option>
-        <option value="ja-JP">🇯🇵 日本語 (Japanese)</option>
-        <option value="ko-KR">🇰🇷 한국어 (Korean)</option>
-      </select>
-    </div>
+  <label for="langSelect">🔤 ជ្រើសរើសភាសា (Language):</label>
+  <select id="langSelect">
+    <option value="km-KH">KH ភាសាខ្មែរ (Khmer)</option>
+    <option value="en-US">EN English</option>
+    <option value="th-TH">TH ភាសាថៃ (Thai)</option>
+  </select>
 
-    <!-- ប្រអប់បញ្ចូលអត្ថបទ -->
-    <textarea id="textInput" placeholder="បញ្ចូលអត្ថបទ ឬ ប្រធានបទចម្រៀង..."></textarea>
+  <textarea id="textInput" placeholder="វាយអក្សរនៅទីនេះ ឬចុចប៊ូតុង 🎤 និយាយ..."></textarea>
 
-    <!-- Status -->
-    <div id="statusBox" style="display: none; margin-bottom: 10px; color: #f39c12; font-weight: bold;">
-      <span id="statusText">កំពុងដំណើរការ...</span>
-    </div>
-
-    <!-- ប៊ូតុង -->
-    <div class="button-group" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
-      <button onclick="askAI()" style="flex: 1; background-color: #008cba; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">✨ សួរ AI</button>
-      <button onclick="startVoiceInput()" style="flex: 1; background-color: #e67e22; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">🎤 និយាយ</button>
-      <button onclick="generateSunoMusic()" style="flex: 1; background-color: #9b59b6; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">🎵 បង្កើតចម្រៀង</button>
-    </div>
-
-    <div class="button-group" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
-      <button onclick="playAudio()" style="flex: 1; background-color: #4caf50; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">▶️ ចាក់សំឡេង</button>
-      <button onclick="stopAudio()" style="flex: 1; background-color: #f44336; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">⏹️ បញ្ចប់</button>
-      <button onclick="clearAll()" style="flex: 1; background-color: #7f8c8d; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">🗑️ លុប</button>
-    </div>
-
-    <!-- Player -->
-    <audio id="audioPlayer" controls style="display: none; width: 100%; margin-top: 15px;"></audio>
-    <div id="downloadContainer" style="margin-top: 10px; display: none;">
-      <a id="downloadBtn" href="#" target="_blank" download="song.mp3" class="btn-download">📥 ទាញយក MP3 (Download)</a>
-    </div>
-
-    <!-- ប្រវត្តិ -->
-    <div class="history-section">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="margin: 0; font-size: 1.05em; color: #3498db;">📜 ប្រវត្តិបទចម្រៀង MP3</h3>
-        <button onclick="clearHistory()" style="background: transparent; color: #e74c3c; border: none; cursor: pointer; font-size: 0.8em;">🗑️ លុបប្រវត្តិ</button>
-      </div>
-      <div id="historyList">
-        <p style="font-size: 0.85em; color: #888; margin-top: 5px;">មិនទាន់មានប្រវត្តិបទចម្រៀងនៅឡើយទេ</p>
-      </div>
-    </div>
-
+  <div id="statusBox">
+    <span id="statusText">...</span>
   </div>
 
-  <script src="script.js"></script>
+  <div class="button-grid">
+    <button class="btn-ask" onclick="askAI()">✨ សួរ AI</button>
+    <button class="btn-voice" onclick="startVoiceInput()">🎤 និយាយ</button>
+    <button class="btn-music" onclick="generateSunoMusic()">🎵 តែងចម្រៀង</button>
+    <button class="btn-play" onclick="playAudio()">▶️ ចាក់សំឡេង</button>
+    <button class="btn-stop" onclick="stopAudio()">⏹️ បញ្ឈប់</button>
+    <button class="btn-clear" onclick="clearAll()">🗑️ លុប</button>
+  </div>
+
+  <div class="history-box">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span>📜 ប្រវត្តិបទចម្រៀង MP3</span>
+      <button onclick="clearHistory()" style="background:none; border:none; color:#ef4444; padding:0; cursor:pointer;">🗑️ លុបប្រវត្តិ</button>
+    </div>
+    <div id="historyList"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
