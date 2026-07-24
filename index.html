@@ -115,9 +115,17 @@
 
   <label for="langSelect">🔤 ជ្រើសរើសភាសា (Language):</label>
   <select id="langSelect">
-    <option value="km-KH">KH ភាសាខ្មែរ (Khmer)</option>
-    <option value="en-US">EN English</option>
-    <option value="th-TH">TH ភាសាថៃ (Thai)</option>
+    <option value="km-KH">🇰🇭 ភាសាខ្មែរ (Khmer)</option>
+    <option value="en-US">🇺🇸 English (US)</option>
+    <option value="fr-FR">🇫🇷 Français (French)</option>
+    <option value="zh-CN">🇨🇳 中文 (Chinese)</option>
+    <option value="ja-JP">🇯🇵 日本語 (Japanese)</option>
+    <option value="ko-KR">🇰🇷 한국어 (Korean)</option>
+    <option value="th-TH">🇹🇭 ភាសាថៃ (Thai)</option>
+    <option value="vi-VN">🇻🇳 Tiếng Việt (Vietnamese)</option>
+    <option value="lo-LA">🇱🇦 ភាសាឡាវ (Lao)</option>
+    <option value="de-DE">🇩🇪 Deutsch (German)</option>
+    <option value="es-ES">🇪🇸 Español (Spanish)</option>
   </select>
 
   <textarea id="textInput" placeholder="វាយអក្សរនៅទីនេះ ឬចុចប៊ូតុង 🎤 និយាយ..."></textarea>
@@ -224,7 +232,7 @@ function startVoiceInput() {
   recognition.start();
 }
 
-// --- ២. មុខងារសួរ AI (ការពារ Header Error 100%) ---
+// --- ២. មុខងារសួរ AI ---
 async function askAI() {
   const apiKey = getGroqApiKey();
   if (!apiKey) {
@@ -255,7 +263,7 @@ async function askAI() {
         model: "llama-3.3-70b-versatile",
         temperature: 0.5,
         messages: [
-          { role: "system", content: `You are a helpful AI voice assistant. Respond accurately and concisely in language code: ${lang}. Keep response short.` }, 
+          { role: "system", content: `You are a helpful AI voice assistant. Respond accurately and concisely in language code: ${lang}. Keep response short and clear.` }, 
           { role: "user", content: promptText }
         ]
       })
@@ -279,15 +287,29 @@ async function askAI() {
   }
 }
 
-// --- ៣. មុខងារបំប្លែងអក្សរទៅជាសំឡេង ---
+// --- ៣. មុខងារបំប្លែងអក្សរទៅជាសំឡេង (គាំទ្រច្រើនភាសា) ---
 function speakText(text, langSelect) {
   stopAudio();
 
-  let voiceName = "Khmer Female";
   const langCode = langSelect.split('-')[0];
+  let voiceName = "Khmer Female"; // Default Khmer
 
-  if (langCode === 'en') voiceName = "US English Female";
-  else if (langCode === 'th') voiceName = "Thai Female";
+  // រៀបចំសំឡេង ResponsiveVoice តាមភាសា
+  const voiceMap = {
+    'en': 'US English Female',
+    'fr': 'French Female',
+    'zh': 'Chinese Female',
+    'ja': 'Japanese Female',
+    'ko': 'Korean Female',
+    'th': 'Thai Female',
+    'vi': 'Vietnamese Female',
+    'de': 'Deutsch Female',
+    'es': 'Spanish Female'
+  };
+
+  if (voiceMap[langCode]) {
+    voiceName = voiceMap[langCode];
+  }
 
   if (typeof responsiveVoice !== 'undefined') {
     responsiveVoice.speak(text, voiceName, {
@@ -442,4 +464,4 @@ function hideStatus() {
 </script>
 </body>
   </html>
-  
+      
