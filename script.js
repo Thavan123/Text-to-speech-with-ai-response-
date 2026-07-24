@@ -1,10 +1,10 @@
 // 🔑 Groq API Key
 const GROQ_API_KEY = "Gsk_C9S9o7j7eYnreNjSBAQAWGdyb3FY3fUqDPlT0qhe6Nm9V6nVZ23f";
 
+const player = document.getElementById('audioPlayer');
 let recognition = null;
 let isListening = false;
 
-// ផ្ទុកប្រវត្តិពេលបើក Web ភ្លាម
 document.addEventListener('DOMContentLoaded', () => {
   loadSongHistory();
   initSpeechRecognition();
@@ -27,7 +27,7 @@ function initSpeechRecognition() {
       const transcript = event.results[0][0].transcript;
       document.getElementById('textInput').value = transcript;
       hideStatus();
-      askAI(); // និយាយចប់ បញ្ជូនទៅ AI អូតូ
+      askAI(); 
     };
 
     recognition.onerror = function(event) { 
@@ -65,7 +65,7 @@ async function askAI() {
     return; 
   }
   stopAudio();
-  showStatus("🤖 AI កំពុងគិត និងត្រៀមនិយាយ...");
+  showStatus("🤖 AI កំពុងគិត និងត្រៀមឆ្លើយតប...");
   try {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: 'POST',
@@ -77,7 +77,7 @@ async function askAI() {
         model: "llama-3.3-70b-versatile",
         temperature: 0.3,
         messages: [
-          { role: "system", content: `Respond accurately in language code: ${lang}. Keep it short and plain text (no emojis or complex markdown) so it can be spoken clearly.` }, 
+          { role: "system", content: `Respond accurately in language code: ${lang}. Keep it short and concise.` }, 
           { role: "user", content: prompt }
         ]
       })
@@ -88,8 +88,8 @@ async function askAI() {
       document.getElementById('textInput').value = aiReply;
       hideStatus();
       
-      // 🔊 អានសំឡេងដោយប្រើ Web Speech Synthesis
-      speakTextNative(aiReply, lang);
+      // ចាក់សំឡេងតាម Audio Player ផ្ទាល់
+      playAudioText(aiReply, lang);
 
     } else if (data.error) {
       hideStatus();
@@ -133,8 +133,8 @@ async function generateSunoMusic() {
       document.getElementById('textInput').value = lyrics;
       hideStatus();
       
-      speakTextNative(lyrics, lang);
-      saveToHistory(prompt);
+      playAudioText(lyrics, lang);
+      saveToHistory(prompt, player.src);
 
     } else if (data.error) {
       hideStatus();
@@ -146,39 +146,32 @@ async function generateSunoMusic() {
   }
 }
 
-// --- ៤. មុខងារបញ្ចេញសំឡេងផ្ទាល់របស់ Browser (Web Speech API) ---
-function speakTextNative(text, langCode) {
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel(); // បញ្ឈប់សំឡេងចាស់បើកំពុងនិយាយ
+// --- ៤. មុខងារបំប្លែងអត្ថបទទៅជាសំឡេង MP3 ຜ່ານ API ជំនួស (ResponsiveVoice / Streamlabs TTS) ---
+function playAudioText(text, langSelect) {
+  const langCode = langSelect.split('-')[0]; // km, en, th
+  const cleanText = encodeURIComponent(text.substring(0, 200));
+  
+  // ប្រើ Streamlabs Text-to-Speech API (ដំណើរការបានល្អបំផុតលើទូរស័ព្ទ និងមិនសូវរងការប្លុក)
+  let voiceName = "Setha"; // ភាសាខ្មែរ ឬសំឡេងស្តង់ដារ
+  if (langCode === 'en') voiceName = "Brian";
+  else if (langCode === 'th') voiceName = "Nirvana";
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = langCode; // កំណត់ភាសា (km-KH, en-US, etc.)
-    utterance.rate = 0.95; // ផ្ទៃល្បឿនអានសមរម្យ
-    utterance.pitch = 1.0;
+  // បង្កើត Audio URL ជំនួស Google TTS ธรรมดา
+  const audioUrl = `https://api.streamelements.com/kappa/v2/speech?voice=${voiceName}&text=${cleanText}`;
 
-    window.speechSynthesis.speak(utterance);
-  } else {
-    alert("Browser របស់អ្នកមិនគាំទ្រមុខងារអានសំឡេងនេះទេ!");
-  }
+  player.src = audioUrl;
+  player.style.display = "block";
+  
+  player.play().catch(error => {
+    console.log("Autoplay blocked:", error);
+    alert("សូមចុចលើរូបសញ្ញា Play នៅលើ Player ដើម្បីស្តាប់សំឡេង!");
+  });
 }
 
-function playAudio() {
-  const text = document.getElementById('textInput').value.trim();
-  const lang = document.getElementById('langSelect').value;
-  if (!text) return;
-  speakTextNative(text, lang);
-}
-
-function stopAudio() { 
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-  }
-}
-
-// --- ៥. ប្រវត្តិ និងមុខងារផ្សេងៗ ---
-function saveToHistory(title) {
+// --- ៥. គ្រប់គ្រងប្រវត្តិ និង Player ---
+function saveToHistory(title, url) {
   let history = JSON.parse(localStorage.getItem('suno_song_history')) || [];
-  history.unshift({ title: title || "បទចម្រៀង AI", date: new Date().toLocaleTimeString() });
+  history.unshift({ title: title || "បទចម្រៀង AI", url: url });
   if (history.length > 15) history.pop();
   localStorage.setItem('suno_song_history', JSON.stringify(history));
   loadSongHistory();
@@ -196,14 +189,32 @@ function loadSongHistory() {
   history.forEach((item) => {
     const div = document.createElement('div');
     div.className = 'history-item';
-    div.innerHTML = `<span>🎵 ${item.title}</span>`;
+    div.innerHTML = `<span>🎵 ${item.title}</span><div><button class="btn-play-hist" onclick="playHistorySong('${item.url}')">▶️</button></div>`;
     historyList.appendChild(div);
   });
+}
+
+function playHistorySong(url) { 
+  player.src = url; 
+  player.style.display = "block"; 
+  player.play(); 
 }
 
 function clearHistory() { 
   localStorage.removeItem('suno_song_history'); 
   loadSongHistory(); 
+}
+
+function playAudio() {
+  const text = document.getElementById('textInput').value.trim();
+  const lang = document.getElementById('langSelect').value;
+  if (!text) return;
+  playAudioText(text, lang);
+}
+
+function stopAudio() { 
+  player.pause(); 
+  player.currentTime = 0; 
 }
 
 function clearAll() { 
@@ -223,3 +234,4 @@ function hideStatus() {
   const statusBox = document.getElementById('statusBox'); 
   if (statusBox) statusBox.style.display = 'none'; 
 }
+  
