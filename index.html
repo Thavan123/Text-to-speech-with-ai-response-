@@ -246,7 +246,7 @@
         isMusicPlaying = true;
         btn.innerText = "⏸️ ឈប់ភ្លេង";
       }).catch(e => {
-        alert("មិនអាចចាក់ភ្លេងបានទេ: " + e.message);
+        alert("មិនអាចចាក់ភ្លេងได้ទេ: " + e.message);
       });
     }
   }
@@ -258,16 +258,31 @@
       recognition.continuous = false;
       recognition.interimResults = false;
       
-      recognition.onstart = () => { isListening = true; showStatus("🎤 កំពុងស្ដាប់សំឡេង..."); };
-      recognition.onresult = (e) => {
-        document.getElementById('inputText').value = e.results[0][0].transcript;
-        hideStatus();
-        if (isLive) askAI();
+      recognition.onstart = () => { 
+        isListening = true; 
+        showStatus("🎤 កំពុងស្ដាប់សំឡេង..."); 
       };
-      recognition.onerror = () => { hideStatus(); isListening = false; };
+      
+      recognition.onresult = (e) => {
+        const spokenText = e.results[0][0].transcript;
+        document.getElementById('inputText').value = spokenText;
+        hideStatus();
+        isListening = false;
+        
+        // 🔗 ស្វ័យប្រវត្តិ៖ ពេលនិយាយចប់ អត់បាច់ចុចសួរ AI ទេ វាបញ្ជូនទៅ AI ភ្លាម
+        askAI();
+      };
+      
+      recognition.onerror = () => { 
+        hideStatus(); 
+        isListening = false; 
+      };
+      
       recognition.onend = () => {
         isListening = false;
-        if (isLive) setTimeout(() => recognition.start(), 500);
+        if (isLive) {
+          setTimeout(() => { if(isLive) recognition.start(); }, 500);
+        }
       };
     }
   });
@@ -322,7 +337,7 @@
     if (isLive) {
       btn.style.background = '#16a34a';
       showStatus("🔴 កំពុងឡាយផ្ទាល់ជាមួយ AI...");
-      recognition.lang = 'km-KH';
+      recognition.lang = document.getElementById('srcLang').value === 'km' ? 'km-KH' : 'en-US';
       recognition.start();
     } else {
       btn.style.background = '#db2777';
@@ -353,7 +368,7 @@
         body: JSON.stringify({
           model: model,
           messages: [
-            { role: "system", content: "អ្នកគឺជាជំនួយការ AI ដ៏ឆ្លាតវៃ។ សូមឆ្លើយតបជាភាសាខ្មែរឱ្យបានច្បាស់លាស់។" },
+            { role: "system", content: "អ្នកគឺជាជំនួយការ AI ដ៏ឆ្លាតវៃ។ សូមឆ្លើយតបជាភាសាខ្មែរឱ្យបានខ្លី និងច្បាស់លាស់។" },
             { role: "user", content: content }
           ],
           temperature: 0.7
@@ -364,7 +379,16 @@
         const reply = data.choices[0].message.content.trim();
         document.getElementById('outputText').value = reply;
         hideStatus();
-        speak(reply, 'km');
+        
+        // 🔊 អានចម្លើយចេញមកក្រៅ ហើយបើកស្តាប់បន្តស្វ័យប្រវត្តិប្រសិនបើស្ថិតក្នុងរបៀប Live
+        const langCode = document.getElementById('srcLang').value === 'km' ? 'km' : 'en';
+        speak(reply, langCode, () => {
+          if (isLive && !isListening) {
+            setTimeout(() => {
+              if (isLive) recognition.start();
+            }, 1000);
+          }
+        });
       } else {
         hideStatus();
         alert("Error: " + (data.error?.message || "Invalid response"));
@@ -408,22 +432,39 @@
     askAI();
   }
 
-  // 🔊 មុខងារបញ្ចេញសំឡេងតាមបាសទូរស័ព្ទ (Text-to-Speech)
-  function speak(text, lang) {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel(); // បញ្ឈប់សំឡេងចាស់ដែលកំពុងនិយាយค้าง
+  // 🔊 មុខងារនិយាយចេញសំឡេង និងបញ្ជូនសញ្ញាបន្ត (Callback)
+  function speak(text, lang, onEndCallback) {
+    if (!('speechSynthesis' in window)) {
+      if (onEndCallback) onEndCallback();
+      return;
+    }
+    window.speechSynthesis.cancel();
     
-    if (!text) return;
-    const cleanText = text.replace(/[*#_`]/g, ''); // លុបសញ្ញាพิเศษออก
+    if (!text) {
+      if (onEndCallback) onEndCallback();
+      return;
+    }
+
+    const cleanText = text.replace(/[*#_`]/g, '');
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = (lang === 'km') ? 'km-KH' : 'en-US';
-    utterance.rate = 1.0; // ល្បឿននិយាយធម្មតា
+    utterance.rate = 1.0;
+    
+    utterance.onend = () => {
+      if (onEndCallback) onEndCallback();
+    };
+    
+    utterance.onerror = () => {
+      if (onEndCallback) onEndCallback();
+    };
+
     window.speechSynthesis.speak(utterance);
   }
 
   function playAudio() {
     const text = document.getElementById('outputText').value;
-    speak(text, 'km');
+    const lang = document.getElementById('targetLang').value;
+    speak(text, lang);
   }
 
   function stopAudio() {
