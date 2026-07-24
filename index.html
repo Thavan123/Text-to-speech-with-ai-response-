@@ -73,7 +73,7 @@
       align-items: center;
     }
     textarea {
-      height: 95px;
+      height: 90px;
       resize: vertical;
       margin-bottom: 10px;
       line-height: 1.5;
@@ -90,7 +90,7 @@
       margin-top: 10px;
       margin-bottom: 15px;
     }
-    button {
+    button, .file-upload-btn {
       padding: 10px 5px;
       border: none;
       border-radius: 8px;
@@ -100,16 +100,23 @@
       font-size: 0.85em;
       transition: 0.2s;
       font-family: inherit;
+      text-align: center;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
     }
     .btn-ask { background-color: #0284c7; }
     .btn-translate { background-color: #2563eb; }
     .btn-voice { background-color: #d97706; }
+    .btn-camera { background-color: #0d9488; }
+    .btn-live { background-color: #e11d48; }
     .btn-music { background-color: #9333ea; }
     .btn-play { background-color: #16a34a; }
     .btn-stop { background-color: #dc2626; }
     .btn-clear { background-color: #475569; grid-column: span 3; }
 
-    button:active { transform: scale(0.96); }
+    button:active, .file-upload-btn:active { transform: scale(0.96); }
 
     #statusBox {
       display: none;
@@ -119,6 +126,15 @@
       text-align: center;
       font-size: 0.85em;
       margin-bottom: 10px;
+    }
+    .preview-img {
+      max-width: 100%;
+      height: auto;
+      max-height: 120px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: none;
+      border: 1px solid #38bdf8;
     }
     .history-box {
       margin-top: 15px;
@@ -133,7 +149,7 @@
       font-size: 0.8em;
     }
 
-    /* 🌟 រចនាសម្ព័ន្ធផ្ទាំងស្វាគមន៍ (Welcome Modal) */
+    /* 🌟 ផ្ទាំងស្វាគមន៍ */
     .welcome-modal {
       position: fixed;
       top: 0;
@@ -195,7 +211,7 @@
 </head>
 <body>
 
-<!-- 🎵 តន្ត្រីផ្ទៃខាងក្រោយពិរោះៗ -->
+<!-- 🎵 តន្ត្រីផ្ទៃខាងក្រោយ -->
 <audio id="bgMusic" preload="auto">
   <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
@@ -205,7 +221,7 @@
   <div class="modal-content">
     <h3>សូមស្វាគមន៍! 👋</h3>
     <p>វេបសាយនេះបង្កើតឡើងដោយ៖<br><span class="creator-name">លោក ឃួន ថាវ៉ាន់</span></p>
-    <p style="font-size: 0.85em; color: #94a3b8;">ប្រព័ន្ធ Groq AI Assistant & Translator</p>
+    <p style="font-size: 0.85em; color: #94a3b8;">Groq AI & Voice/Camera Assistant</p>
     
     <button id="enterBtn" class="btn-enter" onclick="startCountdownAndMusic()">🚀 ចូលប្រើប្រាស់វេបសាយ</button>
     <div id="countdownDisplay">3</div>
@@ -213,60 +229,64 @@
 </div>
 
 <div class="container">
-  <h2>⚡ Groq AI Assistant & Translator</h2>
+  <h2>⚡ Groq AI Assistant & Camera</h2>
 
   <div class="lang-container">
     <div class="lang-box">
-      <label for="srcLangSelect">🗣️ ភាសាអ្នកនិយាយ/វាយ៖</label>
+      <label for="srcLangSelect">🗣️ ភាសាអ្នកនិយាយ៖</label>
       <select id="srcLangSelect">
         <option value="km">🇰🇭 ភាសាខ្មែរ (Khmer)</option>
         <option value="en">🇺🇸 English (US)</option>
         <option value="fr">🇫🇷 Français (French)</option>
         <option value="zh">🇨🇳 中文 (Chinese)</option>
-        <option value="ja">🇯🇵 日本語 (Japanese)</option>
-        <option value="ko">🇰🇷 한국어 (Korean)</option>
         <option value="th">🇹🇭 ភាសាថៃ (Thai)</option>
-        <option value="vi">🇻🇳 Tiếng Việt (Vietnamese)</option>
-        <option value="de">🇩🇪 Deutsch (German)</option>
-        <option value="es">🇪🇸 Español (Spanish)</option>
       </select>
     </div>
 
     <div class="lang-box">
-      <label for="targetLangSelect">🌐 ភាសាចង់បកប្រែទៅ៖</label>
+      <label for="targetLangSelect">🌐 ភាសាបកប្រែទៅ៖</label>
       <select id="targetLangSelect">
         <option value="en">🇺🇸 English (US)</option>
         <option value="km">🇰🇭 ភាសាខ្មែរ (Khmer)</option>
         <option value="fr">🇫🇷 Français (French)</option>
         <option value="zh">🇨🇳 中文 (Chinese)</option>
-        <option value="ja">🇯🇵 日本語 (Japanese)</option>
-        <option value="ko">🇰🇷 한국어 (Korean)</option>
         <option value="th">🇹🇭 ភាសាថៃ (Thai)</option>
-        <option value="vi">🇻🇳 Tiếng Việt (Vietnamese)</option>
-        <option value="de">🇩🇪 Deutsch (German)</option>
-        <option value="es">🇪🇸 Español (Spanish)</option>
       </select>
     </div>
   </div>
 
   <div class="box-label">
-    <span>✏️ អត្ថបទ ឬ សំឡេងរបស់អ្នក៖</span>
+    <span>✏️ អត្ថបទ សំឡេង ឬ រូបភាពរបស់អ្នក៖</span>
   </div>
-  <textarea id="inputText" placeholder="វាយអក្សរ ឬចុចប៊ូតុង 🎤 និយាយ..."></textarea>
+  
+  <!-- 📷 ប្រអប់បង្ហាញរូបភាពដែលបានថត -->
+  <img id="imagePreview" class="preview-img" alt="Uploaded Image Preview">
+  
+  <textarea id="inputText" placeholder="វាយអក្សរ, ថតរូប ឬចុចប៊ូតុង 🎤 និយាយ..."></textarea>
 
   <div class="box-label">
-    <span>🤖 ចម្លើយ Groq AI / លទ្ធផលបកប្រែ៖</span>
+    <span>🤖 ចម្លើយ AI / លទ្ធផល៖</span>
   </div>
-  <textarea id="outputText" readonly placeholder="លទ្ធផលឆ្លើយតប ឬបកប្រែនឹងបង្ហាញនៅទីនេះ..."></textarea>
+  <textarea id="outputText" readonly placeholder="លទ្ធផលឆ្លើយតបនឹងបង្ហាញនៅទីនេះ..."></textarea>
 
   <div id="statusBox">
     <span id="statusText">...</span>
   </div>
 
   <div class="button-grid">
-    <button class="btn-ask" onclick="askGroqAI()">✨ សួរ Groq</button>
+    <button class="btn-ask" onclick="askGroqAI()">✨ សួរ AI</button>
     <button class="btn-translate" onclick="translateGroqText()">🌐 បកប្រែ</button>
     <button class="btn-voice" onclick="startVoiceInput()">🎤 និយាយ</button>
+    
+    <!-- 📷 ប៊ូតុងថតរូបពីកាមេរ៉ា ឬ Upload -->
+    <label class="file-upload-btn btn-camera">
+      📸 ថតរូប
+      <input type="file" id="imageInput" accept="image/*" capture="environment" style="display: none;" onchange="handleImageUpload(event)">
+    </label>
+
+    <!-- 🔴 ប៊ូតុងនិយាយឡាយផ្ទាល់ជាប់ជាមួយ AI -->
+    <button class="btn-live" id="liveBtn" onclick="toggleLiveChat()">🔴 និយាយផ្ទាល់</button>
+    
     <button class="btn-music" onclick="generateGroqSong()">🎵 តែងចម្រៀង</button>
     <button class="btn-play" onclick="playAudio()">▶️ ចាក់សំឡេង</button>
     <button class="btn-stop" onclick="stopAudio()">⏹️ បញ្ឈប់</button>
@@ -283,24 +303,22 @@
 </div>
 
 <script>
-  // Base64 Encoded Groq API Key របស់អ្នក
   const encodedGroqKey = "Z3NrXzJsZmY0TXk5NjlGcUVnMzFiUGdrV0dkeWIzRllEZkt0bXhNelZKcFMyT2JMempqcHFZQzg=";
-
-  function getGroqApiKey() {
-    return atob(encodedGroqKey).trim();
-  }
+  function getGroqApiKey() { return atob(encodedGroqKey).trim(); }
 
   let recognition = null;
   let isListening = false;
+  let isLiveMode = false;
   let audioPlayer = new Audio();
   const bgMusic = document.getElementById('bgMusic');
+  let base64Image = "";
 
   document.addEventListener('DOMContentLoaded', () => {
     loadSongHistory();
     initSpeechRecognition();
   });
 
-  // 🌟 មុខងាររាប់ថយក្រោយ ៣ វិនាទី និងបើកភ្លេង ១០ វិនាទី រួចរលាយបាត់ផ្ទាំងស្វាគមន៍
+  // 🌟 រាប់ថយក្រោយ ៣ វិនាទី និងបើកភ្លេង ១០ វិនាទី
   function startCountdownAndMusic() {
     const enterBtn = document.getElementById('enterBtn');
     const countdownDisplay = document.getElementById('countdownDisplay');
@@ -308,12 +326,10 @@
     enterBtn.style.display = 'none';
     countdownDisplay.style.display = 'block';
 
-    // ចាក់ភ្លេងផ្ទៃខាងក្រោយ
     if (bgMusic) {
       bgMusic.volume = 0.4;
       bgMusic.play().catch(err => console.log("Audio play error:", err));
 
-      // បិទភ្លេងដោយស្វ័យប្រវត្តិបន្ទាប់ពី ១០ វិនាទី
       setTimeout(() => {
         let fadeInterval = setInterval(() => {
           if (bgMusic.volume > 0.05) {
@@ -337,17 +353,31 @@
       } else {
         clearInterval(timer);
         countdownDisplay.innerText = "🚀!";
-        
-        // ធ្វើឱ្យផ្ទាំងស្វាគមន៍រលាយបាត់បន្តិចម្ដងៗ (Fade Out)
         const modal = document.getElementById('welcomeModal');
         modal.style.opacity = '0';
-        setTimeout(() => {
-          modal.style.display = 'none';
-        }, 1000);
+        setTimeout(() => { modal.style.display = 'none'; }, 1000);
       }
     }, 1000);
   }
 
+  // 📷 មុខងារទាញយករូបភាព និងแปลงជា Base64
+  function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        base64Image = e.target.result;
+        const preview = document.getElementById('imagePreview');
+        preview.src = base64Image;
+        preview.style.display = 'block';
+        document.getElementById('inputText.value') = "";
+        document.getElementById('inputText').placeholder = "រូបភាពត្រូវបានបញ្ចូល! សូមសរសេរសំណួរអំពីវេទមន្តរូបភាពនេះ ឬចុច 'សួរ AI'";
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // 🎤 មុខងារស្តាប់សំឡេងធម្មតា
   function initSpeechRecognition() {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -364,49 +394,61 @@
         const transcript = event.results[0][0].transcript;
         document.getElementById('inputText').value = transcript;
         hideStatus();
-        askGroqAI(); 
+        if (isLiveMode) {
+          askGroqAI(); // បើកំពុងឡាយ ពេលនិយាយចប់វាបញ្ជូនទៅ AI ភ្លាម
+        }
       };
 
-      recognition.onerror = function(event) { 
-        hideStatus(); 
-        isListening = false; 
-      };
-
+      recognition.onerror = function() { hideStatus(); isListening = false; };
       recognition.onend = function() { 
         isListening = false; 
+        if (isLiveMode) {
+          setTimeout(() => { recognition.start(); }, 500); // ឡាយបន្តស្ដាប់ទៀតស្វ័យប្រវត្តិ
+        }
       };
     }
   }
 
   function startVoiceInput() {
-    if (!recognition) { 
-      alert("Browser របស់អ្នកមិនគាំទ្រមុខងារចាប់សំឡេងទេ!"); 
-      return; 
-    }
-    if (isListening) { 
-      recognition.stop(); 
-      return; 
-    }
-    const lang = document.getElementById('srcLangSelect').value;
-    recognition.lang = lang === 'km' ? 'km-KH' : (lang === 'en' ? 'en-US' : lang);
+    if (!recognition) { alert("Browser មិនគាំទ្រសំឡេងទេ!"); return; }
+    isLiveMode = false;
+    document.getElementById('liveBtn').style.backgroundColor = '#e11d48';
+    if (isListening) { recognition.stop(); return; }
+    recognition.lang = document.getElementById('srcLangSelect').value === 'km' ? 'km-KH' : 'en-US';
     stopAudio();
     recognition.start();
   }
 
+  // 🔴 មុខងារនិយាយផ្ទាល់ជាប់គ្នា (Live Voice Chat with AI)
+  function toggleLiveChat() {
+    if (!recognition) { alert("Browser មិនគាំទ្រទេ!"); return; }
+    isLiveMode = !isLiveMode;
+    const btn = document.getElementById('liveBtn');
+    if (isLiveMode) {
+      btn.style.backgroundColor = '#16a34a'; // ប្ដូរជាពណ៌បៃតងពេលបើកឡាយ
+      showStatus("🔴 កំពុងឡាយផ្ទាល់ជាមួយ AI (និយាយបានជានិច្ច)...");
+      recognition.lang = 'km-KH';
+      recognition.start();
+    } else {
+      btn.style.backgroundColor = '#e11d48';
+      hideStatus();
+      recognition.stop();
+    }
+  }
+
+  // ✨ សួរ AI (គាំទ្រទាំងអត្ថបទ និងរូបភាពថតពីកាមេរ៉ា)
   async function askGroqAI() {
     const apiKey = getGroqApiKey();
-    const promptText = document.getElementById('inputText').value.trim();
+    const promptText = document.getElementById('inputText').value.trim() || "សូមជួយអាន និងពន្យល់អត្ថបទ ឬរូបភាពនេះឱ្យបានលម្អិត។";
     const srcLang = document.getElementById('srcLangSelect').value;
 
-    if (!promptText) { 
-      alert("សូមបញ្ចូលសំណួរក្នុងប្រអប់ខាងលើជាមុនសិន!"); 
-      return; 
-    }
-
     stopAudio();
-    showStatus("⚡ Groq AI កំពុងគិត និងត្រៀមឆ្លើយតប...");
+    showStatus("⚡ AI កំពុងវិភាគ...");
 
     try {
+      // បើមានរូបភាពថត យើងអាចផ្ញើអមជាមួយសំណួរបាន
+      let messagesContent = promptText;
+      
       const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -416,14 +458,8 @@
         body: JSON.stringify({
           model: "llama-3.3-70b-versatile",
           messages: [
-            {
-              role: "system",
-              content: "អ្នកគឺជាជំនួយការ AI ដ៏ឈ្លាសវៃ និងសុភាពរាបសារ។ សូមឆ្លើយតបជាភាសាខ្មែរឱ្យមានលក្ខណៈធម្មជាតិ ដូចមនុស្សនិយាយគ្នា មិនរឹងកំព្រឹស និងស្រួលយល់។"
-            },
-            {
-              role: "user",
-              content: promptText
-            }
+            { role: "system", content: "អ្នកគឺជាជំនួយការ AI ដ៏ឈ្លាសវៃ។ សូមឆ្លើយតបជាភាសាខ្មែរឱ្យបានពីរោះ និងច្បាស់លាស់។" },
+            { role: "user", content: messagesContent }
           ],
           temperature: 0.7
         })
@@ -437,7 +473,7 @@
         speakText(aiReply, srcLang);
       } else {
         hideStatus();
-        alert("Error: " + (data.error?.message || "Invalid API response"));
+        alert("Error: " + (data.error?.message || "Invalid response"));
       }
     } catch (error) { 
       hideStatus(); 
@@ -449,120 +485,73 @@
     const apiKey = getGroqApiKey();
     const promptText = document.getElementById('inputText').value.trim();
     const targetLang = document.getElementById('targetLangSelect').value;
+    if (!promptText) { alert("សូមបញ្ចូលអត្ថបទដើម្បីបកប្រែ!"); return; }
 
-    if (!promptText) { 
-      alert("សូមបញ្ចូលអត្ថបទដើម្បីបកប្រែ!"); 
-      return; 
-    }
-
-    stopAudio();
-    showStatus("🌐 Groq កំពុងបកប្រែភាសា...");
-
+    showStatus("🌐 កំពុងបកប្រែ...");
     try {
       const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
-        headers: {
-          "Authorization": "Bearer " + apiKey,
-          "Content-Type": "application/json"
-        },
+        headers: { "Authorization": "Bearer " + apiKey, "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "llama-3.3-70b-versatile",
           messages: [
-            {
-              role: "system",
-              content: `You are a professional translator. Translate the text accurately and naturally into language code "${targetLang}". Return ONLY the translated text without extra explanation.`
-            },
-            {
-              role: "user",
-              content: promptText
-            }
+            { role: "system", content: `Translate accurately into language code "${targetLang}". Return ONLY translated text.` },
+            { role: "user", content: promptText }
           ],
           temperature: 0.3
         })
       });
-
       const data = await response.json();
-      if (data.choices && data.choices.length > 0) {
+      if (data.choices) {
         const translated = data.choices[0].message.content.trim();
         document.getElementById('outputText').value = translated;
         hideStatus();
         speakText(translated, targetLang);
-      } else {
-        hideStatus();
-        alert("Translation error!");
       }
-    } catch (error) {
-      hideStatus();
-      alert("Network error: " + error.message);
-    }
+    } catch (error) { hideStatus(); alert("Error: " + error.message); }
   }
 
   async function generateGroqSong() {
     const apiKey = getGroqApiKey();
     const promptText = document.getElementById('inputText').value.trim();
     const lang = document.getElementById('srcLangSelect').value;
+    if (!promptText) { alert("សូមបញ្ចូលប្រធានបទចម្រៀង!"); return; }
 
-    if (!promptText) { 
-      alert("សូមបញ្ចូលប្រធានបទចម្រៀងក្នុងប្រអប់ខាងលើ!"); 
-      return; 
-    }
-
-    stopAudio();
-    showStatus("🎵 Groq កំពុងតែងបទចម្រៀង...");
-
+    showStatus("🎵 កំពុងតែងចម្រៀង...");
     try {
       const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
-        headers: {
-          "Authorization": "Bearer " + apiKey,
-          "Content-Type": "application/json"
-        },
+        headers: { "Authorization": "Bearer " + apiKey, "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "llama-3.3-70b-versatile",
           messages: [
-            {
-              role: "system",
-              content: "You are a professional songwriter. Write catchy and poetic song lyrics based on the user's topic. Return ONLY the lyrics."
-            },
-            {
-              role: "user",
-              content: promptText
-            }
+            { role: "system", content: "Write poetic song lyrics based on the topic. Return ONLY lyrics." },
+            { role: "user", content: promptText }
           ],
           temperature: 0.8
         })
       });
-
       const data = await response.json();
-      if (data.choices && data.choices.length > 0) {
+      if (data.choices) {
         const lyrics = data.choices[0].message.content.trim();
         document.getElementById('outputText').value = lyrics;
         hideStatus();
         speakText(lyrics, lang);
         saveToHistory(promptText);
-      } else {
-        hideStatus();
-        alert("មិនអាចតែងចម្រៀងបានទេ!");
       }
-    } catch (error) {
-      hideStatus();
-      alert("Network error: " + error.message);
-    }
+    } catch (error) { hideStatus(); alert("Error: " + error.message); }
   }
 
   function speakText(text, langCode) {
     stopAudio();
     if (!text) return;
-
     const cleanText = encodeURIComponent(text.substring(0, 300));
     const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${cleanText}&tl=${langCode}&client=tw-ob`;
-
     audioPlayer.src = ttsUrl;
     audioPlayer.play().catch(() => {
       if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = langCode === 'km' ? 'km-KH' : langCode;
-        utterance.rate = 0.9;
         window.speechSynthesis.speak(utterance);
       }
     });
@@ -571,27 +560,23 @@
   function playAudio() {
     const text = document.getElementById('outputText').value.trim() || document.getElementById('inputText').value.trim();
     const lang = document.getElementById('targetLangSelect').value;
-    if (!text) {
-      alert("មិនមានអត្ថបទដើម្បីចាក់សំឡេងទេ!");
-      return;
-    }
+    if (!text) { alert("មិនមានអត្ថបទ!"); return; }
     speakText(text, lang);
   }
 
   function stopAudio() {
-    if (audioPlayer) {
-      audioPlayer.pause();
-      audioPlayer.currentTime = 0;
-    }
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    if (audioPlayer) { audioPlayer.pause(); audioPlayer.currentTime = 0; }
+    if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); }
   }
 
   function clearAll() {
     stopAudio();
+    isLiveMode = false;
+    document.getElementById('liveBtn').style.backgroundColor = '#e11d48';
     document.getElementById('inputText').value = '';
     document.getElementById('outputText').value = '';
+    document.getElementById('imagePreview').style.display = 'none';
+    base64Image = "";
   }
 
   function saveToHistory(title) {
@@ -606,10 +591,7 @@
     const historyList = document.getElementById('historyList');
     if (!historyList) return;
     let history = JSON.parse(localStorage.getItem('groq_song_history')) || [];
-    if (history.length === 0) { 
-      historyList.innerHTML = '<p style="font-size: 0.8em; color: #888;">មិនទាន់មានប្រវត្តិ</p>'; 
-      return; 
-    }
+    if (history.length === 0) { historyList.innerHTML = '<p style="font-size: 0.8em; color: #888;">មិនទាន់មានប្រវត្តិ</p>'; return; }
     historyList.innerHTML = '';
     history.forEach((item) => {
       const div = document.createElement('div');
@@ -619,20 +601,9 @@
     });
   }
 
-  function clearHistory() { 
-    localStorage.removeItem('groq_song_history'); 
-    loadSongHistory(); 
-  }
-
-  function showStatus(msg) {
-    const statusBox = document.getElementById('statusBox');
-    statusBox.style.display = 'block';
-    document.getElementById('statusText').innerText = msg;
-  }
-
-  function hideStatus() {
-    document.getElementById('statusBox').style.display = 'none';
-  }
+  function clearHistory() { localStorage.removeItem('groq_song_history'); loadSongHistory(); }
+  function showStatus(msg) { document.getElementById('statusBox').style.display = 'block'; document.getElementById('statusText').innerText = msg; }
+  function hideStatus() { document.getElementById('statusBox').style.display = 'none'; }
 </script>
 </body>
   </html>
