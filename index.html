@@ -6,7 +6,6 @@
   <title>កម្មវិធីអានអត្ថបទ & AI Assistant</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Overlay ផ្ទាំង Login បង្ខំឱ្យ Sign in */
     #loginOverlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -38,12 +37,12 @@
 </head>
 <body>
 
-  <!-- ផ្ទាំង Login បង្ខំឱ្យ Sign in ជាមួយ Google -->
+  <!-- ផ្ទាំង Login -->
   <div id="loginOverlay">
     <div class="login-box">
       <h2>🔐 សូមចូលប្រើប្រាស់</h2>
       <p>សូមចុះឈ្មោះ ឬ Login ជាមួយ Google ដើម្បីប្រើប្រាស់កម្មវិធី</p>
-      <button class="btn-google" onclick="loginWithGoogle()">
+      <button class="btn-google" type="button" id="btnGoogleLogin">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
         Sign in with Google
       </button>
@@ -51,7 +50,7 @@
   </div>
 
   <div class="container" id="mainApp" style="display: none;">
-    <!-- ព័ត៌មានអ្នកប្រើប្រាស់ពេល Login រួច -->
+    <!-- ព័ត៌មានអ្នកប្រើប្រាស់ -->
     <div class="user-profile">
       <div style="display: flex; align-items: center; gap: 10px;">
         <img id="userAvatar" src="" width="35" height="35" style="border-radius: 50%;">
@@ -85,32 +84,31 @@
     <!-- ប្រអប់បញ្ចូលអត្ថបទ -->
     <textarea id="textInput" placeholder="បញ្ចូលអត្ថបទ ឬ ប្រធានបទចម្រៀង..."></textarea>
 
-    <!-- ផ្ទាំងបង្ហាញ Status -->
+    <!-- Status -->
     <div id="statusBox" style="display: none; margin-bottom: 10px; color: #f39c12; font-weight: bold;">
       <span id="statusText">កំពុងដំណើរការ...</span>
     </div>
 
-    <!-- ជួរប៊ូតុងទី ១ -->
+    <!-- ប៊ូតុង -->
     <div class="button-group" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
       <button onclick="askAI()" style="flex: 1; background-color: #008cba; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">✨ សួរ AI</button>
       <button onclick="startVoiceInput()" style="flex: 1; background-color: #e67e22; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">🎤 និយាយ</button>
       <button onclick="generateSunoMusic()" style="flex: 1; background-color: #9b59b6; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">🎵 បង្កើតចម្រៀង</button>
     </div>
 
-    <!-- ជួរប៊ូតុងទី ២ -->
     <div class="button-group" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
       <button onclick="playAudio()" style="flex: 1; background-color: #4caf50; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">▶️ ចាក់សំឡេង</button>
       <button onclick="stopAudio()" style="flex: 1; background-color: #f44336; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">⏹️ បញ្ចប់</button>
       <button onclick="clearAll()" style="flex: 1; background-color: #7f8c8d; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">🗑️ លុប</button>
     </div>
 
-    <!-- កន្លែងចាក់ Audio & ប៊ូតុង Download -->
+    <!-- Player -->
     <audio id="audioPlayer" controls style="display: none; width: 100%; margin-top: 15px;"></audio>
     <div id="downloadContainer" style="margin-top: 10px; display: none;">
       <a id="downloadBtn" href="#" target="_blank" download="song.mp3" class="btn-download">📥 ទាញយក MP3 (Download)</a>
     </div>
 
-    <!-- ប្រវត្តិបទចម្រៀង -->
+    <!-- ប្រវត្តិ -->
     <div class="history-section">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <h3 style="margin: 0; font-size: 1.05em; color: #3498db;">📜 ប្រវត្តិបទចម្រៀង MP3</h3>
@@ -123,12 +121,11 @@
 
   </div>
 
-  <!-- Firebase SDKs សម្រាប់ដំណើរការ Login -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase Version 8.10.1 (Stable សម្រាប់ទូរស័ព្ទ) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script src="script.js"></script>
 </body>
-  </html>
-                                              
+</html>
