@@ -1,3 +1,4 @@
+// ផ្ទុកទិន្នន័យសំណួរ-ចម្លើយ (អ្នកអាចថែមសំណួររហូតដល់ ៩០+ តាមទម្រង់នេះ)
 const questionsData = [
     {
         id: 1, page: "41",
@@ -19,7 +20,7 @@ const questionsData = [
     },
     {
         id: 4, page: "51",
-        km: { question: "៤. ការធ្វើរោគវិនិច្ឆ័យជំងឺតេតាណូស (Diagnostic du tétanos) ៖", answer: "• ផ្អែកលើប្រវត្តិ ៖ ស្នាមរបួស, ប្រវត្តិផ្ទាល់ខ្លួននៃការចាក់វ៉ាក់សាំង\n• ផ្អែកលើសញ្ញាគ្លីនិក ៖ អាការៈស្ទះថ្គាមខ្លាំងមិនអាចបើកបាន (Trismus invincible), ការកញ្រ្ជោលសាច់ដុំកើនឡើងពេលមានរំញោច, ស្មារតីនៅល្អជាធម្មតា" },
+        km: { question: "៤. ការធ្វើរោគវិនិច្ឆ័យជំងឺតេតាណូស (Diagnostic du tétanos) ៖", answer: "• ផ្អែកលើប្រវត្តិ ៖ ស្នាមរបួស, ប្រវត្តិផ្ទាល់ខ្លួននៃការចាក់វ៉ាក់សាំង\n• ផ្អែកលើសញ្ញាគ្លីនិក ៖ អាការៈស្ទះថ្គាមខ្លាំងមិនអាចបើកបាន (Trismus invincible), ការកញ្រ្ជោលសាច់ដុំកើនឡើងពេលមានរំញោច" },
         fr: { question: "4. Diagnostic du tétanos :", answer: "+ Arguments anamnestiques : Notions de la plaie, Notion de la vaccination\n+ Arguments cliniques : Trismus invincible, contracture s'accentuant lors du stimulus" },
         en: { question: "4. Diagnosis of Tetanus:", answer: "+ History: Wound history, vaccination history\n+ Clinical signs: Lockjaw (trismus), muscle spasms, intact consciousness" }
     },
@@ -29,6 +30,7 @@ const questionsData = [
         fr: { question: "5. Traitement de la coqueluche :", answer: "- Hospitalisation pour les nourrissons < 3 mois\n- Isolement et éviction scolaire de 30 jours\n- Erythromycine : 50 mg/kg/j en 4 prises" },
         en: { question: "5. Treatment of Pertussis:", answer: "- Hospitalization for infants <3 months\n- Isolation for 30 days\n- Erythromycin: 50 mg/kg/day in 4 doses" }
     }
+    // 💡 សំណួរទី ៦ ដល់ ៩០+ នឹងត្រូវបន្ថែមបន្តនៅទីនេះ!
 ];
 
 let currentIndex = 0;
@@ -41,13 +43,15 @@ const uiText = {
 };
 
 function updateDisplay() {
+    if (!questionsData || questionsData.length === 0) return;
+
     const currentData = questionsData[currentIndex];
-    const langData = currentData[currentLang];
+    const langData = currentData[currentLang] || currentData['km'];
     const ui = uiText[currentLang];
 
     document.getElementById('app-title').textContent = ui.title;
     document.getElementById('author-name').textContent = ui.author;
-    document.getElementById('q-number').textContent = `${ui.qPrefix} ${currentIndex + 1}`;
+    document.getElementById('q-number').textContent = `${ui.qPrefix} ${currentIndex + 1} / ${questionsData.length}`;
     document.getElementById('q-page').textContent = `${ui.pagePrefix} ${currentData.page}`;
     
     document.getElementById('question-text').textContent = langData.question;
@@ -56,17 +60,17 @@ function updateDisplay() {
     document.getElementById('prev-btn').textContent = ui.prev;
     document.getElementById('next-btn').textContent = ui.next;
 
+    // បើក/បិទ ប៊ូតុងតាមចំនួនសំណួរជាក់ស្តែង
     document.getElementById('prev-btn').disabled = (currentIndex === 0);
     document.getElementById('next-btn').disabled = (currentIndex === questionsData.length - 1);
 }
 
 function setLanguage(lang) {
     currentLang = lang;
-    document.getElementById('btn-km').classList.remove('active');
-    document.getElementById('btn-fr').classList.remove('active');
-    document.getElementById('btn-en').classList.remove('active');
-
-    document.getElementById(`btn-${lang}`).classList.add('active');
+    ['km', 'fr', 'en'].forEach(l => {
+        const btn = document.getElementById(`btn-${l}`);
+        if(btn) btn.classList.toggle('active', l === lang);
+    });
     updateDisplay();
 }
 
@@ -84,7 +88,5 @@ function prevQuestion() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    updateDisplay();
-});
-             
+document.addEventListener("DOMContentLoaded", updateDisplay);
+    
