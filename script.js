@@ -1,381 +1,499 @@
 const questionsData = [
-    {
-        id: 1, page: "78",
-        km: { question: "១. រោគសញ្ញាគ្លីនិកនៃជំងឺលាកប្រព័ន្ធផ្លូវដង្ហើម Bronchiolite លើទារក ៖", answer: "• ចាប់ផ្តើមដោយ Rhinopharyngite និងក្តៅខ្លួនស្ទើៗ 1-2 ថ្ងៃ\n• បន្ទាប់មកមានក្អក, ដកដង្ហើមលឿន (Tachypnée), ពិបាកដកដង្ហើម (Freinage expiratoire)\n• ស្ដាប់សួតឃើញមាន : Freinage expiratoire, Sibilants និង Râles sous-crépitants" },
-        fr: { question: "1. Signes cliniques de la bronchiolite aiguë du nourrisson :", answer: "• Début par une rhinopharyngite avec fièvre modérée pendant 1 à 2 jours\n• Apparition d'une toux, d'une polypnée et d'une gêne respiratoire expiratoire\n• Auscultation : freinage expiratoire, sibilants et râles sous-crépitants" },
-        en: { question: "1. Clinical signs of acute bronchiolitis in infants:", answer: "• Starts with rhinopharyngitis and mild fever for 1-2 days\n• Followed by cough, tachypnea, and expiratory wheezing/distress\n• Auscultation: expiratory wheezes and fine crackles" }
-    },
-    {
-        id: 2, page: "79",
-        km: { question: "២. វីរុសដែលជាដើមហេតុចម្បងនៃជំងឺ Bronchiolite ៖", answer: "• **VRS (Virus Respiratory Syncytial)** : ស្មើនឹង ៧០-៨០% នៃករណីទាំងអស់\n• វីរុសផ្សេងទៀត : Rhinovirus, Metapneumovirus, Influenza" },
-        fr: { question: "2. Étiologie principale de la bronchiolite :", answer: "• **VRS (Virus Respiratoire Syncytial)** : responsable de 70 à 80% des cas\n• Autres virus : Rhinovirus, Métapneumovirus humain, Influenza" },
-        en: { question: "2. Main etiology of bronchiolitis:", answer: "• **RSV (Respiratory Syncytial Virus)**: accounts for 70-80% of cases\n• Other viruses: Rhinovirus, Metapneumovirus, Influenza" }
-    },
-    {
-        id: 3, page: "80",
-        km: { question: "៣. ការព្យាបាល និងថែទាំជំងឺ Bronchiolite ស្រាលនៅផ្ទះ ៖", answer: "• ជូតសមាតច្រមុះដោយសេរ៉ូមប្រៃ (Désobstruction Rhinopharyngée - DRP) មុនពេលបៅ\n• បំបៅបន្តិចៗតែច្រើនដង (Fractionnement des repas)\n• លើកក្បាលឱ្យខ្ពស់បន្តិចពេលដេក (Position proclive 30°)\n• ផ្តល់ថ្នាំបញ្ចុះកម្តៅ Paracetamol បើមានកម្តៅ > 38.5°C" },
-        fr: { question: "3. Traitement ambulatoire de la bronchiolite :", answer: "• Désobstruction rhinopharyngée (DRP) au sérum physiologique avant les repas\n• Fractionnement des repas\n• Position proclive dorsale à 30°\n• Antipyrétiques (Paracétamol) si fièvre > 38,5°C" },
-        en: { question: "3. Home management of mild bronchiolitis:", answer: "• Nasal saline suctioning/drops (DRP) before feedings\n• Smaller, more frequent feedings\n• Elevate head of bed to 30 degrees\n• Paracetamol for fever > 38.5°C" }
-    },
-    {
-        id: 4, page: "81",
-        km: { question: "៤. លក្ខណៈនៃជំងឺគ្រុនពោះវៀនជ្រៀតចូលប្រព័ន្ធប្រសាទ (Encephalopathie typhique) ៖", answer: "• មានការប្រែប្រួលស្មារតីខ្លាំង (Coma, Stupeur)\n• មានអាការៈប្រដេញ/ប្រشنជើងដៃ (Tremblements, Convulsions)\n• ជាសញ្ញាគ្រោះថ្នាក់ខ្លាំងនៃជំងឺ Fièvre typhoïde ត្រូវប្រញាប់ប្រើ Steroid (Dexamethasone)" },
-        fr: { question: "4. Signes de l'encéphalopathie typhique :", answer: "• Troubles de la conscience sévères (coma, stupéfaction)\n• Tremblements, myoclonies ou convulsions\n• Forme grave nécessitant une corticothérapie associative (Dexaméthasone)" },
-        en: { question: "4. Features of Typhoid Encephalopathy:", answer: "• Severe altered mental status (coma, stupor)\n• Tremors, myoclonus, or seizures\n• Severe complication requiring adjunctive Corticosteroids (Dexamethasone)" }
-    },
-    {
-        id: 5, page: "82",
-        km: { question: "៥. សញ្ញាគ្លីនិកនៃជំងឺ Appendicite aiguë (លាកខ្នែងពោះវៀនស្រួចស្រាវ) លើកុមារ ៖", answer: "• ឈឺពោះនៅតំបន់ហើមស្ដាំ (Fosse iliaque droite)\n• ក្តៅខ្លួនស្ទើៗ (38°C - 38.5°C)\n• ចង់ក្អួត ឬក្អួត\n• សញ្ញាពិនិត្យ ៖ ឈឺចាប់ខ្លាំងពេលសង្កត់ត្រង់ចំណុច McBurney និងសញ្ញា Défense musculaire" },
-        fr: { question: "5. Signes cliniques de l'appendicite aiguë :", answer: "• Douleur abdominale localisée à la fosse iliaque droite (FID)\n• Fébrilécule (38°C - 38,5°C)\n• Nausées ou vomissements\n• Signes physiques : douleur provoquée au point de McBurney et défense en FID" },
-        en: { question: "5. Clinical signs of Acute Appendicitis in children:", answer: "• Abdominal pain localized to the right iliac fossa\n• Low-grade fever (38°C - 38.5°C)\n• Nausea or vomiting\n• Physical exam: McBurney point tenderness and localized muscle defense" }
-    },
-    {
-        id: 6, page: "83",
-        km: { question: "៦. ការធ្វើរោគវិនិច្ឆ័យជំងឺ Appendicite ៖", answer: "• **NFS** ៖ ឃើញ Hyperleucocytose à Polynucléaires Neutrophiles\n• **CRP** ៖ កើនឡើង (Indicateur d'inflammation)\n• **Échographie abdominale** : ឃើញ appendice រីកធំ (> 6 mm) និងមិនអាចសង្កត់ឱ្យរាបបាន" },
-        fr: { question: "6. Examens complémentaires pour l'appendicite :", answer: "• **NFS** : hyperleucocytose à polynucléaires neutrophiles (> 10 000/mm3)\n• **CRP** : augmentée\n• **Échographie abdominale** : appendice aperçu, incompressible, diamètre > 6 mm" },
-        en: { question: "6. Diagnostic workup for Appendicitis:", answer: "• **CBC**: Leukocytosis with neutrophilia\n• **CRP**: Elevated\n• **Abdominal Ultrasound**: Non-compressible appendix with diameter > 6 mm" }
-    },
-    {
-        id: 7, page: "84",
-        km: { question: "៧. រោគសញ្ញាគ្លីនិកនៃជំងឺ Invagination Intestinale Aiguë (IIA) ៖", answer: "+ ឈឺពោះចុកខ្លាំងភ្លាមៗជាលក្ខណៈរលក (Crises douloureuses paroxystiques)\n+ ក្អួត (Vomissements)\n+ ជុះលាមកមានឈាមលាយសំបោរ (Selles sanglantes / Rectorragies)\n+ ស្ទាបប៉ះដុំពោះ (Boudin d'invagination)" },
-        fr: { question: "7. Triade clinique de l'Invagination Intestinale Aiguë (IIA) :", answer: "+ Douleurs abdominales paroxystiques violentes\n+ Vomissements\n+ Émissions de selles sanglantes (rectorragies)\n+ Palpation d'un boudin d'invagination" },
-        en: { question: "7. Clinical features of Acute Intussusception (IIA):", answer: "+ Sudden, severe paroxysmal abdominal pain\n+ Vommiting\n+ 'Red currant jelly' bloody stools\n+ Palpable sausage-shaped abdominal mass" }
-    },
-    {
-        id: 8, page: "85",
-        km: { question: "៨. ការព្យាបាលជំងឺ Invagination Intestinale Aiguë (IIA) ៖", answer: "• **Lavement hydrostatique ou pneumatique** ជាជម្រើសទី១ បើគ្មាន Peritonite\n• **Chirurgie (ការវះកាត់)** ករណីបូមពង្រីកមិនជោគជ័យ ឬមានសញ្ញាធ្លុះពោះវៀន" },
-        fr: { question: "8. Traitement de l'invagination intestinale aiguë :", answer: "• **Réduction de l'invagination** par lavement pneumatique ou hydrostatique\n• **Réduction chirurgicale** en cas d'échec du lavement ou de signes de nécrose/perforation" },
-        en: { question: "8. Treatment of Intussusception:", answer: "• **Non-surgical reduction** (Air or Hydrostatic enema) as first-line if no peritonitis\n• **Surgical reduction** if enema fails or perforation/peritonitis is present" }
-    },
-    {
-        id: 9, page: "86",
-        km: { question: "៩. លក្ខណៈគ្លីនិកនៃជំងឺ Asthma (ហឺតកុមារ) ៖", answer: "- ក្អកជារ៉ាំរ៉ៃ ឬរើឡើងវិញ (ជាពិសេសពេលយប់ ឬពេលធ្វើចលនា)\n- ដកដង្ហើមមានសំឡេងចៃៗ (Sifflement/Wheezing)\n- ពិបាកដកដង្ហើម (Dyspnée expiratoire)\n- មានប្រវត្តិ Atopie ក្នុងគ្រួសារ" },
-        fr: { question: "9. Signes cliniques de l'asthme chez l'enfant :", answer: "- Toux récurrente (particulièrement la nuit ou à l'effort)\n- Wheezing (sifflement expiratoire)\n- Dyspnée expiratoire récurrente\n- Terrain atopique personnel ou familial" },
-        en: { question: "9. Clinical signs of Asthma in children:", answer: "- Recurrent cough (especially at night or post-exercise)\n- Expiratory wheezing\n- Recurrent expiratory dyspnea\n- Personal or family history of atopy" }
-    },
-    {
-        id: 10, page: "87",
-        km: { question: "១០. ការព្យាបាលវិបត្តិហឺតស្រួចស្រាវ (Crise d'asthme aiguë) ៖", answer: "• ប្រើថ្នាំពង្រីកបំពង់ខ្យល់ខ្លី ៖ **Salbutamol (Ventoline)**\n• ផ្តល់អុកស៊ីសែន (O2) ប្រសិនបើ SpO2 < 92%\n• ផ្តល់ថ្នាំ Corticoïde តាមមាត់ (Prednisolone 1-2 mg/kg)" },
-        fr: { question: "10. Traitement de la crise d'asthme aiguë :", answer: "• Bêta-2 mimétiques de courte durée d'action : **Salbutamol**\n• Oxygénothérapie si SpO2 < 92%\n• Corticothérapie par voie orale (Prednisolone) si crise modérée à sévère" },
-        en: { question: "10. Treatment of Acute Asthma Exacerbation:", answer: "• Short-acting beta-2 agonist: **Salbutamol (Albuterol)**\n• Oxygen supplementation if SpO2 < 92%\n• Systemic Corticosteroids (oral Prednisolone)" }
-    },
-    {
-        id: 11, page: "88",
-        km: { question: "១១. រោគសញ្ញាគ្លីនិកនៃជំងឺដក់ទឹកក្នុងខួរក្បាល (Hydrocéphalie) លើទារក ៖", answer: "• ទំហំប្រអប់ក្បាលរីកធំខុសធម្មតា (Macrocrénie)\n• ថង់ពោះវៀនក្បាល/ថប់ប៉ោង (Fontanelle antérieure bombante)\n• សញ្ញាភ្នែកធ្លាក់ចុះក្រោម (Signe du soleil couchant)" },
-        fr: { question: "11. Signes cliniques de l'hydrocéphalie chez le nourrisson :", answer: "• Augmentation rapide du périmètre crânien (Macrocrénie)\n• Fontanelle antérieure tendue et bombante\n• Regard en « soleil couchant »" },
-        en: { question: "11. Clinical signs of Hydrocephalus in infants:", answer: "• Rapidly increasing head circumference (Macrocephaly)\n• Tense, bulging anterior fontanelle\n• 'Setting-sun' eye sign" }
-    },
-    {
-        id: 12, page: "89",
-        km: { question: "១២. ការធ្វើរោគវិនិច្ឆ័យ និងព្យាបាលជំងឺ Hydrocéphalie ៖", answer: "• **Diagnostic** ៖ Échographie transfontanellaire (ETF), TDM (CT-Scan) ឬ IRM\n• **Traitement** ៖ ការវះកាត់ដាក់បំពង់បង្ហូរទឹកខួរក្បាល (DVP) ឬ ETV" },
-        fr: { question: "12. Diagnostic et traitement de l'hydrocéphalie :", answer: "• **Diagnostic** : Échographie transfontanellaire (ETF), TDMc ou IRM cérébrale\n• **Traitement** : Traitement chirurgical par Dérivation Ventriculo-Péritonéale (DVP)" },
-        en: { question: "12. Diagnosis and Treatment of Hydrocephalus:", answer: "• **Diagnosis**: Cranial ultrasound (ETF), Brain CT, or MRI\n• **Treatment**: Surgical intervention via VP Shunt or ETV" }
-    },
-    {
-        id: 13, page: "90",
-        km: { question: "១៣. លក្ខណៈនៃជំងឺ Hypothyroïdie congénitale (ខ្សោយក្រពេញទីរ៉ូអ៊ីតពីកំណើត) ៖", answer: "- ទារកកើតមកលើសថ្ងៃ, ទំងន់ធ្ងន់\n- លឿងស្បែកអូសបន្លាយ (Ictère prolongé)\n- ទារកស្ងប់ស្ងាត់ពេក, សំឡេងយំស្អក, អណ្តាតធំ (Macroglossie)" },
-        fr: { question: "13. Signes de l'hypothyroïdie congénitale chez le nouveau-né :", answer: "- Dépassement de terme, macrosomie\n- Ictère néonatal prolongé\n- Hypotonie, léthargie, cri rauque, macroglossie" },
-        en: { question: "13. Signs of Congenital Hypothyroidism in newborns:", answer: "- Post-term birth, large birth weight\n- Prolonged neonatal jaundice\n- Hypotonia, lethargy, hoarse cry, macroglossia" }
-    },
-    {
-        id: 14, page: "91",
-        km: { question: "១៤. ការព្យាបាលជំងឺ Congenital Hypothyroidism ៖", answer: "• ត្រូវតែព្យាបាលឱ្យបានឆាប់បំផុត (មុនអាយុ ២ សប្តាហ៍)\n• ប្រើថ្នាំជំនួសអ័រម៉ូន ៖ **L-Thyroxine (Lévothyrox)** មួយជីវិត" },
-        fr: { question: "14. Traitement de l'hypothyroïdie congénitale :", answer: "• Traitement précoce indispensable (avant 15 jours de vie)\n• Hormonothérapie substitutive : **L-Thyroxine (Lévothyrox)** à vie" },
-        en: { question: "14. Treatment of Congenital Hypothyroidism:", answer: "• Early initiation of therapy (within 2 weeks of birth)\n• Lifelong hormone replacement therapy: **L-Thyroxine (Levothyroxine)**" }
-    },
-    {
-        id: 15, page: "92",
-        km: { question: "១៥. សញ្ញាគ្លីនិកនៃជំងឺ Convulsion Fébrile (ប្រشنដោយសារកម្តៅឡើងខ្ពស់) ៖", answer: "• កើតលើកុមារអាយុពី ៦ ខែ ដល់ ៥ ឆ្នាំ\n• មានការប្រشن ពេលកម្តៅឡើងលឿន (> 38.5°C)\n• រយៈពេលប្រشنខ្លី (< 15 នាទី)\n• គ្មានការឆ្លងមេរោគលើខួរក្បាលឡើយ" },
-        fr: { question: "15. Caractéristiques des convulsions fébriles simples :", answer: "• Survenue entre 6 mois et 5 ans\n• Crise tonico-clonique généralisée lors d'une ascension thermique rapide (> 38,5°C)\n• Durée brève (< 15 minutes)" },
-        en: { question: "15. Features of Simple Febrile Seizures:", answer: "• Occurs in children aged 6 months to 5 years\n• Generalized tonic-clonic seizure during rapid rise in temperature (> 38.5°C)\n• Duration under 15 minutes" }
-    },
-    {
-        id: 16, page: "93",
-        km: { question: "១៦. ការព្យាបាលបន្ទាន់ពេលកុមារកំពុងប្រشن (Prise en charge d'une crise convulsive) ៖", answer: "• ដាក់កុមារឱ្យដេកផ្អៀង (Position Latérale de Sécurité - PLS)\n• មិនត្រូវញាត់អ្វីចូលក្នុងមាត់ដាច់ខាត\n• ផ្តល់ថ្នាំ **Diazepam (Valium)** តាមគូទ (0.5 mg/kg) បើប្រشن > ៥ នាទី" },
-        fr: { question: "16. Conduite à tenir pendant la crise convulsive :", answer: "• Mise en Position Latérale de Sécurité (PLS)\n• Ne rien introduire dans la bouche\n• Injection intra-rectale de **Diazépam (Valium)** : 0,5 mg/kg si la crise dure > 5 minutes" },
-        en: { question: "16. Emergency management of active seizures:", answer: "• Place child in Recovery Position (PLS)\n• Do NOT place anything in the mouth\n• Administer Rectal **Diazepam (Valium)** (0.5 mg/kg) if seizure lasts > 5 minutes" }
-    },
-    {
-        id: 17, page: "94",
-        km: { question: "១៧. សញ្ញានៃជំងឺ Kwashiorkor (កង្វះអាហារូបត្ថម្ភធ្ងន់ធ្ងរប្រភេទប្រូតែអ៊ីន) ៖", answer: "- ហើម (Œdèmes) ចាប់ផ្តើមពីខ្នងជើង និងមុខ\n- ស្បែកមានស្នាមអុជខ្មៅប្រេះស្រកា\n- សក់ក្រហម ស្រួយ រជ្រុះងាយ\n- ថ្លើមរីកធំ (Hépatomégalie)" },
-        fr: { question: "17. Signes cliniques du Kwashiorkor :", answer: "- Œdèmes bilatéraux prenant le godet (pieds, membres, visage)\n- Lesions cutanées : dermatose craquelée hyperpigmentée\n- Modifications des cheveux (secs, cassants, décolorés)" },
-        en: { question: "17. Clinical signs of Kwashiorkor:", answer: "- Bilateral pitting edema (feet, legs, face)\n- Skin lesions: 'flaky-paint' dermatosis\n- Hair changes (sparse, brittle, reddish discoloration)" }
-    },
-    {
-        id: 18, page: "95",
-        km: { question: "១៨. សញ្ញានៃជំងឺ Marasme (កង្វះអាហារូបត្ថម្ភធ្ងន់ធ្ងរប្រភេទថាមពល) ៖", answer: "• ស្គមស្គាំងខ្លាំង សល់តែស្បែករុំឆ្អឹង (Émaciation extrême)\n• បាត់បង់ជាតិខ្លាញ់ក្រោមស្បែក (Visage de vieillard)\n• គ្មានការហើម (Absence d'œdème) ឡើយ" },
-        fr: { question: "18. Signes cliniques du Marasme :", answer: "• Émaciation intense, fonte musculaire et graisseuse globale\n• Visage de vieillard\n• Absence totale d'œdèmes" },
-        en: { question: "18. Clinical signs of Marasmus:", answer: "• Severe muscle wasting and loss of subcutaneous fat\n• Old man/wizened facial appearance\n• Complete absence of edema" }
-    },
-    {
-        id: 19, page: "96",
-        km: { question: "១៩. គោលការណ៍សំខាន់ៗក្នុងការស្តារអាហារូបត្ថម្ភកុមារ (Prise en charge de la MAS) ៖", answer: "• ការពារ Syndrome de Renutrition (Refeeding Syndrome)\n• ប្រើប្រាស់ទឹកដោះគោរូបមន្តពិសេស **F-75** និង **F-100** / **ATPE**\n• ការពារ និងព្យាបាល Hypoglycémie, Hypothermie" },
-        fr: { question: "19. Principes de renutrition de la Malnutrition Aiguë Sévère (MAS) :", answer: "• Prévenir le syndrome de renutrition inappropriée\n• Phase initiale : lait **F-75** ; Phase de consolidation : **F-100** ou **ATPE**\n• Traiter/Prévenir l'hypoglycémie et l'hypothermie" },
-        en: { question: "19. Principles of Severe Acute Malnutrition (SAM) management:", answer: "• Prevent Refeeding Syndrome\n• Initial phase: **F-75**; Rehabilitation phase: **F-100** or **RUTF**\n• Treat and prevent hypoglycemia and hypothermia" }
-    },
-    {
-        id: 20, page: "97",
-        km: { question: "២០. រោគសញ្ញាជំងឺរលាកថ្លើមដោយវីរុសប្រភេទ បេ ស្រួចស្រាវ (Hépatite B aiguë) ៖", answer: "• ដំណាក់កាលមុនលឿង ៖ ក្តៅខ្លួន, អស់កម្លាំង, ឈឺសន្លាក់\n• ដំណាក់កាលលឿង ៖ ភ្នែកលឿង ស្បែកលឿង, ទឹកនោមពណ៌ក្រមៅ\n• Biologie : Transaminases (ALAT/ASAT) កើនឡើងខ្លាំង" },
-        fr: { question: "20. Signes de l'hépatite B aiguë :", answer: "• Phase pré-ictérique : syndrome grippal, asthénie, arthralgies\n• Phase ictérique : ictère franc, urines foncées, selles décolorées\n• Biologie : élévation majeure des transaminases (ALAT > 10 fois la normale)" },
-        en: { question: "20. Clinical features of Acute Hepatitis B:", answer: "• Pre-icteric phase: flu-like symptoms, fatigue, arthralgia\n• Icteric phase: overt jaundice, dark urine, pale stools\n• Labs: Marked elevation of transaminases" }
-    },
-    {
-        id: 21, page: "98",
-        km: { question: "២១. ការធ្វើសេរ៉ូឡូជីដើម្បីបញ្ជាក់ជំងឺ Hepatitis B ៖", answer: "• **Ag HBs (+)** ៖ បញ្ជាក់ថាមានវត្តមានវីរុសក្នុងខ្លួន\n• **Ac Anti-HBc IgM (+)** ៖ បញ្ជាក់ថាជាការឆ្លងស្រួចស្រាវ\n• **Ac Anti-HBs (+)** តែមួយមុខ ៖ មានអង់ទីករដោយសារការចាក់វ៉ាក់សាំង" },
-        fr: { question: "21. Profils sérologiques de l'hépatite B :", answer: "• **Ag HBs (+)** : présence du virus dans l'organisme\n• **Ac anti-HBc IgM (+)** : marqueur d'une infection aiguë\n• **Ac anti-HBs (+)** isolé : immunité conférée par la vaccination" },
-        en: { question: "21. Hepatitis B Serological Markers:", answer: "• **HBsAg (+)**: Indicates active HBV infection\n• **Anti-HBc IgM (+)**: Indicates acute infection\n• **Isolated Anti-HBs (+)**: Indicates immunity via vaccination" }
-    },
-    {
-        id: 22, page: "99",
-        km: { question: "២២. ការពារការចម្លងវីរុសរលាកថ្លើម បេ ពីម្តាយទៅកូន ៖", answer: "• ចាក់ **វ៉ាក់សាំង VHB** និង **Ig anti-HBs** ឱ្យទារកក្នុងរយ:ពេល **១២ ម៉ោងដំបូងក្រោយកើត**\n• បន្តចាក់វ៉ាក់សាំងការពារឱ្យគ្រប់ដូស" },
-        fr: { question: "22. Prévention de la transmission mère-enfant du VHB :", answer: "• Administration du **vaccin anti-HBV** et des **immunoglobulines anti-HBs** dans les **12 premières heures de vie**\n• Poursuite du schéma vaccinal standard" },
-        en: { question: "22. Prevention of Mother-to-Child Transmission of HBV:", answer: "• Administer both **HBV vaccine** and **HBIG** within **12 hours of birth**\n• Complete routine immunization schedule" }
-    },
-    {
-        id: 23, page: "100",
-        km: { question: "២៣. រោគសញ្ញាគ្លីនិកនៃជំងឺ Diabetes Type 1 លើកុមារ ៖", answer: "+ នោមច្រើន (Polyurie)\n+ ផឹកទឹកច្រើន (Polydipsie)\n+ ញ៉ាំច្រើនតែស្គមចុះ (Polyphagie avec maigrissement)\n+ អស់កម្លាំងខ្លាំង, នោមដាក់កន្លែងដេក" },
-        fr: { question: "23. Syndrome polyuro-polydipsique du diabète de type 1 :", answer: "+ Polyurie\n+ Polydipsie\n+ Polyphagie avec amaigrissement rapide\n+ Asthénie et énurésie secondaire" },
-        en: { question: "23. Signs of Type 1 Diabetes Mellitus in children:", answer: "+ Polyuria\n+ Polydipsia\n+ Polyphagia with rapid weight loss\n+ Fatigue and secondary enuresis" }
-    },
-    {
-        id: 24, page: "101",
-        km: { question: "២៤. សញ្ញានៃជំងឺបង្កដោយផលវិបាក Acidocétose Diabétique (DKA) ៖", answer: "• ដកដង្ហើមញាប់ខ្លាំង (Respiration de Kussmaul)\n• ខ្យល់ដង្ហើមមានក្លិនអាសេតូន (Odeur acétonique)\n• ក្អួត, ឈឺពោះខ្លាំង\n• ស្មារតីស្រទន់ ឬសន្លប់" },
-        fr: { question: "24. Signes de l'acidocétose diabétique (ACD) :", answer: "• Dyspnée de Kussmaul\n• Haleine à odeur d'acétonémie\n• Douleurs abdominales, vomissements\n• Troubles de la conscience" },
-        en: { question: "24. Signs of Diabetic Ketoacidosis (DKA):", answer: "• Kussmaul breathing\n• Fruity/acetone breath odor\n• Abdominal pain, nausea, vomiting\n• Altered mental status progressing to coma" }
-    },
-    {
-        id: 25, page: "102",
-        km: { question: "២៥. ការព្យាបាលជំងឺ Diabetes Type 1 លើកុមារ ៖", answer: "• ការចាក់ **Insuline** ជំនួសមួយជីវិត\n• ការតាមដានកម្រិតស្ករក្នុងឈាម (Glycémie)\n• ការរៀបចំរបបអាហារសមស្រប" },
-        fr: { question: "25. Traitement du diabète de type 1 :", answer: "• Insulinothérapie substitutive à vie\n• Auto-surveillance glycémique\n• Éducation thérapeutique et équilibre diététique" },
-        en: { question: "25. Management of Type 1 Diabetes in children:", answer: "• Lifelong Insulin replacement therapy\n• Frequent blood glucose monitoring\n• Patient education and dietary planning" }
-    },
-    {
-        id: 26, page: "103",
-        km: { question: "២៦. សញ្ញាគ្លីនិកនៃជំងឺ Anémie Ferriprive (ស្លេកស្លាំងដោយខ្វះជាតិដែក) ៖", answer: "• ស្បែក និងភ្នាសរំអិលស្លេកស្កាំង\n• អស់កម្លាំង, លឿនហត់\n• ក្រចកដៃសំប៉ែត ឬខូង (Koilonychie)\n• ញ៉ាំរបស់ចម្លែកៗ (Pica : ញ៉ាំដី, អង្ករឆៅ)" },
-        fr: { question: "26. Signes cliniques de l'anémie ferriprive :", answer: "• Pâleur cutanéo-muqueuse progressive\n• Asthénie, fatigabilité à l'effort\n• Ongles cassants, koïlonychie\n• Trouble du comportement alimentaire (Pica)" },
-        en: { question: "26. Clinical features of Iron Deficiency Anemia:", answer: "• Pallor of skin and mucous membranes\n• Fatigue, exercise intolerance\n• Spoon-shaped nails (koilonychia)\n• Pica (eating non-food items)" }
-    },
-    {
-        id: 27, page: "107",
-        km: { question: "២៧. លក្ខណៈជីវគីមីឈាមនៃជំងឺ Anémie Ferriprive (NFS/Bilan martial) ៖", answer: "• **Hb** ថយចុះ (< 11 g/dL)\n• **VGM** ថយចុះ (< 80 fL : Anémie Microcytaire)\n• **Ferritine sérique** ថយចុះខ្លាំង" },
-        fr: { question: "27. Bilan biologique de l'anémie ferriprive :", answer: "• **Hémoglobine** effondrée (< 11 g/dl)\n• **VGM** diminué (< 80 fl : microcytose)\n• **Ferritine sérique** effondrée" },
-        en: { question: "27. Laboratory profile of Iron Deficiency Anemia:", answer: "• Low **Hemoglobin** (< 11 g/dL)\n• Low **MCV** (< 80 fL: Microcytic anemia)\n• Significantly low **Serum Ferritin**" }
-    },
-    {
-        id: 28, page: "108",
-        km: { question: "២៨. ការព្យាបាលជំងឺ Anémie Ferriprive ៖", answer: "• ផ្តល់ថ្នាំជាតិដែកតាមមាត់ ៖ **Sulfate ferreux** (3-6 mg/kg/day) រយៈពេល ៣ ទៅ ៦ ខែ\n• បន្ថែមអាហារសម្បូរជាតិដែក" },
-        fr: { question: "28. Traitement de l'anémie ferriprive :", answer: "• Supplémentation martiale orale : **Sels de fer ferreux** pendant 3 à 6 mois\n• Diversification alimentaire adaptée" },
-        en: { question: "28. Treatment of Iron Deficiency Anemia:", answer: "• Oral iron therapy: **Ferrous sulfate** for 3 to 6 months\n• Dietary modifications (iron-rich foods)" }
-    },
-    {
-        id: 29, page: "109",
-        km: { question: "២៩. សញ្ញាគ្លីនិកនៃជំងឺ Thalassemia ធ្ងន់ធ្ងរ (Bêta-Thalassémie majeure) ៖", answer: "• ស្លេកស្លាំងធ្ងន់ធ្ងរលេចឡើងចាប់ពីអាយុ ៦ ខែ\n• ថ្លើម និងអណ្តើករីកធំខ្លាំង (Splénomégalie)\n• ទម្រង់មុខផ្លាស់ប្តូរ (Faciès thalassémique)" },
-        fr: { question: "29. Signes de la Bêta-thalassémie majeure :", answer: "• Anémie sévère progressive dès l'âge de 6 mois\n• Hépatosplénomégalie volumineuse\n• Deformations osseuses cranio-faciales" },
-        en: { question: "29. Features of Beta-Thalassemia Major:", answer: "• Severe progressive anemia onset around 6 months\n• Massive hepatosplenomegaly\n• Characteristic craniofacial bone changes" }
-    },
-    {
-        id: 30, page: "110",
-        km: { question: "៣០. ការព្យាបាលជំងឺ Bêta-Thalassémie majeure ៖", answer: "• ចាក់បញ្ចូលគ្រាប់ឈាមក្រហម រៀងរាល់ ៣ ទៅ ៤ សប្តាហ៍ម្តង\n• ប្រើថ្នាំបណ្តេញជាតិដែកលើស (Chélateurs du fer)\n• អាចព្យាបាលជាដាច់ដោយសារ **Greffe de moelle osseuse**" },
-        fr: { question: "30. Traitement de la Bêta-thalassémie majeure :", answer: "• Transfusions régulières de culots globulaires toutes les 3 à 4 semaines\n• Traitement chélateur du fer\n• Traitement curatif : **Allogreffe de moelle osseuse**" },
-        en: { question: "30. Management of Beta-Thalassemia Major:", answer: "• Regular packed red blood cell transfusions\n• Iron chelation therapy\n• Definitive cure: **Bone marrow transplantation**" }
-    },
-    {
-        id: 31, page: "111",
-        km: { question: "៣១. សញ្ញាគ្លីនិកនៃជំងឺ Meningite Aiguë (រលាកភ្នាសខួរក្បាលស្រួចស្រាវ) លើកុមារ ៖", answer: "• ក្តៅខ្លួនខ្លាំងភ្លាមៗ\n• រឹងក (Raideur de la nuque)\n• ក្អួត, ឈឺក្បាលខ្លាំង, ក្តៅក្រហាយពន្លឺ (Photophobie)" },
-        fr: { question: "31. Syndrome méningé de la méningite aiguë :", answer: "• Début brutal avec fièvre élevée\n• Raideur de la nuque, signe de Kernig et Brudzinski\n• Céphalées violentes, vomissements en jet, photophobie" },
-        en: { question: "31. Clinical signs of Acute Meningitis in children:", answer: "• Sudden onset of high fever\n• Nuchal rigidity (stiff neck), Kernig/Brudzinski signs\n• Severe headache, projectile vomiting, photophobia" }
-    },
-    {
-        id: 32, page: "112",
-        km: { question: "៣២. ការប្រឡងពិនិត្យទឹកខួរក្បាល (Ponction Lombaire) ករណី រលាកភ្នាសខួរក្បាលដោយបាក់តេរី ៖", answer: "• ទឹកខួរក្បាលល្អក់ (LCR trouble/purulent)\n• កោសិកាឈាមសកើនឡើងខ្លាំង (Polynucleaires Neutrophiles)\n• Glycorachie ថយចុះ, Protéinorachie កើនឡើង" },
-        fr: { question: "32. Analyse du LCR dans la méningite bactérienne :", answer: "• Aspect du LCR : trouble ou purulent\n• Hyperleucocytose à prédominance de polynucléaires neutrophiles\n• Hypoglycorachie, hyperprotéinorachie" },
-        en: { question: "32. CSF analysis in Bacterial Meningitis:", answer: "• Cloudy or purulent CSF appearance\n• Predominance of neutrophilic leukocytosis\n• Decreased CSF glucose, elevated CSF protein" }
-    },
-    {
-        id: 33, page: "113",
-        km: { question: "៣៣. ការព្យាបាលបន្ទាន់ជំងឺ Méningite Bactérienne ៖", answer: "• ប្រើថ្នាំផ្សះ **Ceftriaxone** ឬ **Céfotaxime** ដូសខ្ពស់ភ្លាមៗតាមសរសៃឈាម\n• ប្រើ **Dexamethasone** មុន ឬជាមួយថ្នាំផ្សះដំបូង" },
-        fr: { question: "33. Traitement antibiotique urgence de la méningite :", answer: "• Céphalo. de 3ème génération : **Ceftriaxone** ou **Céfotaxime** IV à forte dose\n• Dexaméthasone IV associée lors de la première injection" },
-        en: { question: "33. Emergency treatment for Bacterial Meningitis:", answer: "• High-dose IV 3rd gen Cephalosporins: **Ceftriaxone** or **Cefotaxime**\n• Adjunctive IV **Dexamethasone** with/before first antibiotic dose" }
-    },
-    {
-        id: 34, page: "114",
-        km: { question: "៣៤. សញ្ញាគ្លីនិកនៃជំងឺ Syndrome Néphrotique (រោគសញ្ញាម្រាមតម្រងនោម) ៖", answer: "+ ហើមពាសពេញរាងកាយ (Œdèmes généralisés / Anasarque)\n+ ទឹកនោមមានប្រូតេអ៊ីនច្រើន (Protéinurie massive)\n+ ឈាមមានអាល់ប៊ុយមីនទាប (Hypoalbuminémie)" },
-        fr: { question: "34. Triade du Syndrome Néphrotique :", answer: "+ Œdèmes mous, blancs, prenant le godet (visage, membres, anasarque)\n+ Protéinurie massive (> 50 mg/kg/j)\n+ Hypoalbuminémie (< 30 g/L)" },
-        en: { question: "34. Clinical triad of Nephrotic Syndrome:", answer: "+ Generalized pitting edema (anasarca)\n+ Massive proteinuria\n+ Hypoalbuminemia" }
-    },
-    {
-        id: 35, page: "115",
-        km: { question: "៣៥. ការព្យាបាលជំងឺ Nephrotic Syndrome ប្រភេទដំបូងលើកុមារ ៖", answer: "• ប្រើថ្នាំ Corticoïde ៖ **Prednisolone** (2 mg/kg/day) រយៈពេល ៤ ទៅ ៦ សប្តាហ៍\n• ពិសារអាហារកាត់បន្ថយអំបិល (Régime hyposodé)" },
-        fr: { question: "35. Traitement de première ligne du syndrome néphrotique :", answer: "• Corticothérapie orale : **Prednisolone** (60 mg/m²/j) pendant 4 à 6 semaines\n• Régime strict sans sel" },
-        en: { question: "35. First-line management of Nephrotic Syndrome:", answer: "• Oral Corticosteroids: **Prednisolone** for 4 to 6 weeks\n• Strict low-sodium diet" }
-    },
-    {
-        id: 36, page: "116",
-        km: { question: "៣៦. សញ្ញាគ្លីនិកនៃជំងឺ Glomérulonéphrite Aiguë (GNA) ក្រោយឆ្លង Streptocoque ៖", answer: "• នោមមានឈាម (Hématurie macroscopique / ទឹកនោមពណ៌ត្នោត)\n• ឡើងសម្ពាធឈាម (Hypertension artérielle)\n• ហើមត្របកភ្នែក និងជើង (Œdèmes)" },
-        fr: { question: "36. Signes de la Glomérulonéphrite Aiguë post-streptococcique :", answer: "• Hématurie macroscopique (urines bouillon de culture)\n• Hypertension artérielle (HTA)\n• Œdèmes modérés (visage et chevilles)" },
-        en: { question: "36. Signs of Post-Streptococcal Glomerulonephritis (PSGN):", answer: "• Macroscopic hematuria (cola-colored urine)\n• Hypertension\n• Periorbital and lower extremity edema" }
-    },
-    {
-        id: 37, page: "117",
-        km: { question: "៣៧. ការពិនិត្យមន្ទីរពិសោធន៍សម្រាប់ជំងឺ PSGN / GNA ៖", answer: "• **ASLO** ឡើងខ្ពស់ (បញ្ជាក់ថាធ្លាប់ឆ្លង Streptocoque)\n• កម្រិត **C3 Fraction du complément** ថយចុះ\n• នោមមានគ្រាប់ឈាមក្រហម (Hématurie)" },
-        fr: { question: "37. Bilan biologique de la GNA post-streptococcique :", answer: "• Élévation des anticorps **ASLO**\n• Baisse transitoire du **facteur C3 du complément**\n• Hématurie microscopique/macroscopique avec cylindres hématiques" },
-        en: { question: "37. Diagnostic evaluation for PSGN:", answer: "• Elevated **ASLO** titers\n• Transient decrease in serum **C3 complement** level\n• Hematuria with dysmorphic RBCs or RBC casts" }
-    },
-    {
-        id: 38, page: "118",
-        km: { question: "៣៨. សញ្ញានៃជំងឺគ្រុនឈាម (Dengue) ដំណាក់កាលស្រួចស្រាវ ៖", answer: "• ក្តៅខ្លួនខ្លាំងភ្លាមៗ (39°C - 40°C) 2-7 ថ្ងៃ\n• ឈឺក្បាល, ឈឺក្រោយប្រអប់ភ្នែក, ឈឺសាច់ដុំ/ឆ្អឹង\n• មានស្នាមកន្ទួលក្រហមលើស្បែក (Éruption cutanée)" },
-        fr: { question: "38. Phase fébrile de la Dengue :", answer: "• Fièvre élevée à début brutal (39-40°C) durant 2 à 7 jours\n• Céphalées rétro-orbitaires, myalgies, arthralgies\n• Érythème cutané ou exanthème" },
-        en: { question: "38. Febrile phase of Dengue Fever:", answer: "• Sudden onset of high fever lasting 2 to 7 days\n• Retro-orbital headache, severe myalgia/arthralgia\n• Transient macular rash" },
-    },
-    {
-        id: 39, page: "119",
-        km: { question: "៣៩. សញ្ញាព្រមាននៃជំងឺគ្រុនឈាមធ្ងន់ធ្ងរ (Warning signs of severe Dengue) ៖", answer: "• ឈឺពោះខ្លាំង ឬចុចឈឺ\n• ក្អួតជារឿយៗ\n• មានហូរឈាមតាមភ្នាស (អញ្ចាញធ្មេញ, ច្រមុះ, ក្អួតឈាម)\n• លឹមៗ ឬម្នោះម្នេញ" },
-        fr: { question: "39. Signes d'alerte de la Dengue sévère :", answer: "• Douleurs abdominales intenses ou provoquées\n• Vomissements persistants\n• Saignements des muqueuses\n• Léthargie ou agitation" },
-        en: { question: "39. Warning signs of Severe Dengue:", answer: "• Severe abdominal pain or tenderness\n• Persistent vomiting\n• Mucosal bleeding\n• Lethargy or restlessness" }
-    },
-    {
-        id: 40, page: "120",
-        km: { question: "៤០. ការព្យាបាល និងថែទាំជំងឺគ្រុនឈាម (Dengue) ៖", answer: "• ផ្តល់ទឹកអូរ៉ាសូល (ORS) ឬបញ្ចូលសេរ៉ូមតាមតម្រូវការ\n• ប្រើតែ **Paracetamol** បញ្ចុះកម្តៅ (ហាមប្រើ Ibuprofen/Aspirin ដាច់ខាត)\n• តាមដាន Hematocrite (HCT) និងគ្រាប់ប្លាកែត" },
-        fr: { question: "40. Prise en charge de la Dengue :", answer: "• Réhydratation orale (SRO) ou réhydratation IV selon la sévérité\n• Antipyrétique : **Paracétamol uniquement** (AINS et Aspirine contre-indiqués)\n• Surveillance stricte de l'hématocrite et des plaquettes" },
-        en: { question: "40. Management of Dengue Fever:", answer: "• Adequate fluid replacement (ORS or IV fluids as needed)\n• Fever control: **Paracetamol ONLY** (Aspirin/NSAIDs strictly contraindicated)\n• Close monitoring of Hematocrit and Platelet count" }
-            }    {
-        id: 41, page: "121",
-        km: { question: "៤១. សញ្ញាគ្លីនិកនៃជំងឺ Otite Moyenne Aiguë - OMA (រលាកត្រចៀកកណ្តាលស្រួចស្រាវ) ៖", answer: "• ឈឺត្រចៀក (Otalgie) ឬកុមារយកដៃទាញត្រចៀក\n• ក្តៅខ្លួន\n• ពិនិត្យ Otoscopie ឃើញ membrane tympanique ឡើងក្រហម ប៉ោង ឬមានខ្ទុះ" },
-        fr: { question: "41. Signes cliniques de l'Otite Moyenne Aiguë (OMA) :", answer: "• Otalgie (ou pleurs inhabituels, enfant qui touche son oreille)\n• Fièvre\n• Otoscopie : tympan congestif, bombé ou perforé avec otorrhée" },
-        en: { question: "41. Clinical signs of Acute Otitis Media (AOM):", answer: "• Ear pain (otalgia) or infant tugging at the ear\n• Fever\n• Otoscopy: bulging, erythematous tympanic membrane or otorrhea" }
-    },
-    {
-        id: 42, page: "122",
-        km: { question: "៤២. ការព្យាបាលជំងឺ Otite Moyenne Aiguë លើកុមារ ៖", answer: "• ថ្នាំបំបាត់ការឈឺចាប់ និងបញ្ចុះកម្តៅ (Paracetamol)\n• ថ្នាំផ្សះ **Amoxicillin** (80-90 mg/kg/day) ជាជម្រើសទី១ ករណី OMA Purulente" },
-        fr: { question: "42. Traitement de l'Otite Moyenne Aiguë purulente :", answer: "• Antalgiques et antipyrétiques (Paracétamol)\n• Antibiothérapie de 1ère intention : **Amoxicilline** à forte dose (80-90 mg/kg/j)" },
-        en: { question: "42. Treatment of Acute Otitis Media:", answer: "• Analgesics and antipyretics (Paracetamol)\n• First-line antibiotic: High-dose **Amoxicillin** (80-90 mg/kg/day)" }
-    },
-    {
-        id: 43, page: "123",
-        km: { question: "៤៣. លក្ខណៈនៃជំងឺ Laryngite Aiguë (រលាកបំពង់សំឡេងស្រួចស្រាវលើកុមារ) ៖", answer: "• ក្អកគ្រល : Toux rauque / aboyante\n• សំឡេងស្អក : Dysphonie\n• ស្រែកដកដង្ហើមចូល : Stridor inspiratoire" },
-        fr: { question: "43. Triade clinique de la Laryngite Aiguë sous-glottique :", answer: "• Toux rauque ou aboyante\n• Dysphonie (voix enrouée)\n• Stridor inspiratoire avec bradypnée inspiratoire" },
-        en: { question: "43. Clinical triad of Acute Croup (Laryngotracheitis):", answer: "• Barking cough\n• Hoarseness (dysphonia)\n• Inspiratory stridor" }
-    },
-    {
-        id: 44, page: "124",
-        km: { question: "៤៤. ការព្យាបាលជំងឺ Laryngite Aiguë ៖", answer: "• ផ្តល់ **Dexamethasone** តាមមាត់ ឬចាក់ (0.15 - 0.6 mg/kg) មួយដូស\n• បាញ់ **Adrénaline (Epinephrine) nebulized** ករណីមាន Stridor ពេលសម្រាក" },
-        fr: { question: "44. Traitement de la laryngite aiguë :", answer: "• Corticothérapie : **Dexaméthasone** orale ou IV (dose unique)\n• Nébulisation d'**Adrénaline** en cas de stridor de repos ou gêne sévère" },
-        en: { question: "44. Treatment of Acute Croup:", answer: "• Single dose of oral/parenteral **Dexamethasone**\n• Nebulized **Epinephrine** for stridor at rest or severe distress" }
-    },
-    {
-        id: 45, page: "125",
-        km: { question: "៤៥. សញ្ញាគ្លីនិកនៃជំងឺ Epiglottite Aiguë (រលាកគម្របបំពង់ខ្យល់ - អាសន្នរោគ) ៖", answer: "• ក្តៅខ្លួនខ្លាំង ស្រួចស្រាវ\n• លេបទឹកមាត់មិនរួច ហូរទឹកមាត់ (Sialorrhée)\n• អង្គុយទោរទៅមុខ (Position du trépied)\n• ហាមប្រើឈើពិនិត្យបំពង់ក (Abaisse-langue) ដាច់ខាត" },
-        fr: { question: "45. Signes de l'Épiglottite Aiguë (Urgence vitale) :", answer: "• Fièvre élevée de survenue brutale\n• Dysphagie majeure avec sialorrhée (l'enfant bave)\n• Position assise du trépied (penché en avant)\n• **Contre-indication absolue de l'abaisse-langue**" },
-        en: { question: "45. Signs of Acute Epiglottitis (Medical Emergency):", answer: "• High fever with sudden onset\n• Severe dysphagia and drooling\n• Tripod positioning\n• **Strictly avoid tongue depressor exam**" }
-    },
-    {
-        id: 46, page: "126",
-        km: { question: "៤៦. មេរោគដើមហេតុ និងការពាបាលជំងឺ Epiglottite Aiguë ៖", answer: "• ដើមហេតុ ៖ **Haemophilus influenzae type b (Hib)**\n• ព្យាបាល ៖ បើកផ្លូវដង្ហើមបន្ទាន់ (Intubation) + ថ្នាំផ្សះ **Ceftriaxone** IV" },
-        fr: { question: "46. Étiologie et traitement de l'épiglottite :", answer: "• Agent causal principal : **Haemophilus influenzae de type b**\n• Prise en charge : Sécurisation des voies aériennes (Intubation) + **Ceftriaxone** IV" },
-        en: { question: "46. Etiology and management of Epiglottitis:", answer: "• Main pathogen: **Haemophilus influenzae type b (Hib)**\n• Management: Airway protection (Endotracheal intubation) + IV **Ceftriaxone**" }
-    },
-    {
-        id: 47, page: "127",
-        km: { question: "៤៧. សញ្ញាគ្លីនិកនៃជំងឺ PNEUMONIE (រលាកសួត) លើកុមារ ៖", answer: "• ក្តៅខ្លួន + ក្អក\n• ដកដង្ហើមលឿន (Tachypnée)\n• សញ្ញាពិបាកដកដង្ហើម (Tirage intercostal, Battement des ailes du nez)\n• ស្ដាប់សួតឃើញមាន Râles crépitants" },
-        fr: { question: "47. Signes cliniques d'une pneumonie aiguë :", answer: "• Fièvre élevée et toux\n• Polypnée (tachypnée)\n• Signes de lutte respiratoire (tirage, battement des ailes du nez)\n• Auscultation : rÂles crépitants localisés" },
-        en: { question: "47. Clinical signs of Pneumonia in children:", answer: "• Fever and cough\n• Tachypnea\n• Respiratory distress (intercostal retractions, nasal flaring)\n• Auscultation: Focal crackles" }
-    },
-    {
-        id: 48, page: "128",
-        km: { question: "៤៨. ការកំណត់ដង្ហើមលឿន (Tachypnée) តាមអាយុរបស់ WHO ៖", answer: "• អាយុ < ២ ខែ ៖ ≥ ៦០ ដង/នាទី\n• អាយុ ២-១១ ខែ ៖ ≥ ៥០ ដង/នាទី\n• អាយុ ១២ ខែ - ៥ ឆ្នាំ ៖ ≥ ៤០ ដង/នាទី" },
-        fr: { question: "48. Seuils de tachypnée selon l'OMS :", answer: "• < 2 mois : ≥ 60 respirations/min\n• 2 à 11 mois : ≥ 50 respirations/min\n• 12 mois à 5 ans : ≥ 40 respirations/min" },
-        en: { question: "48. WHO thresholds for Tachypnea:", answer: "• < 2 months: ≥ 60 breaths/min\n• 2 to 11 months: ≥ 50 breaths/min\n• 12 months to 5 years: ≥ 40 breaths/min" }
-    },
-    {
-        id: 49, page: "129",
-        km: { question: "៤៩. ការព្យាបាលជំងឺ Pneumonie FRANCHE LOBAIRE AIGUË (PFLA) ៖", answer: "• មេរោគចម្បង ៖ **Streptococcus pneumoniae (Pneumocoque)**\n• ថ្នាំផ្សះជម្រើសទី១ ៖ **Amoxicillin** ដូសខ្ពស់ (80-100 mg/kg/day)" },
-        fr: { question: "49. Traitement de la pneumonie franche lobaire aiguë (PFLA) :", answer: "• Étiologie principale : **Pneumocoque (Streptococcus pneumoniae)**\n• Antibiotique de 1ère intention : **Amoxicilline** à forte dose (80-100 mg/kg/j)" },
-        en: { question: "49. Treatment of Acute Lobar Pneumonia:", answer: "• Primary pathogen: **Streptococcus pneumoniae**\n• First-line antibiotic: High-dose **Amoxicillin** (80-100 mg/kg/day)" }
-    },
-    {
-        id: 50, page: "130",
-        km: { question: "៥០. លក្ខណៈនៃជំងឺ Atypic Pneumonia (រលាកសួតមិនសមស្រប) ៖", answer: "• មេរោគ ៖ **Mycoplasma pneumoniae** ឬ Chlamydia pneumoniae\n• កើតលើកុមារអាយុ > ៥ ឆ្នាំ, ក្អកស្ងួតអូសបន្លាយ\n• ព្យាបាលដោយថ្នាំក្រុម **Macrolides** (Azithromycin, Clarithromycin)" },
-        fr: { question: "50. Caractéristiques de la pneumonie atypique :", answer: "• Agent : **Mycoplasma pneumoniae**\n• Fréquent chez l'enfant de plus de 5 ans, toux sèche quinteuse\n• Traitement : **Macrolides** (Azithromycine)" },
-        en: { question: "50. Features of Atypical Pneumonia:", answer: "• Pathogen: **Mycoplasma pneumoniae**\n• Common in children > 5 years, persistent dry cough\n• Treatment: **Macrolides** (Azithromycin)" }
-    },
-    {
-        id: 51, page: "131",
-        km: { question: "៥១. រោគសញ្ញាគ្លីនិកនៃជំងឺ Coqueluche (ក្អកមាន់) ៖", answer: "• ក្អកជាខ្សែៗជាប់ៗគ្នា (Quintes de toux)\n• ស្រែកដកដង្ហើមចូលដូចមាន់រងាវ (Chant du coq)\n• ក្អួតក្រោយពេលក្អក (Vomissements post-tussifs)" },
-        fr: { question: "51. Signes cliniques de la Coqueluche :", answer: "• Quintes de toux paroxystiques épuisantes\n• Reprise inspiratoire en « chant du coq »\n• Vomissements post-tussifs" },
-        en: { question: "51. Clinical signs of Pertussis (Whooping Cough):", answer: "• Paroxysmal coughing fits\n• High-pitched inspiratory 'whoop'\n• Post-tussive vomiting" }
-    },
-    {
-        id: 52, page: "132",
-        km: { question: "៥២. មេរោគ និងការព្យាបាលជំងឺ Coqueluche ៖", answer: "• មេរោគ ៖ **Bordetella pertussis**\n• ព្យាបាល ៖ ថ្នាំផ្សះក្រុម **Macrolides** (Azithromycin, Clarithromycin) ដើម្បីកាត់បន្ថយការចម្លង" },
-        fr: { question: "52. Étiologie et traitement de la coqueluche :", answer: "• Agent responsable : **Bordetella pertussis**\n• Traitement : **Macrolides** (Clarithromycine/Azithromycine) pour réduire la contagiosité" },
-        en: { question: "52. Etiology and treatment of Pertussis:", answer: "• Causative agent: **Bordetella pertussis**\n• Treatment: **Macrolides** (Azithromycin) to reduce contagiousness" }
-    },
-    {
-        id: 53, page: "133",
-        km: { question: "៥៣. សញ្ញាគ្លីនិកនៃជំងឺ Rougeole (ជ្រឹល) ៖", answer: "• ក្តៅខ្លួន, ក្អក, ហូរទឹកច្រមុះ, ក្រហមភ្នែក (Catarrhe oculonasal)\n• ស្នាមអុច **Koplik** ក្នុងមាត់ (Signe de Koplik)\n• កន្ទួលក្រហមចាប់ផ្តើមពីមុខ ចុះមកក្រោម (Éruption maculopapuleuse descendante)" },
-        fr: { question: "53. Triade et signes de la Rougeole :", answer: "• Fièvre, catarrhe oculo-naso-respiratoire (toux, rhinite, conjonctivite)\n• **Taches de Koplik** sur la muqueuse buccale\n• Éruption maculo-papuleuse descendante (visage puis tronc et membres)" },
-        en: { question: "53. Signs of Measles (Rubeola):", answer: "• Fever, 3 Cs (Cough, Coryza, Conjunctivitis)\n• **Koplik spots** on buccal mucosa\n• Maculopapular rash spreading cephalocaudally" }
-    },
-    {
-        id: 54, page: "134",
-        km: { question: "៥៤. ផលវិបាក និងការផ្តល់ថ្នាំបន្ថែមក្នុងជំងឺ Rougeole ៖", answer: "• ផលវិបាក ៖ Otite, Pneumonie, Encéphalite\n• ផ្តល់ **Vitamin A** ២ ដូស ដើម្បីកាត់បន្ថយអត្រាស្លាប់" },
-        fr: { question: "54. Complications et supplémentation dans la rougeole :", answer: "• Complications : Otite, pneumopathie, encéphalite aiguë\n• Supplémentation en **Vitamine A** recommandée pour prévenir les complications graves" },
-        en: { question: "54. Complications and supplementation in Measles:", answer: "• Complications: Otitis media, pneumonia, encephalitis\n• Mandatory **Vitamin A** supplementation to reduce mortality" }
-    },
-    {
-        id: 55, page: "135",
-        km: { question: "៥៥. សញ្ញាគ្លីនិកនៃជំងឺ Varicelle (អុតស្វាយ) ៖", answer: "• កន្ទួលពងទឹក (Vésicules en gouttes de rosée)\n• មានគ្រប់ដំណាក់កាលលើស្បែកតែមួយ (Macules, Vésicules, Croûtes)\n• រមាស់ខ្លាំង (Prurit intense)" },
-        fr: { question: "55. Caractéristiques de l'éruption de la Varicelle :", answer: "• Vésicules « en gouttes de rosée » sur base érythémateuse\n• Coexistence de tous les stades éruptifs (macules, vésicules, croûtes)\n• Prurit intense" },
-        en: { question: "55. Clinical features of Varicella (Chickenpox):", answer: "• 'Dewdrops on a rose petal' vesicular rash\n• Lesions in various stages of development simultaneously\n• Intense pruritus" }
-    },
-    {
-        id: 56, page: "136",
-        km: { question: "៥៦. ការព្យាបាល និងបម្រាមក្នុងជំងឺ Varicelle ៖", answer: "• អនាម័យស្បែក, ថ្នាំកាត់បន្ថយការរមាស់ (Antihistaminique)\n• **ហាមប្រើ Ibuprofen/Aspirin ដាច់ខាត** (ប្រយុទ្ធនឹង Surinfection bactérienne / Syndrome de Reye)" },
-        fr: { question: "56. Prise en charge et contre-indications de la varicelle :", answer: "• Soins d'hygiène, antihistaminiques sédatifs si prurit\n• **Contre-indication stricte des AINS (Ibuprofène)** et de l'Aspirine" },
-        en: { question: "56. Management and contraindications in Chickenpox:", answer: "• Skincare, oral antihistamines for itching\n• **Strictly avoid NSAIDs (Ibuprofen)** and Aspirin" }
-    },
-    {
-        id: 57, page: "137",
-        km: { question: "៥៧. សញ្ញាគ្លីនិកនៃជំងឺ Oreillons (ពពកជ្រូក) ៖", answer: "• រលាកហើមក្រពេញទឹកមាត់ត្រចៀក (Parotidite ourlienne) សងខាង ឬម្ខាង\n• ក្តៅខ្លួន, ឈឺចាប់ពេលទំពារ\n• ផលវិបាក ៖ Orchite (រលាកពងស្វាសលើកុមារពេញវ័យ), Méningite" },
-        fr: { question: "57. Signes et complications des Oreillons :", answer: "• Parotidite ourlienne bilatérale ou unilatérale douloureuse\n• Fièvre modérée, gène à la mastication\n• Complications : Orchite post-pubertaire, méningite aseptique" },
-        en: { question: "57. Signs and complications of Mumps:", answer: "• Painful parotid gland swelling (Parotitis)\n• Low-grade fever, discomfort with chewing\n• Complications: Post-pubertal orchitis, aseptic meningitis" }
-    },
-    {
-        id: 58, page: "138",
-        km: { question: "៥៨. សញ្ញាគ្លីនិកនៃជំងឺ Rubéole (ស្អូក) ៖", answer: "• កន្ទួលក្រហមស្រាលៗ (Éruption maculopapuleuse rose)\n• ហើមក្រពេញទឹកលឿងនៅក្រោយក និង occipital (Adénopathies occipitales)\n• គ្រោះថ្នាក់ខ្លាំងលើស្ត្រីមានផ្ទៃពោះ (Rubéole congénitale)" },
-        fr: { question: "58. Features of Rubella (Rubéole) :", answer: "• Éruption maculo-papuleuse rosée transitoire\n• Adénopathies rétro-auriculaires et occipitales doucereuses\n• Risque majeur de malformations fœtales en cas de grossesse" },
-        en: { question: "58. Clinical features of Rubella (German Measles):", answer: "• Pink maculopapular rash\n• Tender suboccipital and postauricular lymphadenopathy\n• High risk of congenital malformations in pregnancy" }
-    },
-    {
-        id: 59, page: "139",
-        km: { question: "៥៩. សញ្ញាគ្លីនិកនៃជំងឺ Scarlatine (គ្រុនក្រហម) ៖", answer: "• ក្តៅខ្លួន + រលាកបំពង់ក (Angine aiguë)\n• អណ្តាតក្រហមដូចផ្លែស្ត្រប៊ែរី (Langue framboisée)\n• កន្ទួលក្រហមស្បែកដូចក្រដាសខាត់ (Exanthème granité en papier de verre)" },
-        fr: { question: "59. Signes cliniques de la Scarlatine :", answer: "• Angine aiguë érythémateuse avec fièvre\n• Desquamation de la langue (aspect « framboisé »)\n• Exanthème scarlatiniforme granité (« peau de chagrin »)" },
-        en: { question: "59. Clinical signs of Scarlet Fever:", answer: "• Acute streptococcal pharyngitis with fever\n• 'Strawberry tongue'\n• Sandpaper-textured erythematous rash" }
-    },
-    {
-        id: 60, page: "140",
-        km: { question: "៦០. មេរោគ និងការព្យាបាលជំងឺ Scarlatine ៖", answer: "• មេរោគ ៖ **Streptocoque β-hémolytique du groupe A**\n• ព្យាបាល ៖ **Amoxicillin** តាមមាត់ រយៈពេល ៦ ថ្ងៃ" },
-        fr: { question: "60. Étiologie et traitement de la scarlatine :", answer: "• Agent responsable : **Streptocoque β-hémolytique du groupe A**\n• Traitement : **Amoxicilline** orale pendant 6 jours" },
-        en: { question: "60. Etiology and treatment of Scarlet Fever:", answer: "• Causative agent: **Group A Streptococcus (GAS)**\n• Treatment: Oral **Amoxicillin** for 6 days" }
-        }    {
-        id: 61, page: "141",
-        km: { question: "៦១. សញ្ញាគ្លីនិកនៃជំងឺ Mégalérythème Épidémique (Erythema Infectiosum / ជំងឺទី៥) ៖", answer: "• ស្នាមក្រហមលើថ្ពាល់ទាំងសងខាងដូចត្រូវគេទះ (Joues souffletées / Slapped cheek)\n• កន្ទួលក្រហមលើដងខ្លួន និងអវយវៈ មានលក្ខណៈដូចចក/សំណាញ់ (Aspect réticulé / en dentelle)\n• បង្កដោយ **Parvovirus B19**" },
-        fr: { question: "61. Caractéristiques du Mégalérythème Épidémique (Cinquième maladie) :", answer: "• Érythème du visage en « joues souffletées »\n• Éruption réticulée « en dentelle » sur le tronc et les membres\n• Agent responsable : **Parvovirus B19**" },
-        en: { question: "61. Features of Erythema Infectiosum (Fifth Disease):", answer: "• 'Slapped cheek' rash appearance on the face\n• Reticulated / lace-like rash on trunk and extremities\n• Etiology: **Parvovirus B19**" }
-    },
-    {
-        id: 62, page: "142",
-        km: { question: "៦២. សញ្ញាគ្លីនិកនៃជំងឺ Exanthème Brusque (Roséole / ជំងឺទី៦) ៖", answer: "• ក្តៅខ្លួនខ្លាំង (39°C - 40°C) រយៈពេល ៣ ទៅ ៥ ថ្ងៃ ដោយគ្មានសញ្ញាអ្វីផ្សេង\n• ក្តៅខ្លួនស្រឡះភ្លាមៗ ទើបលេចចេញកន្ទួលក្រហមតូចៗ (Éruption maculopapuleuse) លើទ្រូង និងពោះ\n• បង្កដោយ **HHV-6 (Human Herpesvirus 6)**" },
-        fr: { question: "62. Caractéristiques de la Roséole (Exanthème Brusque) :", answer: "• Fièvre élevée isolée (39-40°C) pendant 3 à 5 jours\n• Défervescence thermique thermique brutale suivie de l'apparition d'un exanthème maculo-papuleux\n• Agent responsable : **HHV-6**" },
-        en: { question: "62. Clinical features of Roseola Infantum (Sixth Disease):", answer: "• High fever (39-40°C) for 3 to 5 days without localization\n• Abrupt defervescence immediately followed by a maculopapular rash on trunk\n• Etiology: **HHV-6**" }
-    },
-    {
-        id: 63, page: "143",
-        km: { question: "៦៣. សញ្ញាគ្លីនិកនៃជំងឺ Syndrome Pieds-Mains-Bouche (ជំងឺដៃ ជើង និងមាត់) ៖", answer: "• មានពងទឹកតូចៗ ឬដំបៅក្នុងមាត់ (Stomatite / Aphthy)\n• មានពងទឹកតូចៗលើបាតដៃ បាតជើង និងក้น\n• បង្កដោយវីរុស **Coxsackie A16** ឬ **Enterovirus 71 (EV71)**" },
-        fr: { question: "63. Signes du Syndrome Pieds-Mains-Bouche :", answer: "• Vésicules et aphtes buccaux douloureux\n• Éruption vésiculeuse des paumes des mains, plantes des pieds et fesses\n• Agents principaux : **Coxsackievirus A16** et **Enterovirus 71**" },
-        en: { question: "63. Clinical signs of Hand, Foot, and Mouth Disease (HFMD):", answer: "• Painful oral vesicles/ulcers\n• Vesicular eruption on palms, soles, and buttocks\n• Main causative agents: **Coxsackievirus A16** and **Enterovirus 71**" }
-    }
+  {
+    id: 1, page: "1",
+    km: { question: "១. តើសរីរាង្គណាខ្លះដែលស្ថិតនៅក្នុងប្រព័ន្ធប្រសាទកណ្ដាល (CNS)?", answer: "ប្រព័ន្ធប្រសាទកណ្ដាល (CNS) រួមមាន៖\n- ខួរក្បាល (Brain)\n- ខួរឆ្អឹងខ្នង (Spinal Cord)" },
+    fr: { question: "1. Quels sont les organes qui composent le système nerveux central (SNC) ?", answer: "Le système nerveux central (SNC) comprend :\n- L'encéphale (Cerveau)\n- La moelle épinière" }
+  },
+  {
+    id: 2, page: "2",
+    km: { question: "២. តើផ្នែកណាខ្លះនៃសួតដែលស្ថិតនៅក្នុង Respiratory Zone?", answer: "Respiratory Zone រួមមាន៖\n- Respiratory bronchioles\n- Alveolar ducts\n- Alveoli" },
+    fr: { question: "2. Quelles sont les parties du poumon situées dans la zone respiratoire ?", answer: "La zone respiratoire comprend :\n- Les bronchioles respiratoires\n- Les conduits alvéolaires\n- Les alvéoles pulmonaires" }
+  },
+  {
+    id: 3, page: "3",
+    km: { question: "៣. តើអង់ស៊ីមអ្វីដែលដើរតួនាទីសំខាន់ក្នុងការរំលាយអាហារក្នុងក្រពះ?", answer: "អង់ស៊ីមសំខាន់គឺ Pepsin (កាត់ប្រូតេអ៊ីន) និង Gastric Lipase" },
+    fr: { question: "3. Quelle est l'enzyme principale de la digestion gastrique ?", answer: "L'enzyme principale est la pepsine et la lipase gastrique." }
+  },
+  {
+    id: 4, page: "4",
+    km: { question: "៤. តើឆ្អឹងអ្វីខ្លះដែលបង្កើតបានជា Axial Skeleton?", answer: "Axial Skeleton រួមមាន៖\n- ឆ្អឹងលលាដ៍ក្បាល (Skull)\n- ឆ្អឹងខ្នង (Vertebral column)\n- ឆ្អឹងជំនីរ និងឆ្អឹងទ្រូង (Ribs & Sternum)" },
+    fr: { question: "4. Quels os composent le squelette axial ?", answer: "Le squelette axial comprend :\n- Le crâne\n- La colonne vertébrale\n- Les côtes et le sternum" }
+  },
+  {
+    id: 5, page: "5",
+    km: { question: "៥. តើសរសៃឈាមណាដែលនាំឈាមមានអុកស៊ីសែនចេញពីបេះដូងទៅកាន់រាងកាយ?", answer: "គឺ Aorta (អាអត)" },
+    fr: { question: "5. Quelle artère transporte le sang oxygéné du cœur vers le corps ?", answer: "C'est l'aorte." }
+  },
+  {
+    id: 6, page: "6",
+    km: { question: "៦. តើកោសិកាឈាមក្រហមមានអាយុកាលប្រហែលប៉ុន្មានថ្ងៃ?", answer: "ប្រហែល ១២០ ថ្ងៃ" },
+    fr: { question: "6. Quelle est la durée de vie moyenne d'un globule rouge ?", answer: "Environ 120 jours." }
+  },
+  {
+    id: 7, page: "7",
+    km: { question: "៧. តើតម្រងនោមមាននាទីចម្បងអ្វីខ្លះ?", answer: "- ត្រងកាកសំណល់ចេញពីឈាម\n- រក្សាលំនឹងទឹក និងអេឡិចត្រូលីត\n- ផលិតអ័រម៉ូន Erythropoietin" },
+    fr: { question: "7. Quelles sont les fonctions principales des reins ?", answer: "- Filtrer les déchets du sang\n- Maintenir l'équilibre hydrique et électrolytique\n- Sécréter l'érythropoïétine" }
+  },
+  {
+    id: 8, page: "8",
+    km: { question: "៨. តើថ្លើមផលិតសារធាតុអ្វីសម្រាប់ជួយរំលាយជាតិខ្លាញ់?", answer: "ទឹកប្រម៉ាត់ (Bile)" },
+    fr: { question: "8. Que produit le foie pour faciliter la digestion des lipides ?", answer: "La bile." }
+  },
+  {
+    id: 9, page: "9",
+    km: { question: "៩. តើលំពែង (Pancreas) បញ្ចេញអ័រម៉ូនអ្វីខ្លះដើម្បីគ្រប់គ្រងកម្រិតស្ករក្នុងឈាម?", answer: "- Insulin (បន្ធូរកម្រិតស្ករ)\n- Glucagon (បnetwork/បង្កើនកម្រិតស្ករ)" },
+    fr: { question: "9. Quelles hormones le pancréas sécrète-t-il pour réguler la glycémie ?", answer: "- L'insuline\n- Le glucagon" }
+  },
+  {
+    id: 10, page: "10",
+    km: { question: "១០. តើសាច់ដុំបេះដូងជាប្រភេទទម្រង់សាច់ដុំអ្វី?", answer: "សាច់ដុំស្វ័យប្រវត្តិ (Involuntary striated muscle)" },
+    fr: { question: "10. Quel type de muscle est le muscle cardiaque ?", answer: "Muscle strié involontaire." }
+  },
+  {
+    id: 11, page: "11",
+    km: { question: "១១. តើណឺរ៉ូន (Neuron) មានផ្នែកសំខាន់ៗអ្វីខ្លះ?", answer: "- Cell body (Soma)\n- Dendrites\n- Axon" },
+    fr: { question: "11. Quelles sont les parties principales d'un neurone ?", answer: "- Le corps cellulaire (Soma)\n- Les dendrites\n- L'axone" }
+  },
+  {
+    id: 12, page: "12",
+    km: { question: "១២. តើឆ្អឹងវែងជាងគេបំផុតក្នុងរាងកាយមនុស្សគឺឆ្អឹងអ្វី?", answer: "ឆ្អឹងផ្លូវ (Femur)" },
+    fr: { question: "12. Quel est l'os le plus long du corps humain ?", answer: "Le fémur." }
+  },
+  {
+    id: 13, page: "13",
+    km: { question: "១៣. តើសួតខាងស្តាំមានប៉ុន្មានកញ្ចប់ (Lobes)?", answer: "មាន ៣ កញ្ចប់ (Superior, Middle, Inferior lobes)" },
+    fr: { question: "13. Combien de lobes le poumon droit possède-t-il ?", answer: "3 lobes (supérieur, moyen, inférieur)." }
+  },
+  {
+    id: 14, page: "14",
+    km: { question: "១៤. តើសួតខាងឆ្វេងមានប៉ុន្មានកញ្ចប់ (Lobes)?", answer: "មាន ២ កញ្ចប់ (Superior និង Inferior lobes)" },
+    fr: { question: "14. Combien de lobes le poumon gauche possède-t-il ?", answer: "2 lobes (supérieur et inférieur)." }
+  },
+  {
+    id: 15, page: "15",
+    km: { question: "១៥. តើអ័រម៉ូន Thyroid Stimulating Hormone (TSH) ត្រូវបានផលិតចេញពីណា?", answer: "ក្រពេញតួ Pituitary Gland (Anterior pituitary)" },
+    fr: { question: "15. Où est produite la TSH ?", answer: "Par l'hypophyse antérieure." }
+  },
+  {
+    id: 16, page: "16",
+    km: { question: "១៦. តើលីមហ្វូស៊ីត T (T-cells) ធំធាត់ និងអភិវឌ្ឍនៅឯណា?", answer: "នៅក្នុងក្រពេញ Thymus" },
+    fr: { question: "16. Où mûrissent les lymphocytes T ?", answer: "Dans le thymus." }
+  },
+  {
+    id: 17, page: "17",
+    km: { question: "១៧. តើលីមហ្វូស៊ីត B (B-cells) ផលិតនៅឯណា?", answer: "នៅក្នុងខួរឆ្អឹង (Bone marrow)" },
+    fr: { question: "17. Où sont produits les lymphocytes B ?", answer: "Dans la moelle osseuse." }
+  },
+  {
+    id: 18, page: "18",
+    km: { question: "១៨. តើសម្ពាធឈាមធម្មតារបស់មនុស្សពេញវ័យគឺប៉ុន្មាន?", answer: "ប្រហែល 120/80 mmHg" },
+    fr: { question: "18. Quelle est la pression artérielle normale chez un adulte ?", answer: "Environ 120/80 mmHg." }
+  },
+  {
+    id: 19, page: "19",
+    km: { question: "១៩. តើលំពែងស្ថិតនៅផ្នែកណានៃពោះ?", answer: "ផ្នែកខាងលើខាងឆ្វេងនៃពោះ (Epigastrium / Left hypochondrium)" },
+    fr: { question: "19. Où se situe le pancréas ?", answer: "Dans la partie supérieure gauche de l'abdomen." }
+  },
+  {
+    id: 20, page: "20",
+    km: { question: "២០. តើស្រទាប់ក្រៅបង្អែកនៃស្បែកហៅថាអ្វី?", answer: "Epidermis (អេពីដែម)" },
+    fr: { question: "20. Comment s'appelle la couche superficielle de la peau ?", answer: "L'épiderme." }
+  }
 ];
-
-
-             
+         // ==========================================
+// ភាគទី ២: សំណួរទី ២១ ដល់ទី ៤០ (IDs 21 - 40)
+// ==========================================
+questionsData.push(
+  {
+    id: 21, page: "21",
+    km: { question: "២១. តើតម្រងនោមមានកោសិកាមូលដ្ឋានគ្រឹះសម្រាប់ត្រងហៅថាអ្វី?", answer: "Nephron (ណេហ្វ្រុង)" },
+    fr: { question: "21. Quelle est l'unité structurelle et fonctionnelle du rein ?", answer: "Le néphron." }
+  },
+  {
+    id: 22, page: "22",
+    km: { question: "២២. តើសារធាតុ Neurotransmitter ណាដែលដើរតួយ៉ាងសំខាន់ក្នុងការកន្ត្រាក់សាច់ដុំ?", answer: "Acetylcholine (ACh)" },
+    fr: { question: "22. Quel neurotransmetteur intervient principalement dans la contraction musculaire ?", answer: "L'acétylcholine (ACh)." }
+  },
+  {
+    id: 23, page: "23",
+    km: { question: "២៣. តើប្រព័ន្ធបេះដូងមានថតចំនួនប៉ុន្មាន?", answer: "មាន ៤ ថត (Right Atrium, Left Atrium, Right Ventricle, Left Ventricle)" },
+    fr: { question: "23. Combien de cavités le cœur possède-t-il ?", answer: "4 cavités (2 atriums et 2 ventricules)." }
+  },
+  {
+    id: 24, page: "24",
+    km: { question: "២៤. តើសរសៃឈាមវ៉ែនណាដែលនាំឈាមមានអុកស៊ីសែនពីសួតមកកាន់បេះដូង?", answer: "Pulmonary Vein (សរសៃឈាមវ៉ែនសួត)" },
+    fr: { question: "24. Quelles veines transportent le sang oxygéné des poumons vers le cœur ?", answer: "Les veines pulmonaires." }
+  },
+  {
+    id: 25, page: "25",
+    km: { question: "២៥. តើអ័រម៉ូនអ្វីដែលផលិតដោយ Adrenal Cortex ដើម្បីប្រឆាំងការរលាក?", answer: "Cortisol (កវទីសូល)" },
+    fr: { question: "25. Quelle hormone anti-inflammatoire est sécrétée par le cortex surrénal ?", answer: "Le cortisol." }
+  },
+  {
+    id: 26, page: "26",
+    km: { question: "២៦. តើសរីរាង្គណាដែលជួយរក្សាលំនឹងរាងកាយ (Balance)?", answer: "ត្រចៀកខាងក្នុង (Inner ear / Semicircular canals)" },
+    fr: { question: "26. Quel organe aide à maintenir l'équilibre du corps ?", answer: "L'oreille interne (les canaux semi-circulaires)." }
+  },
+  {
+    id: 27, page: "27",
+    km: { question: "២៧. តើពោះវៀនតូចមានប៉ុន្មានផ្នែក?", answer: "មាន ៣ ផ្នែក៖\n- Duodenum\n- Jejunum\n- Ileum" },
+    fr: { question: "27. Quelles sont les trois parties de l'intestin grêle ?", answer: "- Le duodénum\n- Le jéjunum\n- L'iléon" }
+  },
+  {
+    id: 28, page: "28",
+    km: { question: "២៨. តើប្លាកែត (Platelets) មាននាទីសំខាន់អ្វីខ្លះ?", answer: "ជួយក្នុងការកកឈាម (Blood clotting)" },
+    fr: { question: "28. Quel est le rôle principal des plaquettes sanguines ?", answer: "La coagulation sanguine." }
+  },
+  {
+    id: 29, page: "29",
+    km: { question: "២៩. តើលលាដ៍ក្បាលការពារសរីរាង្គមួយណា?", answer: "ខួរក្បាល (Brain)" },
+    fr: { question: "29. Quel organe le crâne protège-t-il ?", answer: "L'encéphale (le cerveau)." }
+  },
+  {
+    id: 30, page: "30",
+    km: { question: "៣០. តើ Hemoglobin មាននៅក្នុងកោសិកាអ្វី?", answer: "កោសិកាឈាមក្រហម (Erythrocytes / Red Blood Cells)" },
+    fr: { question: "30. Dans quelles cellules trouve-t-on l'hémoglobine ?", answer: "Dans les globules rouges (érythrocytes)." }
+  },
+  {
+    id: 31, page: "31",
+    km: { question: "៣១. តើការដកដង្ហើមចេញចូលត្រូវបានគ្រប់គ្រងដោយផ្នែកណានៃខួរក្បាល?", answer: "Medulla Oblongata និង Pons" },
+    fr: { question: "31. Quelle partie du cerveau contrôle la respiration ?", answer: "Le bulbe rachidien (Medulla oblongata) et le pont." }
+  },
+  {
+    id: 32, page: "32",
+    km: { question: "៣២. តើឆ្អឹងខ្នងមនុស្សមានប៉ុន្មានកង់ (Vertebrae)?", answer: "មាន ៣៣ កង់ (៣៣ vertebrae)" },
+    fr: { question: "32. Combien de vertèbres compte la colonne vertébrale humaine ?", answer: "33 vertèbres." }
+  },
+  {
+    id: 33, page: "33",
+    km: { question: "៣៣. តើអ័រម៉ូន Oxytocin ត្រូវចេញពីក្រពេញណា?", answer: "Posterior Pituitary Gland" },
+    fr: { question: "33. Quelle glande libère l'ocytocine ?", answer: "L'hypophyse postérieure." }
+  },
+  {
+    id: 34, page: "34",
+    km: { question: "៣៤. តើស្រទាប់រុំសួតហៅថាអ្វី?", answer: "Pleura (ផ្លឺរ៉ា)" },
+    fr: { question: "34. Comment s'appelle la membrane qui entoure les poumons ?", answer: "La plèvre." }
+  },
+  {
+    id: 35, page: "35",
+    km: { question: "៣៥. តើស្រទាប់រុំបេះដូងហៅថាអ្វី?", answer: "Pericardium (ប៉េរីកាដ)" },
+    fr: { question: "35. Comment s'appelle la membrane qui entoure le cœur ?", answer: "Le péricarde." }
+  },
+  {
+    id: 36, page: "36",
+    km: { question: "៣៦. តើវីតាមីនណាដែលជួយក្នុងការស្រូបយកជាតិកាល់ស្យូម?", answer: "វីតាមីន D (Vitamin D)" },
+    fr: { question: "36. Quelle vitamine favorise l'absorption du calcium ?", answer: "La vitamine D." }
+  },
+  {
+    id: 37, page: "37",
+    km: { question: "៣៧. តើសារធាតុអង់ទីករ (Antibodies) ត្រូវបានផលិតដោយកោសិកាអ្វី?", answer: "Plasma cells (កើតចេញពី B-lymphocytes)" },
+    fr: { question: "37. Quelles cellules produisent les anticorps ?", answer: "Les plasmocytes (dérivés des lymphocytes B)." }
+  },
+  {
+    id: 38, page: "38",
+    km: { question: "៣៨. តើលំពែងមាន Exocrine Function សម្រាប់ធ្វើអ្វី?", answer: "ផលិត Pancreatic juice / អង់ស៊ីមសម្រាប់រំលាយអាហារ" },
+    fr: { question: "38. Quelle est la fonction exocrine du pancréas ?", answer: "Sécréter le jus pancréatique contenant des enzymes digestives." }
+  },
+  {
+    id: 39, page: "39",
+    km: { question: "៣៩. តើជាតិស្ករដែលរក្សាទុកក្នុងថ្លើម និងសាច់ដុំមានឈ្មោះអ្វី?", answer: "Glycogen (គ្លីកូសែន)" },
+    fr: { question: "39. Sous quelle forme le glucose est-il stocké dans le foie et les muscles ?", answer: "Sous forme de glycogène." }
+  },
+  {
+    id: 40, page: "40",
+    km: { question: "៤០. តើផ្នែកណាៃនភ្នែកដែលទទួលពន្លឺ និងរូបភាព?", answer: "Retina (រ៉េទីន)" },
+    fr: { question: "40. Quelle partie de l'œil capte la lumière et les images ?", answer: "La rétine." }
+  }
+);// ==========================================
+// ភាគទី ៣: សំណួរទី ៤១ ដល់ទី ៦០ (IDs 41 - 60)
+// ==========================================
+questionsData.push(
+  {
+    id: 41, page: "41",
+    km: { question: "៤១. តើប្រភេទឈាម O អាចផ្តល់ឱ្យអ្នកជំងឺក្រុមឈាមណាខ្លះ?", answer: "អាចផ្តល់ឱ្យក្រុមឈាមទាំងអស់ (Universal Donor)" },
+    fr: { question: "41. À qui le groupe sanguin O peut-il donner du sang ?", answer: "À tous les groupes sanguins (Donneur universel)." }
+  },
+  {
+    id: 42, page: "42",
+    km: { question: "៤២. តើប្រភេទឈាម AB អាចទទួលឈាមពីក្រុមណាខ្លះ?", answer: "អាចទទួលពីក្រុមឈាមទាំងអស់ (Universal Recipient)" },
+    fr: { question: "42. De qui le groupe sanguin AB peut-il recevoir du sang ?", answer: "De tous les groupes sanguins (Récipendiaire universel)." }
+  },
+  {
+    id: 43, page: "43",
+    km: { question: "៤៣. តើអ័រម៉ូន Erythropoietin (EPO) មាននាទីធ្វើអ្វី?", answer: "ញ៉ាំងឱ្យខួរឆ្អឹងផលិតកោសិកាឈាមក្រហម" },
+    fr: { question: "43. Quel est le rôle de l'érythropoïétine (EPO) ?", answer: "Stimuler la production de globules rouges dans la moelle osseuse." }
+  },
+  {
+    id: 44, page: "44",
+    km: { question: "៤៤. តើសរសៃឈាមអាអត (Aorta) ចេញពីថតបេះដូងមួយណា?", answer: "Left Ventricle (ថតក្រោមឆ្វេង)" },
+    fr: { question: "44. De quelle cavité cardiaque part l'aorte ?", answer: "Du ventricule gauche." }
+  },
+  {
+    id: 45, page: "45",
+    km: { question: "៤៥. តើប្រព័ន្ធបេះដូងមានស្វ័យប្រវត្តិកម្មចម្បងផ្តើមចេញពីណា?", answer: "Sinoatrial node (SA node)" },
+    fr: { question: "45. Quel est le pacemaker naturel du cœur ?", answer: "Le nœud sinusal (Nœud SA)." }
+  },
+  {
+    id: 46, page: "46",
+    km: { question: "៤៦. តើឆ្អឹងជំនីរមនុស្សមានប៉ុន្មានគូ?", answer: "មាន ១២ គូ (២៤ ឆ្អឹង)" },
+    fr: { question: "46. Combien de paires de côtes le corps humain possède-t-il ?", answer: "12 paires de côtes." }
+  },
+  {
+    id: 47, page: "47",
+    km: { question: "៤៧. តើអ័រម៉ូន Calcitonin មាននាទីធ្វើអ្វី?", answer: "បន្ធូរកម្រិតកាល់ស្យូមក្នុងឈាម (រុញកាល់ស្យូមចូលឆ្អឹង)" },
+    fr: { question: "47. Quel est le rôle de la calcitonine ?", answer: "Diminuer le taux de calcium dans le sang." }
+  },
+  {
+    id: 48, page: "48",
+    km: { question: "៤៨. តើអ័រម៉ូន Parathyroid Hormone (PTH) មាននាទីធ្វើអ្វី?", answer: "បង្កើនកម្រិតកាល់ស្យូមក្នុងឈាម" },
+    fr: { question: "48. Quel est le rôle de la parathormone (PTH) ?", answer: "Augmenter le taux de calcium dans le sang." }
+  },
+  {
+    id: 49, page: "49",
+    km: { question: "៤៩. តើខួរក្បាលផ្នែក Cerebellum មាននាទីសំខាន់អ្វី?", answer: "គ្រប់គ្រងចលនាសាច់ដុំ និងរក្សាលំនឹងរាងកាយ" },
+    fr: { question: "49. Quel est le rôle principal du cervelet (Cerebellum) ?", answer: "Coordonner les mouvements et maintenir l'équilibre." }
+  },
+  {
+    id: 50, page: "50",
+    km: { question: "៥០. តើ Glomerulus ស្ថិតនៅក្នុងសរីរាង្គណា?", answer: "នៅក្នុងតម្រងនោម (Kidney)" },
+    fr: { question: "50. Dans quel organe se trouve le glomérule ?", answer: "Dans le rein." }
+  },
+  {
+    id: 51, page: "51",
+    km: { question: "៥១. តើអ័រម៉ូន ADH (Antidiuretic Hormone) ត្រូវផលិតនៅឯណា?", answer: "ផលិតនៅ Hypothalamus និងបញ្ចេញតាម Posterior Pituitary" },
+    fr: { question: "51. Où est produite l'hormone antidiurétique (ADH) ?", answer: "Produite par l'hypothalamus et libérée par l'hypophyse postérieure." }
+  },
+  {
+    id: 52, page: "52",
+    km: { question: "៥២. តើការផ្លាស់ប្តូរឧស្ម័ន (O2 និង CO2) ធ្វើឡើងនៅកន្លែងណាខ្លះ?", answer: "នៅក្នុង Alveoli (ថង់ខ្យល់សួត) និងកោសិកា" },
+    fr: { question: "52. Où se produisent les échanges gazeux (O2 et CO2) ?", answer: "Dans les alvéoles pulmonaires et les tissus." }
+  },
+  {
+    id: 53, page: "53",
+    km: { question: "៥៣. តើ Gastrin ជាអ្វី?", answer: "ជាអ័រម៉ូនដែលជំរុញឱ្យក្រពះបញ្ចេញអាស៊ីត (Gastric acid)" },
+    fr: { question: "53. Qu'est-ce que la gastrine ?", answer: "Une hormone qui stimule la sécrétion d'acide gastrique." }
+  },
+  {
+    id: 54, page: "54",
+    km: { question: "៥៤. តើ Pharynx ដើរតួនាទីក្នុងប្រព័ន្ធណាខ្លះ?", answer: "ប្រព័ន្ធរំលាយអាហារ និងប្រព័ន្ធដកដង្ហើម" },
+    fr: { question: "54. À quels systèmes le pharynx appartient-il ?", answer: "Aux systèmes digestif et respiratoire." }
+  },
+  {
+    id: 55, page: "55",
+    km: { question: "៥៥. តើដង្ហើមសួតកើតឡើងដោយសារចលនានៃសាច់ដុំអ្វី?", answer: "សាច់ដុំស្បៃខណ្ឌ (Diaphragm) និង Intercostal muscles" },
+    fr: { question: "55. Quels sont les muscles principaux de la respiration ?", answer: "Le diaphragme et les muscles intercostaux." }
+  },
+  {
+    id: 56, page: "56",
+    km: { question: "៥៦. តើកោសិកា Monocytes អភិវឌ្ឍទៅជាកោសិកាអ្វីពេលចូលទៅក្នុងលិកា?", answer: "Macrophages" },
+    fr: { question: "56. En quoi les monocytes se différencient-ils dans les tissus ?", answer: "En macrophages." }
+  },
+  {
+    id: 57, page: "57",
+    km: { question: "៥៧. តើសារធាតុ Surfactant នៅក្នុងសួតមាននាទីអ្វី?", answer: "កាត់បន្ថយ កម្លាំងតង់ស្យុងផ្ទៃ (Surface tension) ការពារសួតកុំឱ្យស្វិត" },
+    fr: { question: "57. Quel est le rôle du surfactant pulmonaire ?", answer: "Réduire la tension superficielle pour empêcher l'affaissement des alvéoles." }
+  },
+  {
+    id: 58, page: "58",
+    km: { question: "៥៨. តើក្រពេញធំជាងគេក្នុងរាងកាយមនុស្សគឺអ្វី?", answer: "ថ្លើម (Liver)" },
+    fr: { question: "58. Quelle est la plus grande glande du corps humain ?", answer: "Le foie." }
+  },
+  {
+    id: 59, page: "59",
+    km: { question: "៥៩. តើបំពង់អាហារ (Esophagus) មានប្រវែងប្រហែលប៉ុន្មាន?", answer: "ប្រហែល ២៥ សង់ទីម៉ែត្រ" },
+    fr: { question: "59. Quelle est la longueur moyenne de l'œsophage ?", answer: "Environ 25 cm." }
+  },
+  {
+    id: 60, page: "60",
+    km: { question: "៦០. តើសារធាតុ Melatonin ត្រូវផលិតដោយក្រពេញណា?", answer: "Pineal gland (ក្រពេញប៉ីនេអាល់)" },
+    fr: { question: "60. Quelle glande sécrète la mélatonine ?", answer: "La glande pinéale." }
+  }
+);// ==========================================
+// ភាគទី ៤: សំណួរទី ៦១ ដល់ទី ៨០ (IDs 61 - 80)
+// ==========================================
+questionsData.push(
+  {
+    id: 61, page: "61",
+    km: { question: "៦១. តើក្រពេញ Thyroid ស្ថិតនៅត្រង់ផ្នែកណានៃរាងកាយ?", answer: "ស្ថិតនៅផ្នែកខាងមុខនៃក (Anterior neck)" },
+    fr: { question: "61. Où se situe la glande thyroïde ?", answer: "Dans la partie antérieure du cou." }
+  },
+  {
+    id: 62, page: "62",
+    km: { question: "៦២. តើអ័រម៉ូន Aldosterone មាននាទីធ្វើអ្វី?", answer: "ជួយតម្រូវកម្រិតសូដ្យូម និងប៉ូតាស្យូមក្នុងតម្រងនោម" },
+    fr: { question: "62. Quel est le rôle de l'aldostérone ?", answer: "Réguler le sodium et le potassium dans les reins." }
+  },
+  {
+    id: 63, page: "63",
+    km: { question: "៦៣. តើសរសៃឈាម Coronary Arteries មាននាទីធ្វើអ្វី?", answer: "ផ្គត់ផ្គង់ឈាម និងអុកស៊ីសែនទៅកាន់សាច់ដុំបេះដូង" },
+    fr: { question: "63. Quel est le rôle des artères coronaires ?", answer: "Apporter du sang et de l'oxygène au muscle cardiaque." }
+  },
+  {
+    id: 64, page: "64",
+    km: { question: "៦៤. តើស្រទាប់បេះដូងខាងក្នុងគេបង្អស់ហៅថាអ្វី?", answer: "Endocardium (អង់ដូកាដ)" },
+    fr: { question: "64. Comment s'appelle la couche interne du cœur ?", answer: "L'endocarde." }
+  },
+  {
+    id: 65, page: "65",
+    km: { question: "៦៥. តើស្រទាប់សាច់ដុំបេះដូងកណ្តាលហៅថាអ្វី?", answer: "Myocardium (មីយ៉ូកាដ)" },
+    fr: { question: "65. Comment s'appelle la couche musculaire du cœur ?", answer: "Le myocarde." }
+  },
+  {
+    id: 66, page: "66",
+    km: { question: "៦៦. តើសារធាតុ Hemoglobin មានផ្ទុកធាតុរ៉ែអ្វីសំខាន់?", answer: "ធាតុដែក (Iron / Fe)" },
+    fr: { question: "66. Quel minéral est essentiel à l'hémoglobine ?", answer: "Le fer." }
+  },
+  {
+    id: 67, page: "67",
+    km: { question: "៦៧. តើលំពែងបញ្ចេញអ័រម៉ូនចូលទៅក្នុងប្រព័ន្ធណា?", answer: "ប្រព័ន្ធអង់ដូគ្រីន (Endocrine system)" },
+    fr: { question: "67. Dans quel système le pancréas déverse-t-il ses hormones ?", answer: "Dans le système endocrinien." }
+  },
+  {
+    id: 68, page: "68",
+    km: { question: "៦៨. តើពោះវៀនធំមាននាទីចម្បងអ្វី?", answer: "ស្រូបយកទឹក និងអេឡិចត្រូលីត រួចបង្កើតលាមក" },
+    fr: { question: "68. Quelle est la fonction principale du gros intestin ?", answer: "Absorber l'eau et former les selles." }
+  },
+  {
+    id: 69, page: "69",
+    km: { question: "៦៩. តើបំពង់ Ureter មាននាទីធ្វើអ្វី?", answer: "ដឹកនាំទឹកនោមពីតម្រងនោមទៅកាន់ប្លោកនោម" },
+    fr: { question: "69. Quel est le rôle de l'uretère ?", answer: "Transporter l'urine des reins vers la vessie." }
+  },
+  {
+    id: 70, page: "70",
+    km: { question: "៧០. តើបំពង់ Urethra មាននាទីធ្វើអ្វី?", answer: "បញ្ចេញទឹកនោមពីប្លោកនោមទៅខាងក្រៅ" },
+    fr: { question: "70. Quel est le rôle de l'urètre ?", answer: "Évacuer l'urine de la vessie vers l'extérieur." }
+  },
+  {
+    id: 71, page: "71",
+    km: { question: "៧១. តើកោសិកា العصبي (Neuron) ភ្ជាប់គ្នាត្រង់កន្លែងណា?", answer: "Synapse (ស៊ីណាប់)" },
+    fr: { question: "71. Comment s'appelle la zone de jonction entre deux neurones ?", answer: "La synapse." }
+  },
+  {
+    id: 72, page: "72",
+    km: { question: "៧២. តើស្រទាប់បស្រោបខួរក្បាលហៅថាអ្វី?", answer: "Meninges (មេណាំង)" },
+    fr: { question: "72. Comment s'appellent les membranes qui enveloppent le cerveau ?", answer: "Les méninges." }
+  },
+  {
+    id: 73, page: "73",
+    km: { question: "៧៣. តើ Meninges មានប៉ុន្មានស្រទាប់?", answer: "មាន ៣ ស្រទាប់ (Dura mater, Arachnoid mater, Pia mater)" },
+    fr: { question: "73. Combien de couches composent les méninges ?", answer: "3 couches (Dure-mère, Arachnoïde, Pie-mère)." }
+  },
+  {
+    id: 74, page: "74",
+    km: { question: "៧៤. តើទឹកខួរក្បាល និងខួរឆ្អឹងខ្នងហៅថាអ្វី?", answer: "Cerebrospinal Fluid (CSF)" },
+    fr: { question: "74. Comment s'appelle le liquide cérébro-spinal ?", answer: "Le liquide céphalo-rachidien (LCR)." }
+  },
+  {
+    id: 75, page: "75",
+    km: { question: "៧៥. តើសាច់ដុំណាដែលបំបែកទ្រូង និងពោះ?", answer: "Diaphragm (សាច់ដុំស្បៃខណ្ឌ)" },
+    fr: { question: "75. Quel muscle sépare la cavité thoracique de la cavité abdominale ?", answer: "Le diaphragme." }
+  },
+  {
+    id: 76, page: "76",
+    km: { question: "៧៦. តើកោសិកា osteoblasts មាននាទីធ្វើអ្វី?", answer: "បង្កើត និងកសាងលិកាឆ្អឹង" },
+    fr: { question: "76. Quel est le rôle des ostéoblastes ?", answer: "Former le tissu osseux." }
+  },
+  {
+    id: 77, page: "77",
+    km: { question: "៧៧. តើកោសិកា osteoclasts មាននាទីធ្វើអ្វី?", answer: "រំលាយ និងបំបែកលិកាឆ្អឹងចាស់" },
+    fr: { question: "77. Quel est le rôle des ostéoclastes ?", answer: "Résorber le tissu osseux." }
+  },
+  {
+    id: 78, page: "78",
+    km: { question: "៧៨. តើសរសៃពួរ Tendon ភ្ជាប់អ្វីនិងអ្វី?", answer: "ភ្ជាប់សាច់ដុំទៅនឹងឆ្អឹង" },
+    fr: { question: "78. Que relie un tendon ?", answer: "Un muscle à un os." }
+  },
+  {
+    id: 79, page: "79",
+    km: { question: "៧៩. តើសរសៃពួរ Ligament ភ្ជាប់អ្វីនិងអ្វី?", answer: "ភ្ជាប់ឆ្អឹងទៅនឹងឆ្អឹង" },
+    fr: { question: "79. Que relie un ligament ?", answer: "Un os à un autre os." }
+  },
+  {
+    id: 80, page: "80",
+    km: { question: "៨០. តើអ័រម៉ូន Insulin ផលិតដោយកោសិកាអ្វីនៃលំពែង?", answer: "Beta cells (Islets of Langerhans)" },
+    fr: { question: "80. Quelles cellules pancréatiques sécrètent l'insuline ?", answer: "Les cellules bêta (des îlots de Langerhans)." }
+  }
+);// ==========================================
+// ភាគទី ៥ (ភាគបញ្ចប់): សំណួរទី ៨១ ដល់ទី ៩៦ (IDs 81 - 96)
+// ==========================================
+questionsData.push(
+  {
+    id: 81, page: "81",
+    km: { question: "៨១. តើអ័រម៉ូន Glucagon ផលិតដោយកោសិកាអ្វីនៃលំពែង?", answer: "Alpha cells (Islets of Langerhans)" },
+    fr: { question: "81. Quelles cellules pancréatiques sécrètent le glucagon ?", answer: "Les cellules alpha (des îlots de Langerhans)." }
+  },
+  {
+    id: 82, page: "82",
+    km: { question: "៨២. តើអ័រម៉ូន Growth Hormone (GH) ផលិតចេញពីណា?", answer: "Anterior Pituitary Gland" },
+    fr: { question: "82. Où est produite l'hormone de croissance (GH) ?", answer: "Par l'hypophyse antérieure." }
+  },
+  {
+    id: 83, page: "83",
+    km: { question: "៨៣. តើតំបន់ដកដង្ហើម Conducting Zone មាននាទីអ្វីខ្លះ?", answer: "ដឹកនាំខ្យល់ កំដៅខ្យល់ ផ្តល់សំណើម និងត្រងធូលី" },
+    fr: { question: "83. Quels sont les rôles de la zone de conduction respiratoire ?", answer: "Acheminer, réchauffer, humidifier et filtrer l'air." }
+  },
+  {
+    id: 84, page: "84",
+    km: { question: "៨៤. តើបំពង់ Trachea (បំពង់ខ្យល់) មានទម្រង់ជារូបរាងអ្វី?", answer: "ជាបំពង់មានកងឆ្អឹងខ្ចីរាងអក្សរ C (C-shaped cartilage rings)" },
+    fr: { question: "84. Quelle est la structure de la trachée ?", answer: "Un tube renforcé par des anneaux cartilagineux en forme de C." }
+  },
+  {
+    id: 85, page: "85",
+    km: { question: "៨៥. តើសន្ទះបេះដូងរវាង Right Atrium និង Right Ventricle មានឈ្មោះអ្វី?", answer: "Tricuspid Valve (សន្ទះធ្មេញបី)" },
+    fr: { question: "85. Quelle valve se trouve entre l'atrium droit et le ventricule droit ?", answer: "La valve tricuspide." }
+  },
+  {
+    id: 86, page: "86",
+    km: { question: "៨៦. តើសន្ទះបេះដូងរវាង Left Atrium និង Left Ventricle មានឈ្មោះអ្វី?", answer: "Bicuspid Valve (or Mitral Valve)" },
+    fr: { question: "86. Quelle valve se trouve entre l'atrium gauche et le ventricule gauche ?", answer: "La valve bicuspide (ou mitrale)." }
+  },
+  {
+    id: 87, page: "87",
+    km: { question: "៨៧. តើសរសៃឈាមតូចៗបង្អែកដែលផ្លាស់ប្តូរសារធាតុរវាងឈាម និងកោសិកាហៅថាអ្វី?", answer: "Capillaries (សរសៃឈាមបណ្តាញកៃ)" },
+    fr: { question: "87. Comment s'appellent les plus petits vaisseaux sanguins ?", answer: "Les capillaires." }
+  },
+  {
+    id: 88, page: "88",
+    km: { question: "៨៨. តើក្រពេញ Adrenal Gland ស្ថិតនៅទីណា?", answer: "ស្ថិតនៅពីលើតម្រងនោមទាំងពីរ (Superior to the kidneys)" },
+    fr: { question: "88. Où se situent les glandes surrénales ?", answer: "Au-dessus de chaque rein." }
+  },
+  {
+    id: 89, page: "89",
+    km: { question: "៨៩. តើអ័រម៉ូន Epinephrine (Adrenaline) ត្រូវបញ្ចេញពីផ្នែកណានៃ Adrenal Gland?", answer: "Adrenal Medulla" },
+    fr: { question: "89. Quelle partie de la surrénale sécrète l'adrénaline ?", answer: "La médullosurrénale." }
+  },
+  {
+    id: 90, page: "90",
+    km: { question: "៩០. តើអាំងស៊ុយលីនមានឥទ្ធិពលយ៉ាងណាចំពោះកម្រិតស្ករ?", answer: "បន្ធូរកម្រិតស្ករក្នុងឈាម (Hypoglycemic effect)" },
+    fr: { question: "90. Quel est l'effet de l'insuline sur la glycémie ?", answer: "Diminuer le taux de sucre dans le sang (effet hypoglycémiant)." }
+  },
+  {
+    id: 91, page: "91",
+    km: { question: "៩១. តើកោសិកាឈាមស White Blood Cells (Leukocytes) មាននាទីចម្បងអ្វី?", answer: "ការពាររាងកាយប្រឆាំងនឹងមេរោគ និងជំងឺ" },
+    fr: { question: "91. Quel est le rôle principal des globules blancs ?", answer: "Défendre l'organisme contre les infections." }
+  },
+  {
+    id: 92, page: "92",
+    km: { question: "៩២. តើស្រទាប់ស្បែក Dermis មានផ្ទុកអ្វីខ្លះ?", answer: "សរសៃឈាម សរសៃប្រសាទ ក្រពេញញើស និងឬសសក់" },
+    fr: { question: "92. Que contient le derme ?", answer: "Des vaisseaux sanguins, des nerfs, des glandes sudoripares et des follicules pileux." }
+  },
+  {
+    id: 93, page: "93",
+    km: { question: "៩៣. តើអ័រម៉ូន Prolactin មាននាទីធ្វើអ្វី?", answer: "ជំរុញការផលិតទឹកដោះ" },
+    fr: { question: "93. Quel est le rôle de la prolactine ?", answer: "Stimuler la production de lait maternel." }
+  },
+  {
+    id: 94, page: "94",
+    km: { question: "៩៤. តើ Gallbladder (ប្លោកប្រម៉ាត់) មាននាទីអ្វី?", answer: "រក្សាទុក និងកំហាប់ទឹកប្រម៉ាត់ (Stores & concentrates bile)" },
+    fr: { question: "94. Quel est le rôle de la vésicule biliaire ?", answer: "Stocker et concentrer la bile." }
+  },
+  {
+    id: 95, page: "95",
+    km: { question: "៩៥. តើកោសិកាបំផ្លាញមេរោគ Phagocytes រួមមានកោសិកាអ្វីខ្លះ?", answer: "Neutrophils និង Macrophages" },
+    fr: { question: "95. Quelles sont les principales cellules phagocytaires ?", answer: "Les neutrophiles et les macrophages." }
+  },
+  {
+    id: 96, page: "96",
+    km: { question: "៩៦. តើសរីរាង្គណាខ្លះជា Filter សំខាន់ក្នុងប្រព័ន្ធ lymphatic system?", answer: "Lymph nodes (កូនកណ្តុរ)" },
+    fr: { question: "96. Quels sont les filtres principaux du système lymphatique ?", answer: "Les ganglions lymphatiques." }
+  }
+);
