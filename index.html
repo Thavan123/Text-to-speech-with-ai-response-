@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pédiatrie Q&A - ឃួន ថាវ៉ាន់</title>
-    <!-- Import Google Fonts for Beautiful Khmer & English Typography -->
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -36,7 +35,6 @@
             padding: 20px;
         }
 
-        /* App Header */
         header {
             width: 100%;
             max-width: 800px;
@@ -62,7 +60,6 @@
             font-weight: 600;
         }
 
-        /* Language Selector Bar */
         .lang-container {
             display: flex;
             justify-content: center;
@@ -93,7 +90,6 @@
             box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
         }
 
-        /* Main Q&A Card */
         .container {
             width: 100%;
             max-width: 800px;
@@ -129,7 +125,6 @@
             font-weight: 600;
         }
 
-        /* Question and Answer Styles - Extra Large and Clear */
         .question-box {
             font-size: 1.5rem;
             font-weight: 700;
@@ -149,7 +144,6 @@
             padding: 10px 5px;
         }
 
-        /* Controls / Buttons */
         .controls {
             display: flex;
             justify-content: space-between;
@@ -188,7 +182,6 @@
             opacity: 0.7;
         }
 
-        /* Responsive Design for Mobile */
         @media (max-width: 600px) {
             h1 { font-size: 1.7rem; }
             .author { font-size: 1.05rem; }
@@ -201,12 +194,10 @@
 </head>
 <body>
 
-    <!-- Header Section -->
     <header>
         <h1 id="app-title">សំណួរ-ចម្លើយ Pédiatrie</h1>
         <div class="author" id="author-name">រៀបចំដោយ៖ ឃួន ថាវ៉ាន់</div>
         
-        <!-- Language Switcher -->
         <div class="lang-container">
             <button class="lang-btn active" onclick="setLanguage('km')">🇰🇭 ភាសាខ្មែរ</button>
             <button class="lang-btn" onclick="setLanguage('fr')">🇫🇷 Français</button>
@@ -214,22 +205,20 @@
         </div>
     </header>
 
-    <!-- Main Content Box -->
     <main class="container">
         <div class="card-header">
             <span class="q-number" id="q-number">សំណួរទី ១</span>
-            <span class="q-page" id="q-page">ទំព័រ ៥១</span>
+            <span class="q-page" id="q-page">ទំព័រ ៤១</span>
         </div>
 
         <div class="question-box" id="question-text">
-            <!-- Question Content -->
+            <!-- Question Text -->
         </div>
 
         <div class="answer-box" id="answer-text">
-            <!-- Answer Content -->
+            <!-- Answer Text -->
         </div>
 
-        <!-- Navigation Buttons -->
         <div class="controls">
             <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">
                 ⬅️ <span id="btn-prev-text">ថយក្រោយ</span>
@@ -241,139 +230,93 @@
     </main>
 
     <script>
-        // Database of Questions & Answers in 3 Languages
+        // Database of Questions & Answers from Page 41 to Page 52
         const questionsData = [
             {
-                id: 1,
-                page: "51",
-                km: {
-                    question: "១. ការធ្វើរោគវិនិច្ឆ័យជំងឺតេតាណូស (Diagnostic du tétanos) ៖",
-                    answer: "• ផ្អែកលើប្រវត្តិ (Arguments anamnestiques) ៖\n  - ស្នាមរបួស\n  - ប្រវត្តិផ្ទាល់ខ្លួននៃការចាក់វ៉ាក់សាំង\n\n• ផ្អែកលើសញ្ញាគ្លីនិក (Arguments cliniques) ៖\n  - អាការៈស្ទះថ្គាមខ្លាំងមិនអាចបើកបាន (Trismus invincible, irréductible)\n  - ការកញ្រ្ជោលសាច់ដុំកើនឡើងពេលមានរំញោច\n  - ស្តារស្មារតីនៅល្អជាធម្មតានៅពេលមានការកញ្រ្ជោលសាច់ដុំ"
-                },
-                fr: {
-                    question: "1. Diagnostic du tétanos :",
-                    answer: "+ Arguments anamnestiques :\n  - Notions de la plaie\n  - Notion de la vaccination\n\n+ Arguments cliniques :\n  - Trismus invincible, irréductible\n  - Contracture s'accentuant lors du stimulus\n  - La conscience est conservée lors de la contracture"
-                },
-                en: {
-                    question: "1. Diagnosis of Tetanus:",
-                    answer: "+ History / Anamnesis:\n  - History of wound / injury\n  - Vaccination status history\n\n+ Clinical Signs:\n  - Trismus (lockjaw) invincible and irreducible\n  - Muscle spasms worsening with stimuli\n  - Consciousness remains fully intact during spasms"
-                }
+                id: 77, page: "41",
+                km: { question: "១. លក្ខណៈនៃលឿងទារកដែលជាជំងឺ/មិនធម្មតា (Ictère néonatal pathologique) ៖", answer: "- ចាប់ផ្តើមស្តែងឡើងលឿន (មុន ២៤ ម៉ោងដំបូងក្រោយកើត)\n- ករណីបែកគ្រាប់ឈាមក្រហមធ្ងន់ធ្ងរ៖ មានរោគសញ្ញាស្លេកស្លាំង, ថ្លើមនិងអណ្តើករីកធំ\n- កម្រិត bilirubin libre កើនឡើងខ្លាំង\n- មានសញ្ញាស្លេកស្លាំង (Anémie normo-macrocytaire, hyper-réticulocytose)" },
+                fr: { question: "1. Caractère ictère néonatal pathologique :", answer: "- Début précoce avant 24 heures de vie (le plus souvent) ;\n- En cas d'hémolyse sévère : syndrome anémique, hépatosplénomégalie ;\n- Ictère à bilirubine libre d'intensité plus forte ;\n- Anémie (normo-macrocytaire, hyper-réticulocytose)." },
+                en: { question: "1. Pathological Neonatal Jaundice Characteristics:", answer: "- Early onset within first 24 hours of life\n- Severe hemolysis: anemia syndrome, hepatosplenomegaly\n- High intensity unconjugated bilirubinemia\n- Anemia (normo-macrocytic, hyper-reticulocytosis)" }
             },
             {
-                id: 2,
-                page: "51",
-                km: {
-                    question: "២. ផលវិបាកនៃជំងឺកញ្ជ្រិល (Complications de la rougeole) ៖",
-                    answer: "• ផលវិបាកផ្លូវដង្ហើម ៖ រលាកសួត (Pneumonie), ការឆ្លងរោគបាក់តេរីបន្ថែម, រលាកបំពង់ក\n• ផលវិបាកប្រព័ន្ធប្រសាទ ៖ រលាកខួរក្បាល (Encéphalite)\n• ផលវិបាកប្រព័ន្ធរំលាយអាហារ ៖ រាករូស (Diarrhée)\n• ផលវិបាកបេះដូង ៖ រលាកសាច់ដុំបេះដូង (Myocardite)\n• ផលវិបាកភ្នែក ៖ រលាកបាតភ្នែក (Conjonctivite), រលាកកញ្ចក់ភ្នែក (Kératite)\n• ផលវិបាកឈាម ៖ ប៉ាពូរ៉ាចុះផ្លាកែត (Purpura thrombopénique), ការហូរឈាម"
-                },
-                fr: {
-                    question: "2. Complications de la rougeole :",
-                    answer: "- Complications respiratoires : Pneumonie, surinfections bactériennes, pharyngite\n- Complication neurologique = Encéphalite\n- Complication digestive = Diarrhée\n- Complication cardiaque = Myocardite\n- Complications oculaires : Conjonctivite, Kératite\n- Complications hématologiques = Purpura thrombopénique, hémorragie"
-                },
-                en: {
-                    question: "2. Complications of Measles:",
-                    answer: "- Respiratory complications: Pneumonia, secondary bacterial infections, pharyngitis\n- Neurological complication: Encephalitis\n- Digestive complication: Diarrhea\n- Cardiac complication: Myocarditis\n- Ocular complications: Conjunctivitis, Keratitis\n- Hematological complications: Thrombocytopenic purpura, hemorrhage"
-                }
+                id: 78, page: "41",
+                km: { question: "២. រោគសញ្ញាគ្លីនិកនៃជំងឺ Trichinosis ៖", answer: "• រាករូស (Diarrhea)\n• ឈឺពោះ (Abdominal pain)\n• អស់កម្លាំង (Fatigue)\n• ចង់ក្អួត និងក្អួត (Nausea and vomiting)" },
+                fr: { question: "2. Clinical manifestation of trichinosis :", answer: "• Diarrhea\n• Abdominal pain\n• Fatigue\n• Nausea and vomiting" },
+                en: { question: "2. Clinical Manifestations of Trichinosis:", answer: "• Diarrhea\n• Abdominal pain\n• Fatigue\n• Nausea and vomiting" }
             },
             {
-                id: 3,
-                page: "52",
-                km: {
-                    question: "៣. ការព្យាបាលជំងឺក្អកមាន់ (Traitement de la coqueluche) ៖",
-                    answer: "• តម្រូវឱ្យសម្រាកពេទ្យសម្រាប់ទារកអាយុតិចជាង ៣ ខែ\n• តាមដានសុខភាពកុមារដែលរងផលប៉ះពាល់\n• ធ្វើការរៀបចំនូវការផ្តាច់ខ្លួន និងផ្អាកការសិក្សារយៈពេល ៣០ ថ្ងៃចាប់ពីផ្ដើមក្អក\n• ផ្តល់អុកស៊ីសែន និងកែសម្រួលជាតិទឹកក្នុងរាងកាយបើចាំបាច់\n• ប្រើថ្នាំ Erythromycine : 50 mg/kg/ថ្ងៃ ដោយចែកជា ៤ ដង\n• ចាក់វ៉ាក់សាំងការពារ"
-                },
-                fr: {
-                    question: "3. Traitement de la coqueluche :",
-                    answer: "- Hospitalisation pour les nourrissons de moins de 3 mois\n- Surveillance des enfants atteints\n- Isolement et éviction scolaire de 30 jours à partir du début des quintes\n- Oxygène et correction des troubles hydro-électrolytiques si besoin\n- Erythromycine : 50 mg/kg/j en 4 prises\n- Vaccination"
-                },
-                en: {
-                    question: "3. Treatment of Pertussis (Whooping Cough):",
-                    answer: "- Hospitalization for infants under 3 months\n- Close monitoring of affected children\n- Isolation and school exclusion for 30 days from onset of coughing fits\n- Oxygen and fluid/electrolyte correction if necessary\n- Erythromycin: 50 mg/kg/day divided into 4 doses\n- Vaccination"
-                }
+                id: 79, page: "41",
+                km: { question: "៣. ការព្យាបាលជាក់លាក់លើរោគសញ្ញាតម្រងនោម Nephrotic Syndrome ៖", answer: "+ ការព្យាបាលលើកដំបូង៖ ប្រើ Prednisolone 60 mg/m2/day (ឬ 2mg/kg/day) មិនឱ្យលើស 80mg/24h រយៈពេល ៤ សប្តាហ៍\n+ ការព្យាបាលពេលលេចឡើងវិញ (Relapse > 3 ខែ ក្រោយព្យាបាលចប់)៖ 60 mg/m2/d រហូតដល់ទឹកនោមគ្មាន Proteinuria រយៈពេល ៣ ថ្ងៃ\n+ ការព្យាបាលពេលលេចឡើងវិញភ្លាមៗ (Relapse ≤ 3 ខែ)" },
+                fr: { question: "3. Specific Treatment Nephrotic syndrome :", answer: "+ Treatment of initial episode of NS: Prednisolone 60 mg/m2/day (or 2mg/kg/day), not exceeded 80mg/24h, Duration: 4 weeks\n+ Treatment of relapse > 3 months after treatment completion\n+ Treatment of relapse ≤ 3 months after treatment completion" },
+                en: { question: "3. Specific Treatment for Nephrotic Syndrome:", answer: "+ Initial episode: Prednisolone 60 mg/m2/day (or 2mg/kg/day), max 80mg/24h for 4 weeks\n+ Relapse > 3 months after completion: 60 mg/m2/day until urine free of proteinuria for 3 days\n+ Relapse ≤ 3 months after completion" }
             },
             {
-                id: 4,
-                page: "52",
-                km: {
-                    question: "៤. និយមន័យនៃជំងឺលឿងលើទារកទើបនឹងកើត (Définition ictère néonatale) ៖",
-                    answer: "គឺជាភ្នែក ឬស្បែកលឿង ដែលបណ្តាលមកពីការកើនឡើងនូវកម្រិតប៊ីលីរុយប៊ីននៅក្នុងឈាមទារក (Hyperbilirubinémie)។"
-                },
-                fr: {
-                    question: "4. Définition ictère néonatale :",
-                    answer: "C'est la jaunisse due à l'hyperbilirubinémie du nouveau-né."
-                },
-                en: {
-                    question: "4. Definition of Neonatal Jaundice:",
-                    answer: "Yellowish discoloration of the skin and eyes caused by hyperbilirubinemia in the newborn."
-                }
-            }
-        ];
-
-        // State variables
-        let currentIndex = 0;
-        let currentLang = 'km';
-
-        // UI Translations
-        const uiText = {
-            km: { title: "សំណួរ-ចម្លើយ Pédiatrie", author: "រៀបចំដោយ៖ ឃួន ថាវ៉ាន់", qPrefix: "សំណួរទី", pagePrefix: "ទំព័រ", prev: "ថយក្រោយ", next: "បន្តទៅមុខ" },
-            fr: { title: "Q&R Pédiatrie", author: "Préparé par : KHUON THAVAN", qPrefix: "Question n°", pagePrefix: "Page", prev: "Précédent", next: "Suivant" },
-            en: { title: "Pédiatrie Q&A", author: "Prepared by: KHUON THAVAN", qPrefix: "Question No.", pagePrefix: "Page", prev: "Previous", next: "Next" }
-        };
-
-        // Initialize App
-        function updateDisplay() {
-            const currentData = questionsData[currentIndex];
-            const langData = currentData[currentLang];
-            const ui = uiText[currentLang];
-
-            // Update UI elements
-            document.getElementById('app-title').textContent = ui.title;
-            document.getElementById('author-name').textContent = ui.author;
-            document.getElementById('q-number').textContent = `${ui.qPrefix} ${currentIndex + 1}`;
-            document.getElementById('q-page').textContent = `${ui.pagePrefix} ${currentData.page}`;
-            
-            document.getElementById('question-text').textContent = langData.question;
-            document.getElementById('answer-text').textContent = langData.answer;
-
-            document.getElementById('btn-prev-text').textContent = ui.prev;
-            document.getElementById('btn-next-text').textContent = ui.next;
-
-            // Handle button states
-            document.getElementById('prev-btn').disabled = currentIndex === 0;
-            document.getElementById('next-btn').disabled = currentIndex === questionsData.length - 1;
-        }
-
-        function setLanguage(lang) {
-            currentLang = lang;
-            
-            // Update Active Class on Lang Buttons
-            const buttons = document.querySelectorAll('.lang-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            if (lang === 'km') buttons[0].classList.add('active');
-            if (lang === 'fr') buttons[1].classList.add('active');
-            if (lang === 'en') buttons[2].classList.add('active');
-
-            updateDisplay();
-        }
-
-        function nextQuestion() {
-            if (currentIndex < questionsData.length - 1) {
-                currentIndex++;
-                updateDisplay();
-            }
-        }
-
-        function prevQuestion() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateDisplay();
-            }
-        }
-
-        // Initial Load
-        updateDisplay();
-    </script>
-</body>
-  </html>
-  
+                id: 80, page: "41",
+                km: { question: "៤. ការចុះថយផ្លាកែតដាច់ដោយឡែក (<100,000/mm3) និងស្លេកស្លាំងប្រវត្តិហូរឈាម ៖", answer: "• ឃើញមាន Giant platelet លើ blood smear (កើនឡើង MPV)\n• ការបូមខួរឆ្អឹង (Bone marrow aspiration) បង្ហាញ megakaryocytes ធម្មតាឬកើនឡើង និងគ្មានកោសិកាមិនប្រក្រតី" },
+                fr: { question: "7. Isolated thrombocytopenia (<100,000/mm3) and anemia if history of bleeding :", answer: "• Giant platelet on the blood smear (increase MPV)\n• Bone marrow aspiration show normal or increased megakaryocytes, normal myeloid/erythroid elements and absence of abnormal cells." },
+                en: { question: "4. Isolated Thrombocytopenia (<100,000/mm3) & Anemia with Bleeding History:", answer: "• Giant platelets on blood smear (increased MPV)\n• Bone marrow aspiration reveals normal/increased megakaryocytes without abnormal cell populations." }
+            },
+            {
+                id: 81, page: "41",
+                km: { question: "៥. ហេតុអ្វីបានជាត្រូវពិនិត្យសុខភាពទារកទើបនឹងកើត? (Because of) ៖", answer: "• ដើម្បីស្វែងរកភាពមិនប្រក្រតី និងបញ្ជូនទៅជំនាញឱ្យទាន់ពេលវេលា\n• ផ្តល់ព័ត៌មានដល់ឪពុកម្តាយ និងបង្កើតទំនាក់ទំនងល្អ\n• ផ្តល់ឱកាសឱ្យគ្រួសារសួរដេញដោលអំពីទារក" },
+                fr: { question: "10. Objectives of Newborn Examination :", answer: "• Detection of abnormalities and to allow referral to appropriate service in a timely fashion\n• Parent information and relationship building\n• Provide the family with an opportunity to ask questions about their baby" },
+                en: { question: "5. Objectives of Newborn Examination:", answer: "• Early detection of abnormalities for timely referral\n• Parent communication and trust building\n• Providing opportunities for parents to ask questions regarding their child" }
+            },
+            {
+                id: 82, page: "42",
+                km: { question: "៦. តើត្រូវពិនិត្យអ្វីខ្លះលើទារក? (What to examine?) ៖", answer: "• សញ្ញាជីវិត (Vital signs)\n• ការពិនិត្យរាងកាយ (Physical exam)\n• ការពិនិត្យទូទៅ (General exam)\n• ការពិនិត្យប្រព័ន្ធប្រសាទ (Neurological exam)\n• ការវាយតម្លៃអាយុក្នុងផ្ទៃ (Estimation of gestational age)" },
+                fr: { question: "What to examine ?", answer: "• Vital signs\n• Physical exam\n• General exam\n• Neurological exam\n• Estimation of gestational age" },
+                en: { question: "6. What to Examine in a Newborn?", answer: "• Vital signs\n• Physical examination\n• General examination\n• Neurological examination\n• Gestational age estimation" }
+            },
+            {
+                id: 83, page: "43-44",
+                km: { question: "៧. ការផ្តល់សេរ៉ូមតាមសរសៃឈាមសម្រាប់គ្រុនឈាម Grade I & II (IV fluid for DHF) ៖", answer: "+ ផ្ដើមដោយ Crystalloid 1.5-3ml/kg/h រយៈពេល ១-៣ ម៉ោង\n  • បើធូរស្រាល៖ បន្ត 3ml/kg/h ៣ ម៉ោងទៀត រួចបន្ថយមក 1.5ml/kg/h ក្នុងរង្វង់ ៤៨ ម៉ោង រួចផ្អាក\n  • បើមិនធូរស្រាល៖ បន្តកម្រិតដើម ១-៣ ម៉ោង រួចពិនិត្យ Hct បើកាន់តែធ្ងន់ធ្ងរត្រូវដំឡើងកម្រិត 3-6ml/kg/h" },
+                fr: { question: "IV fluid therapy for DHF grade I & II :", answer: "+ Start IV fluid 1.5-3ml/kg/h crystalloid solutions over 1-3h\n  • Improvement: IV to 3ml/kg/h for another 3h -> Lower to 1.5ml/kg/h over 48h, then stop.\n  • No improvement: continue same rate, recheck Hct, adjust accordingly." },
+                en: { question: "7. IV Fluid Protocol for DHF Grade I & II:", answer: "+ Start IV crystalloid at 1.5-3 ml/kg/h over 1-3 hours.\n  • If improved: Maintain 3 ml/kg/h for 3h, then step down to 1.5 ml/kg/h over 48h before stopping.\n  • If no improvement: Re-evaluate vital signs and Hct, increase to 3-6 ml/kg/h if worsening." }
+            },
+            {
+                id: 84, page: "44",
+                km: { question: "៨. សញ្ញាធ្ងន់ធ្ងរនៃជំងឺរលាកស្រោមខួរដោយបាក់តេរី (Méningite bactérienne) ៖", answer: "- ប្រព័ន្ធសរសៃឈាម៖ ចង្វាក់បេះដូងកើនឡើង, បាតដៃបាតជើងត្រជាក់, គ្មានទឹកនោម, សម្ពាធឈាមធ្លាក់\n- ស្បែក៖ ស្នាមជាំស្បែករីករាលដាលលឿន (Purpura extensif)\n- ប្រព័ន្ធប្រសាទ៖ វង្វេងស្មារតី ឬសន្លប់ (Coma)" },
+                fr: { question: "9. Signe de gravité méningite bactérienne :", answer: "- Hémodynamique : augmentation FC, TRC allongé, extrémités froides, anurie, hypotension.\n- Cutanés : purpura rapidement extensif ou nécrotique\n- Neurologique : trouble de la conscience, parfois coma" },
+                en: { question: "8. Severity Signs in Bacterial Meningitis:", answer: "- Hemodynamic: tachycardia, prolonged CRT, cold extremities, anuria, hypotension/collapse\n- Skin: rapidly progressive or necrotic purpura\n- Neurological: altered consciousness, coma" }
+            },
+            {
+                id: 85, page: "44",
+                km: { question: "៩. កត្តាព្យាករណ៍មិនល្អនៃជំងឺរលាកស្រោមខួរ (Élément de mauvais pronostic) ៖", answer: "- ការពន្យារពេលក្នុងការផ្តល់ថ្នាំសម្លាប់បាក់តេរី\n- អាយុនៅក្មេងពេក (ទារក)\n- មេរោគបង្កជាប្រភេទ Pneumocoque\n- សភាពសន្លប់តាំងពីដំបូង\n- មានការធ្លាក់ចុះសម្ពាធឈាម ឬសម្ពាធក្នុងក្បាលកើនឡើង ដែលព្យាបាលយឺតយ៉ាវ" },
+                fr: { question: "10. Élément de mauvais pronostic :", answer: "- Retard à la mise en route d'un traitement bactéricide\n- Jeune âge (nourrisson)\n- Germe (pneumocoque)\n- Gravité de tableau neurologique initial (forme comateuse)\n- Existence d'un collapsus associé ou de signes d'HTIC traités tardivement." },
+                en: { question: "9. Poor Prognostic Factors in Meningitis:", answer: "- Delayed antibiotic treatment\n- Young age (infants)\n- Pathogen type (e.g., Pneumococcus)\n- Initial coma presentation\n- Untreated or delayed treatment of shock or intracranial hypertension" }
+            },
+            {
+                id: 86, page: "45",
+                km: { question: "១០. និយមន័យ និងរោគរស្មីនៃជំងឺរលាកស្រោមខួរ (Physiopathologie méningite) ៖", answer: "+ ជំងឺរលាកស្រោមខួរ គឺជាការរលាកនៃស្រោមខួរ ដែលភាគច្រើនបណ្តាលមកពីវីរុស\n+ ដំណើរបង្កជំងឺ៖ មេរោគចូលតាមផ្លូវដង្ហើម -> ជ្រាបចូល LCR តាមសរសៃឈាម -> មេរោគកើនឡើងលឿនក្នុង LCR (ដោយសារគ្មានប្រព័ន្ធការពារ) -> រាងកាយផលិត Cytokines" },
+                fr: { question: "1. Définition et physiopathologie des méningites :", answer: "+ Inflammation des méninges (virale la plus fréquente).\n+ Physiopathologie :\n  - Germes de portage du rhino-pharynx\n  - Pénétration dans le LCR par voie hématogène\n  - Multiplication rapide dans le LCR sans bactéricide naturel\n  - Réponse de l'hôte : production de cytokines (TNF alpha, IL-1, IL-6)" },
+                en: { question: "10. Pathophysiology of Meningitis:", answer: "+ Inflammation of meninges, most commonly viral.\n+ Pathophysiology: Nasopharyngeal colonization -> Hematogenous spread into CSF -> Rapid bacterial multiplication in CSF lacking immune defenses -> Cytokine cascade activation." }
+            },
+            {
+                id: 87, page: "45",
+                km: { question: "១១. មូលហេតុនៃជំងឺរលាកស្រោមខួរដោយវីរុស (Méningites virales) ៖", answer: "- Entérovirus\n- Paramyxovirus\n- Virus echo\n- Adénovirus\n- Herpes virus" },
+                fr: { question: "4. Causes des méningites virales :", answer: "- Entérovirus\n- Paramyxovirus\n- Virus echo\n- Adénovirus\n- Herpes virus" },
+                en: { question: "11. Causes of Viral Meningitis:", answer: "- Enterovirus\n- Paramyxovirus\n- Echovirus\n- Adenovirus\n- Herpes simplex virus" }
+            },
+            {
+                id: 88, page: "45",
+                km: { question: "១២. របៀបធ្វើរោគវិនិច្ឆ័យរលាកស្រោមខួរលើទារក (Diagnostic méningite nourrisson) ៖", answer: "- ទារករញ៉ួរញ៉ៃ ចង់តែងងុយគេង រអ៊ូរទាំ\n- បដិសេធមិនបៅទឹកដោះគោ\n- មានការកន្ត្រាក់ដោយសារគ្រុនក្តៅ (Convulsions fébriles)\n+ ការពិនិត្យបន្ថែម៖ ពើងពុម្ពពកក្បាល (Fontanelle), ទន់ក ឬរឹងក, សញ្ញាប្រព័ន្ធប្រសាទ" },
+                fr: { question: "6. Comment faire du diagnostic méningite nourrisson ?", answer: "- Enfant grognon, somnolence, refus répété du biberon, convulsions fébriles.\n+ Examen : Tension de la fontanelle, hypotonie ou raideur de la nuque, signes neurologiques de localisation." },
+                en: { question: "12. Diagnosing Meningitis in Infants:", answer: "- Irritability, lethargy, poor feeding, febrile seizures.\n+ Physical findings: Bulging fontanelle, nuchal rigidity/hypotonia, focal neurological signs." }
+            },
+            {
+                id: 89, page: "46",
+                km: { question: "១៣. ការពិនិត្យបញ្ជាក់ជំងឺរលាកស្រោមខួរ (Examens de confirmation) ៖", answer: "+ ការពិនិត្យទឹកឆ្អឹងខ្នង (LCR) ៖\n- សម្ពាធ LCR កើនឡើង និងបាត់បង់ភាពថ្លា\n- ចំនួនកោសិកាមិនប្រក្រតី (> 10/mm3)\n- កម្រិត Protéinorachie > 0,45 g/l\n- សមាមាត្រស្ករក្នុង LCR / ឈាម < 0,40" },
+                fr: { question: "7. Examens de confirmation méningite sont :", answer: "+ Examen du LCR :\n- LCR hypertendu, perte de limpidité\n- Nombre de cellules > 10/mm3\n- Protéinorachie > 0,45 g/l\n- Rapport glucose LCR / sang < 0,40" },
+                en: { question: "13. Confirmatory Tests for Meningitis:", answer: "+ CSF Examination:\n- Elevated opening pressure, cloudy appearance\n- Cell count > 10/mm3\n- Protein level > 0.45 g/L\n- CSF/Blood glucose ratio < 0.40" }
+            },
+            {
+                id: 90, page: "46-47",
+                km: { question: "១៤. រោគសញ្ញាគ្លីនិក និងមន្ទីរពិសោធន៍នៃជំងឺរលាកបំពង់ខ្យល់តូចៗ (Bronchiolite) ៖", answer: "+ ដំណាក់កាលដំបូង (ORL)៖ គ្រុនក្តៅ, ហៀរសម្រោត, ក្អកស្ងួត\n+ ដំណាក់កាលធ្ងន់ធ្ងរ៖ ក្អួត, អស់កម្លាំងមិនបៅ, កើតមានការអាក់ដង្ហើម (Apnea)\n+ ការស្តាប់សួត៖ ឮសំឡេង Sibilants និង Crépritants\n+ សញ្ញាពិបាកដកដង្ហើម៖ វាយតម្លៃតាម score de silverman" },
+                fr: { question: "Signes cliniques et paracliniques du bronchiolite :", answer: "+ Phase débutant : Fièvre élevée, signes rhino-pharyngés, toux sèche.\n+ Phase d'état : Vomissements, apnée (<3M), cyanose, polypnée >60/min.\n+ Auscultation : Râles sibilants et sous-crépitants disséminés." },
+                en: { question: "14. Clinical & Paraclinical Signs of Bronchiolitis:", answer: "+ Early phase: Fever, rhinitis, dry cough.\n+ Progressive phase: Feeding difficulty, apnea in infants <3M, severe respiratory distress.\n+ Auscultation: Wheezing (sibilant râles) and crackles." }
+            },
+            {
+                id: 91, page: "47-49",
+                km: { question: "១៥. កត្តាហានិភ័យនៃការបង្កឱ្យកើតជំងឺហឺត (Risk factors of asthma) ៖", answer: "- អាលែហ្សែន៖ ធូលីដី, រោមសត្វ, កន្លាត, លម្អងផ្កា\n- ការឆ្លងរោគផ្លូវដង្ហើម (វីរុស)\n- ការប្រែប្រួលអារម្មណ៍ខ្លាំង ឬការហាត់ប្រាណ\n- សារធាតុគីមី និងថ្នាំ (Aspirin, Beta blocker)\n- ផ្សែងបារី និងការបំពុលបរិយាកាស" },
+                fr: { question: "11. Risk factors of asthma :",
