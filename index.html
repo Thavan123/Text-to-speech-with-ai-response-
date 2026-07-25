@@ -1,336 +1,165 @@
 <!DOCTYPE html>
-<html lang="km">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thavan AI - Ultra Fast Formatter</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.0.2/tesseract.min.js"></script>
-  <style>
-    :root {
-      --primary: #7c3aed;
-      --accent: #00d2ff;
-      --bg-dark: #0f0c29;
-      --card-bg: rgba(37, 37, 56, 0.95);
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1e1e2f, #2a2a40);
-      color: #ffffff;
-      margin: 0;
-      padding: 15px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container {
-      width: 100%;
-      max-width: 550px;
-      background: var(--card-bg);
-      backdrop-filter: blur(15px);
-      padding: 20px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-    }
-    h2 {
-      text-align: center;
-      color: var(--accent);
-      margin-top: 0;
-      font-size: 19px;
-      margin-bottom: 15px;
-    }
-    .api-box {
-      background: rgba(26, 26, 46, 0.8);
-      padding: 10px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .api-box label {
-      font-size: 12px;
-      color: #00d2ff;
-      display: block;
-      margin-bottom: 5px;
-    }
-    .api-row {
-      display: flex;
-      gap: 8px;
-    }
-    .api-row input {
-      flex: 1;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(15, 12, 41, 0.9);
-      color: #fff;
-      font-size: 13px;
-    }
-    .api-row button {
-      padding: 8px 12px;
-      background: #7c3aed;
-      border: none;
-      border-radius: 8px;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 13px;
-    }
-    .upload-box {
-      border: 2px dashed rgba(0, 210, 255, 0.4);
-      padding: 15px;
-      text-align: center;
-      border-radius: 12px;
-      background: rgba(26, 26, 46, 0.6);
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .upload-box:hover {
-      border-color: var(--accent);
-    }
-    input[type="file"] {
-      display: none;
-    }
-    .upload-label {
-      cursor: pointer;
-      font-size: 14px;
-      color: #ddd;
-    }
-    textarea {
-      width: 100%;
-      height: 180px;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(26, 26, 46, 0.9);
-      color: #fff;
-      font-size: 14px;
-      box-sizing: border-box;
-      outline: none;
-      resize: vertical;
-      margin-bottom: 12px;
-    }
-    .btn-grid {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    button.action-btn {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      color: #fff;
-      transition: 0.2s;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
-    button.action-btn:active {
-      transform: scale(0.97);
-    }
-    .btn-ai { background: #0284c7; }
-    .btn-copy { background: #16a34a; }
-    .btn-clear { background: #64748b; width: 100%; }
-    #status {
-      text-align: center;
-      font-size: 13px;
-      color: #facc15;
-      margin-bottom: 10px;
-      display: none;
-      font-weight: 500;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Pediatric Questions Viewer</title>
+
+<style>
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #f5f7fb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Card */
+.card {
+  width: 600px;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+/* Question text */
+.question {
+  font-size: 20px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+.controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #4a6cf7;
+  color: white;
+  font-size: 14px;
+}
+
+button:hover {
+  background: #364fc7;
+}
+
+/* Language switch */
+.lang {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+select {
+  padding: 5px;
+}
+</style>
+
 </head>
 <body>
 
-<div class="container">
-  <h2>⚡ កែសម្រួល និងរៀបចំសំណួរ-ចម្លើយ (Ultra Fast)</h2>
-
-  <div class="api-box">
-    <label for="apiKeyInput">🔑 បញ្ចូល Groq API Key របស់អ្នកទីនេះ៖</label>
-    <div class="api-row">
-      <input type="password" id="apiKeyInput" placeholder="gsk_...">
-      <button onclick="saveApiKey()">រក្សាទុក</button>
-    </div>
+<div class="card">
+  <div class="lang">
+    <select id="language">
+      <option value="km">Khmer</option>
+      <option value="en">English</option>
+      <option value="fr">French</option>
+    </select>
   </div>
 
-  <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-    <div class="upload-label">
-      📁 <b>ចុចទីនេះដើម្បីជ្រើសរើសហ្វាល់ PDF ឬរូបភាព</b><br>
-      <span style="font-size: 12px; color: #aaa;">(ដំណើរការភ្លាមៗ មិនបាច់ចាំរង់ចាំយូរ)</span>
-    </div>
-    <input type="file" id="fileInput" accept=".pdf,image/*" onchange="handleFile(this)">
-  </div>
+  <div id="question" class="question"></div>
 
-  <div id="status">កំពុងដំណើរការ...</div>
-  
-  <textarea id="resultText" placeholder="លទ្ធផលអត្ថបទដែលបានរៀបចំរួចនឹងបង្ហាញទីនេះ..."></textarea>
-
-  <div class="btn-grid">
-    <button class="action-btn btn-ai" onclick="formatWithAI()">⚡ តម្រៀបសំណួរដោយ AI</button>
-    <button class="action-btn btn-copy" onclick="copyText()">📋 ចម្លងអត្ថបទ</button>
+  <div class="controls">
+    <button onclick="prev()">⬅ Prev</button>
+    <button onclick="next()">Next ➡</button>
   </div>
-  <button class="action-btn btn-clear" onclick="clearAll()">🗑️ សម្អាតទិន្នន័យ</button>
 </div>
 
 <script>
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-  window.onload = function() {
-    const savedKey = localStorage.getItem('groq_api_key');
-    if (savedKey) {
-      document.getElementById('apiKeyInput').value = savedKey;
-    }
-  };
-
-  function saveApiKey() {
-    const key = document.getElementById('apiKeyInput').value.trim();
-    if (!key.startsWith('gsk_')) {
-      alert('⚠️ API Key មិនត្រឹមត្រូវទេ!');
-      return;
-    }
-    localStorage.setItem('groq_api_key', key);
-    alert('✅ បានរក្សាទុក API Key ជោគជ័យ!');
+// ===== QUESTIONS (extract from your PDF) =====
+const questions = [
+  {
+    km: "រៀបរាប់ Syndrome Hémolytique et Urémique",
+    en: "Describe Hemolytic Uremic Syndrome",
+    fr: "Décrire le syndrome hémolytique et urémique"
+  },
+  {
+    km: "រៀបរាប់ clinical 2 formes របស់ SHU",
+    en: "Describe the 2 clinical forms of HUS",
+    fr: "Décrire les deux formes cliniques du SHU"
+  },
+  {
+    km: "រៀបរាប់ signes clinique de laryngite sus glottique",
+    en: "Describe clinical signs of supraglottic laryngitis",
+    fr: "Signes cliniques de la laryngite sus-glottique"
+  },
+  {
+    km: "ការថែទាំ prématuré (anténatal, naissance, post-natal)",
+    en: "Management of premature baby",
+    fr: "Prise en charge du prématuré"
+  },
+  {
+    km: "មេរោគបង្ក meningite purulente",
+    en: "Causative germs of purulent meningitis",
+    fr: "Germes responsables de méningite purulente"
+  },
+  {
+    km: "ធាតុធ្ងន់ធ្ងរ paludisme",
+    en: "Severity criteria of malaria",
+    fr: "Éléments de gravité du paludisme"
+  },
+  {
+    km: "ការផ្ទេរ HIV ម្តាយទៅកូន",
+    en: "Mother-to-child HIV transmission",
+    fr: "Transmission du VIH mère-enfant"
+  },
+  {
+    km: "Diagnosis syndrome néphrotique",
+    en: "Diagnosis of nephrotic syndrome",
+    fr: "Diagnostic du syndrome néphrotique"
   }
+];
 
-  function showStatus(msg) {
-    const s = document.getElementById('status');
-    s.style.display = 'block';
-    s.innerText = msg;
+let index = 0;
+
+// Display function
+function showQuestion() {
+  let lang = document.getElementById("language").value;
+  document.getElementById("question").innerText = questions[index][lang];
+}
+
+// Next
+function next() {
+  if (index < questions.length - 1) {
+    index++;
+    showQuestion();
   }
-  function hideStatus() {
-    const s = document.getElementById('status');
-    if (s) s.style.display = 'none';
+}
+
+// Previous
+function prev() {
+  if (index > 0) {
+    index--;
+    showQuestion();
   }
+}
 
-  async function handleFile(input) {
-    const file = input.files[0];
-    if (!file) return;
+// Language change
+document.getElementById("language").addEventListener("change", showQuestion);
 
-    document.getElementById('resultText').value = '';
+// Init
+showQuestion();
 
-    if (file.type === "application/pdf") {
-      showStatus("📖 កំពុងអានហ្វាល់ PDF...");
-      try {
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-        let fullText = "";
-
-        for (let i = 1; i <= pdf.numPages; i++) {
-          showStatus(`📖 កំពុងអានទំព័រទី ${i} នៃ ${pdf.numPages}...`);
-          const page = await pdf.getPage(i);
-          const textContent = await page.getTextContent();
-          const pageText = textContent.items.map(item => item.str).join(" ");
-          fullText += pageText + "\n";
-        }
-
-        document.getElementById('resultText').value = fullText.trim();
-        hideStatus();
-        formatWithAI();
-      } catch (err) {
-        hideStatus();
-        alert("មានបញ្ហាក្នុងការអាន PDF: " + err.message);
-      }
-    } 
-    else if (file.type.startsWith("image/")) {
-      showStatus("🔍 កំពុងទាញយកអក្សរពីរូបភាព (OCR)...");
-      Tesseract.recognize(
-        file,
-        'eng+khm',
-        { 
-          logger: m => {
-            if (m.status === 'recognizing text') {
-              showStatus(`🔍 កំពុងអាន: ${Math.round(m.progress * 100)}%`);
-            }
-          } 
-        }
-      ).then(({ data: { text } }) => {
-        document.getElementById('resultText').value = text;
-        hideStatus();
-        formatWithAI();
-      }).catch(err => {
-        hideStatus();
-        alert("មានបញ្ហាក្នុងការអានរូបភាព: " + err.message);
-      });
-    } else {
-      alert("សូមជ្រើសរើសយករូបភាព ឬហ្វាល់ PDF ជាមុនសិន!");
-    }
-  }
-
-  async function formatWithAI() {
-    const apiKey = localStorage.getItem('groq_api_key') || document.getElementById('apiKeyInput').value.trim();
-    if (!apiKey) {
-      alert("⚠️ សូមបញ្ចូល និងរក្សាទុក Groq API Key ជាមុនសិន!");
-      return;
-    }
-
-    const rawText = document.getElementById('resultText').value.trim();
-    if (!rawText) {
-      alert("គ្មានអត្ថបទសម្រាប់កែសម្រួលទេ!");
-      return;
-    }
-
-    showStatus("⚡ AI កំពុងរៀបចំ និងតម្រៀបអត្ថបទទាំងមូល... (លឿនរហ័ស)");
-
-    try {
-      // ផ្ញើអត្ថបទទាំងមូលក្នុងពេលតែមួយ (Single Request - Ultra Fast)
-      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: { 
-          "Authorization": "Bearer " + apiKey, 
-          "Content-Type": "application/json" 
-        },
-        body: JSON.stringify({
-          model: "llama-3.1-8b-instant", // Model លឿនបំផុត និង Context ធំ 128k tokens
-          messages: [
-            { 
-              role: "system", 
-              content: "អ្នកគឺជាជំនួយការផ្នែកកែសម្រួលអត្ថបទវេជ្ជសាស្ត្រ។ សូមជួយរៀបចំ និងតម្រៀបអត្ថបទសំណួរ និងចម្លើយខាងក្រោមឱ្យបានត្រឹមត្រូវតាមលំដាប់លំដោយលេខរៀង ដោយកែតម្រូវអក្ខរាវិរុទ្ធដែលរាយប៉ាយឱ្យបានស្អាត និងងាយស្រួលអានបំផុត។" 
-            },
-            { role: "user", content: rawText }
-          ],
-          temperature: 0.3
-        })
-      });
-
-      const data = await res.json();
-
-      if (data.choices && data.choices[0]) {
-        document.getElementById('resultText').value = data.choices[0].message.content.trim();
-        hideStatus();
-        alert("✅ រៀបចំរួចរាល់យ៉ាងលឿន!");
-      } else {
-        hideStatus();
-        alert("Error: " + (data.error?.message || "មានបញ្ហា API"));
-      }
-    } catch(e) {
-      hideStatus();
-      alert("Network Error: " + e.message);
-    }
-  }
-
-  function copyText() {
-    const text = document.getElementById('resultText');
-    if (!text.value) {
-      alert("គ្មានអត្ថបទសម្រាប់ចម្លងទេ!");
-      return;
-    }
-    text.select();
-    text.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(text.value).then(() => {
-      alert("✅ បានចម្លងអត្ថបទជោគជ័យ!");
-    });
-  }
-
-  function clearAll() {
-    document.getElementById('fileInput').value = '';
-    document.getElementById('resultText').value = '';
-    hideStatus();
-  }
 </script>
+
 </body>
-</html>
+  </html>
