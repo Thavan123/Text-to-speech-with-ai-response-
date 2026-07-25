@@ -24,8 +24,8 @@
 <body>
 
     <header>
-        <h2>កម្រងសំណួររោគកុមារ (១ - ៦៣)</h2>
-        <p style="font-size: 13px; margin: 5px 0 10px 0;">រៀបរាងដោយ ឃួន ថាវ៉ាន់</p>
+        <h2 id="ui-title">កម្រងសំណួររោគកុមារ (១ - ៦៣)</h2>
+        <p style="font-size: 13px; margin: 5px 0 10px 0;" id="ui-author">រៀបរាងដោយ ឃួន ថាវ៉ាន់</p>
         <div>
             <button class="btn-lang active" onclick="setLang('km')" id="l-km">ខ្មែរ</button>
             <button class="btn-lang" onclick="setLang('fr')" id="l-fr">Français</button>
@@ -51,12 +51,42 @@
         </div>
 
         <div class="card">
-            <div style="font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 8px; text-align: center;">ជ្រើសរើសសំណួររហ័ស</div>
+            <div style="font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 8px; text-align: center;" id="ui-grid-title">ជ្រើសរើសសំណួររហ័ស</div>
             <div class="grid-jump" id="jumpGrid"></div>
         </div>
     </div>
 
     <script>
+        const uiText = {
+            km: {
+                title: "កម្រងសំណួររោគកុមារ (១ - ៦៣)",
+                author: "រៀបរាងដោយ ឃួន ថាវ៉ាន់",
+                qPrefix: "សំណួរទី ",
+                ansLabel: "ចម្លើយ៖",
+                prev: "មុន",
+                next: "បន្ទាប់",
+                gridTitle: "ជ្រើសរើសសំណួររហ័ស"
+            },
+            fr: {
+                title: "Questions de Pédiatrie (1 - 63)",
+                author: "Compilé par Khoun Thavan",
+                qPrefix: "Question N° ",
+                ansLabel: "Réponse :",
+                prev: "Précédent",
+                next: "Suivant",
+                gridTitle: "Sélection rapide des questions"
+            },
+            en: {
+                title: "Pediatrics Question Bank (1 - 63)",
+                author: "Compiled by Khoun Thavan",
+                qPrefix: "Question ",
+                ansLabel: "Answer:",
+                prev: "Previous",
+                next: "Next",
+                gridTitle: "Quick Question Selection"
+            }
+        };
+
         const data = [
             { id: 1, km: "តើលក្ខណៈវិនិច្ឆ័យនៃ Nephrotic syndrome មានអ្វីខ្លះ?", fr: "Quels sont les critères du diagnostic du syndrome néphrotique?", en: "What are the diagnostic criteria for nephrotic syndrome?", answer: "- Nephrotic range proteinuria\n- Hypoalbuminémie\n- Edema\n- Hyperlipidémie" },
             { id: 2, km: "តើផលវិបាកសរសៃឈាមបេះដូងនៃការរលាកតម្រងនោមក្រោយឆ្លងមេរោគ មានអ្វីខ្លះ?", fr: "Quelles sont les complications cardiovasculaires de la glomérulonéphrite post-infectieuse?", en: "What are the cardiovascular complications of post-infectious glomerulonephritis?", answer: "- Volume overload\n- Hypertension\n- Hyperkalemia\n- Hypocalcemia\n- Seizure" },
@@ -128,9 +158,18 @@
 
         function updateUI() {
             const item = data[currentIndex];
+            const t = uiText[currentLang];
             
-            // Text values
-            document.getElementById('q-number').innerText = (currentLang === 'km' ? 'សំណួរទី ' : currentLang === 'fr' ? 'Question N° ' : 'Question ') + (currentIndex + 1);
+            // Update general UI text
+            document.getElementById('ui-title').innerText = t.title;
+            document.getElementById('ui-author').innerText = t.author;
+            document.getElementById('lbl-ans').innerText = t.ansLabel;
+            document.getElementById('btn-prev').innerText = t.prev;
+            document.getElementById('btn-next').innerText = t.next;
+            document.getElementById('ui-grid-title').innerText = t.gridTitle;
+
+            // Question and answer values
+            document.getElementById('q-number').innerText = t.qPrefix + (currentIndex + 1);
             document.getElementById('q-content').innerText = item[currentLang] || item.km;
             document.getElementById('ans-content').innerText = item.answer;
             document.getElementById('q-position').innerText = (currentIndex + 1) + ' / ' + data.length;
@@ -149,7 +188,7 @@
                 }
             });
 
-            // Grid buttons styling
+            // Grid buttons creation/styling
             const grid = document.getElementById('jumpGrid');
             if (grid.children.length === 0) {
                 for (let i = 0; i < data.length; i++) {
