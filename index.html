@@ -3,52 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pédiatrie Q&A - ឃួន ថាវ៉ាន់</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #0284c7; --bg: #f0f9ff; --card: #ffffff; --text: #0f172a; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', 'Poppins', sans-serif; }
-        body { background: linear-gradient(135deg, #e0f2fe, #f0f9ff); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        header { width: 100%; max-width: 800px; background: var(--card); padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border-bottom: 5px solid var(--primary); }
-        h1 { font-size: 1.8rem; color: var(--primary); }
-        .author { color: #16a34a; font-weight: 600; margin-top: 5px; }
-        .lang-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
-        .lang-btn { background: #e2e8f0; border: none; padding: 8px 14px; font-weight: 600; border-radius: 10px; cursor: pointer; }
-        .lang-btn.active { background: var(--primary); color: white; }
-        .container { width: 100%; max-width: 800px; background: var(--card); border-radius: 20px; padding: 25px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 15px; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
-        .q-number { font-weight: 700; color: var(--primary); background: #e0f2fe; padding: 4px 12px; border-radius: 15px; }
-        .question-box { font-size: 1.25rem; font-weight: 700; color: #0369a1; background: #f8fafc; padding: 15px; border-left: 5px solid var(--primary); border-radius: 8px; }
-        .answer-box { font-size: 1.1rem; line-height: 1.7; white-space: pre-line; padding: 10px 5px; }
-        .controls { display: flex; gap: 10px; border-top: 2px solid #f1f5f9; padding-top: 15px; }
-        .nav-btn { flex: 1; background: var(--primary); color: white; border: none; padding: 12px; font-size: 1.1rem; font-weight: 600; border-radius: 12px; cursor: pointer; }
-        .nav-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
-    </style>
+    <title>Pédiatrie Q&A Flashcards</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for Khmer & English -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <header>
-        <h1 id="app-title">សំណួរ-ចម្លើយ Pédiatrie</h1>
-        <div class="author" id="author-name">រៀបចំដោយ៖ ឃួន ថាវ៉ាន់</div>
-        <div class="lang-container">
-            <button class="lang-btn active" id="btn-km" onclick="setLanguage('km')">🇰🇭 ខ្មែរ</button>
-            <button class="lang-btn" id="btn-fr" onclick="setLanguage('fr')">🇫🇷 Français</button>
-            <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">🇬🇧 English</button>
-        </div>
-    </header>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="app-header">
+            <h1 id="app-title">សំណួរ-ចម្លើយ Pédiatrie</h1>
+            <p id="author-name" class="author">រៀបចំដោយ៖ ឃួន ថាវ៉ាន់</p>
+            
+            <!-- Language Switcher -->
+            <div class="lang-switcher">
+                <button id="btn-km" class="lang-btn active" onclick="setLanguage('km')">🇰🇭 ខ្មែរ</button>
+                <button id="btn-fr" class="lang-btn" onclick="setLanguage('fr')">🇫🇷 Français</button>
+                <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">🇬🇧 English</button>
+            </div>
+        </header>
 
-    <main class="container">
-        <div class="card-header">
-            <span class="q-number" id="q-number">សំណួរទី ១</span>
-            <span class="q-page" id="q-page">ទំព័រ ៤១</span>
-        </div>
-        <div class="question-box" id="question-text">កំពុងដោនឡូដ...</div>
-        <div class="answer-box" id="answer-text"></div>
-        <div class="controls">
-            <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">⬅️ ថយក្រោយ</button>
-            <button class="nav-btn" id="next-btn" onclick="nextQuestion()">បន្តទៅមុខ ➡️</button>
-        </div>
-    </main>
+        <!-- Flashcard Body -->
+        <main class="card-container">
+            <div class="card-header">
+                <span id="q-number" class="badge badge-primary">សំណួរទី 1 / 93</span>
+                <span id="q-page" class="badge badge-secondary">ទំព័រ 78</span>
+            </div>
+
+            <div class="card-body">
+                <div class="question-box">
+                    <h2 id="question-text">កំពុងផ្ទុកសំណួរ...</h2>
+                </div>
+                <hr class="divider">
+                <div class="answer-box">
+                    <div id="answer-text" class="answer-content">កំពុងផ្ទុកចម្លើយ...</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Navigation Controls -->
+        <footer class="controls">
+            <button id="prev-btn" class="nav-btn" onclick="prevQuestion()">⬅️ ថយក្រោយ</button>
+            <button id="next-btn" class="nav-btn primary" onclick="nextQuestion()">បន្តទៅមុខ ➡️</button>
+        </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>
