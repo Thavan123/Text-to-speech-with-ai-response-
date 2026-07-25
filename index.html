@@ -5,169 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pédiatrie Q&A - ឃួន ថាវ៉ាន់</title>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    
     <style>
-        :root {
-            --primary-color: #0284c7;
-            --primary-hover: #0369a1;
-            --bg-color: #f0f9ff;
-            --card-bg: #ffffff;
-            --text-color: #0f172a;
-            --text-muted: #475569;
-            --accent-color: #16a34a;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Kantumruy Pro', 'Poppins', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        header {
-            width: 100%;
-            max-width: 800px;
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            margin-bottom: 25px;
-            border-bottom: 5px solid var(--primary-color);
-        }
-
-        h1 {
-            font-size: 2rem;
-            color: var(--primary-color);
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .author {
-            font-size: 1.1rem;
-            color: var(--accent-color);
-            font-weight: 600;
-        }
-
-        .lang-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 18px;
-        }
-
-        .lang-btn {
-            background-color: #e2e8f0;
-            color: var(--text-color);
-            border: none;
-            padding: 10px 16px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .lang-btn.active {
-            background-color: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-        }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #f1f5f9;
-            padding-bottom: 15px;
-        }
-
-        .q-number {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            background: #e0f2fe;
-            padding: 6px 16px;
-            border-radius: 20px;
-        }
-
-        .q-page {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .question-box {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: #0369a1;
-            line-height: 1.6;
-            background: #f8fafc;
-            padding: 20px;
-            border-left: 6px solid var(--primary-color);
-            border-radius: 8px;
-            min-height: 80px;
-        }
-
-        .answer-box {
-            font-size: 1.2rem;
-            color: #334155;
-            line-height: 1.8;
-            white-space: pre-line;
-            padding: 10px 5px;
-            min-height: 120px;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            margin-top: 15px;
-            padding-top: 20px;
-            border-top: 2px solid #f1f5f9;
-        }
-
-        .nav-btn {
-            flex: 1;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .nav-btn:disabled {
-            background-color: #cbd5e1;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
+        :root { --primary: #0284c7; --bg: #f0f9ff; --card: #ffffff; --text: #0f172a; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', 'Poppins', sans-serif; }
+        body { background: linear-gradient(135deg, #e0f2fe, #f0f9ff); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        header { width: 100%; max-width: 800px; background: var(--card); padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border-bottom: 5px solid var(--primary); }
+        h1 { font-size: 1.8rem; color: var(--primary); }
+        .author { color: #16a34a; font-weight: 600; margin-top: 5px; }
+        .lang-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
+        .lang-btn { background: #e2e8f0; border: none; padding: 8px 14px; font-weight: 600; border-radius: 10px; cursor: pointer; }
+        .lang-btn.active { background: var(--primary); color: white; }
+        .container { width: 100%; max-width: 800px; background: var(--card); border-radius: 20px; padding: 25px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 15px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        .q-number { font-weight: 700; color: var(--primary); background: #e0f2fe; padding: 4px 12px; border-radius: 15px; }
+        .question-box { font-size: 1.25rem; font-weight: 700; color: #0369a1; background: #f8fafc; padding: 15px; border-left: 5px solid var(--primary); border-radius: 8px; }
+        .answer-box { font-size: 1.1rem; line-height: 1.7; white-space: pre-line; padding: 10px 5px; }
+        .controls { display: flex; gap: 10px; border-top: 2px solid #f1f5f9; padding-top: 15px; }
+        .nav-btn { flex: 1; background: var(--primary); color: white; border: none; padding: 12px; font-size: 1.1rem; font-weight: 600; border-radius: 12px; cursor: pointer; }
+        .nav-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -175,9 +30,8 @@
     <header>
         <h1 id="app-title">សំណួរ-ចម្លើយ Pédiatrie</h1>
         <div class="author" id="author-name">រៀបចំដោយ៖ ឃួន ថាវ៉ាន់</div>
-        
         <div class="lang-container">
-            <button class="lang-btn active" id="btn-km" onclick="setLanguage('km')">🇰🇭 ភាសាខ្មែរ</button>
+            <button class="lang-btn active" id="btn-km" onclick="setLanguage('km')">🇰🇭 ខ្មែរ</button>
             <button class="lang-btn" id="btn-fr" onclick="setLanguage('fr')">🇫🇷 Français</button>
             <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">🇬🇧 English</button>
         </div>
@@ -188,109 +42,14 @@
             <span class="q-number" id="q-number">សំណួរទី ១</span>
             <span class="q-page" id="q-page">ទំព័រ ៤១</span>
         </div>
-
-        <div class="question-box" id="question-text"></div>
+        <div class="question-box" id="question-text">កំពុងដោនឡូដ...</div>
         <div class="answer-box" id="answer-text"></div>
-
         <div class="controls">
             <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">⬅️ ថយក្រោយ</button>
             <button class="nav-btn" id="next-btn" onclick="nextQuestion()">បន្តទៅមុខ ➡️</button>
         </div>
     </main>
 
-    <script>
-        const questionsData = [
-            {
-                id: 1, page: "41",
-                km: { question: "១. លក្ខណៈនៃលឿងទារកដែលជាជំងឺ/មិនធម្មតា (Ictère néonatal pathologique) ៖", answer: "- ចាប់ផ្តើមស្តែងឡើងលឿន (មុន ២៤ ម៉ោងដំបូងក្រោយកើត)\n- ករណីបែកគ្រាប់ឈាមក្រហមធ្ងន់ធ្ងរ៖ មានរោគសញ្ញាស្លេកស្លាំង, ថ្លើមនិងអណ្តើករីកធំ\n- កម្រិត bilirubin libre កើនឡើងខ្លាំង\n- មានសញ្ញាស្លេកស្លាំង (Anémie normo-macrocytaire, hyper-réticulocytose)" },
-                fr: { question: "1. Caractère ictère néonatal pathologique :", answer: "- Début précoce avant 24 heures de vie (le plus souvent) ;\n- En cas d'hémolyse sévère : syndrome anémique, hépatosplénomégalie ;\n- Ictère à bilirubine libre d'intensité plus forte ;\n- Anémie (normo-macrocytaire, hyper-réticulocytose)." },
-                en: { question: "1. Pathological Neonatal Jaundice Characteristics:", answer: "- Early onset within first 24 hours of life\n- Severe hemolysis: anemia syndrome, hepatosplenomegaly\n- High intensity unconjugated bilirubinemia\n- Anemia (normo-macrocytic, hyper-reticulocytosis)" }
-            },
-            {
-                id: 2, page: "41",
-                km: { question: "២. រោគសញ្ញាគ្លីនិកនៃជំងឺ Trichinosis ៖", answer: "• រាករូស (Diarrhea)\n• ឈឺពោះ (Abdominal pain)\n• អស់កម្លាំង (Fatigue)\n• ចង់ក្អួត និងក្អួត (Nausea and vomiting)" },
-                fr: { question: "2. Clinical manifestation of trichinosis :", answer: "• Diarrhea\n• Abdominal pain\n• Fatigue\n• Nausea and vomiting" },
-                en: { question: "2. Clinical Manifestations of Trichinosis:", answer: "• Diarrhea\n• Abdominal pain\n• Fatigue\n• Nausea and vomiting" }
-            },
-            {
-                id: 3, page: "41",
-                km: { question: "៣. ការព្យាបាលជាក់លាក់លើរោគសញ្ញាតម្រងនោម Nephrotic Syndrome ៖", answer: "+ ការព្យាបាលលើកដំបូង៖ ប្រើ Prednisolone 60 mg/m2/day (ឬ 2mg/kg/day) មិនឱ្យលើស 80mg/24h រយៈពេល ៤ សប្តាហ៍\n+ ការព្យាបាលពេលលេចឡើងវិញ (Relapse > 3 ខែ ក្រោយព្យាបាលចប់)\n+ ការព្យាបាលពេលលេចឡើងវិញភ្លាមៗ (Relapse ≤ 3 ខែ)" },
-                fr: { question: "3. Specific Treatment Nephrotic syndrome :", answer: "+ Treatment of initial episode of NS: Prednisolone 60 mg/m2/day (or 2mg/kg/day), not exceeded 80mg/24h, Duration: 4 weeks\n+ Treatment of relapse > 3 months after treatment completion\n+ Treatment of relapse ≤ 3 months after treatment completion" },
-                en: { question: "3. Specific Treatment for Nephrotic Syndrome:", answer: "+ Initial episode: Prednisolone 60 mg/m2/day (or 2mg/kg/day), max 80mg/24h for 4 weeks\n+ Relapse > 3 months after completion\n+ Relapse ≤ 3 months after completion" }
-            },
-            {
-                id: 4, page: "41",
-                km: { question: "៤. ការចុះថយផ្លាកែតដាច់ដោយឡែក (<100,000/mm3) និងស្លេកស្លាំងប្រវត្តិហូរឈាម ៖", answer: "• ឃើញមាន Giant platelet លើ blood smear (កើនឡើង MPV)\n• ការបូមខួរឆ្អឹង (Bone marrow aspiration) បង្ហាញ megakaryocytes ធម្មតាឬកើនឡើង និងគ្មានកោសិកាមិនប្រក្រតី" },
-                fr: { question: "4. Isolated thrombocytopenia (<100,000/mm3) and anemia if history of bleeding :", answer: "• Giant platelet on the blood smear (increase MPV)\n• Bone marrow aspiration show normal or increased megakaryocytes, normal myeloid/erythroid elements and absence of abnormal cells." },
-                en: { question: "4. Isolated Thrombocytopenia (<100,000/mm3) & Anemia with Bleeding History:", answer: "• Giant platelets on blood smear (increased MPV)\n• Bone marrow aspiration reveals normal/increased megakaryocytes without abnormal cell populations." }
-            },
-            {
-                id: 5, page: "41",
-                km: { question: "៥. ហេតុអ្វីបានជាត្រូវពិនិត្យសុខភាពទារកទើបនឹងកើត? (Objectives) ៖", answer: "• ដើម្បីស្វែងរកភាពមិនប្រក្រតី និងបញ្ជូនទៅជំនាញឱ្យទាន់ពេលវេលា\n• ផ្តល់ព័ត៌មានដល់ឪពុកម្តាយ និងបង្កើតទំនាក់ទំនងល្អ\n• ផ្តល់ឱកាសឱ្យគ្រួសារសួរដេញដោលអំពីទារក" },
-                fr: { question: "5. Objectives of Newborn Examination :", answer: "• Detection of abnormalities and to allow referral to appropriate service in a timely fashion\n• Parent information and relationship building\n• Provide the family with an opportunity to ask questions about their baby" },
-                en: { question: "5. Objectives of Newborn Examination:", answer: "• Early detection of abnormalities for timely referral\n• Parent communication and trust building\n• Providing opportunities for parents to ask questions regarding their child" }
-            },
-            {
-                id: 6, page: "42",
-                km: { question: "៦. តើត្រូវពិនិត្យអ្វីខ្លះលើទារក? (What to examine?) ៖", answer: "• សញ្ញាជីវិត (Vital signs)\n• ការពិនិត្យរាងកាយ (Physical exam)\n• ការពិនិត្យទូទៅ (General exam)\n• ការពិនិត្យប្រព័ន្ធប្រសាទ (Neurological exam)\n• ការវាយតម្លៃអាយុក្នុងផ្ទៃ (Estimation of gestational age)" },
-                fr: { question: "6. What to examine ?", answer: "• Vital signs\n• Physical exam\n• General exam\n• Neurological exam\n• Estimation of gestational age" },
-                en: { question: "6. What to Examine in a Newborn?", answer: "• Vital signs\n• Physical examination\n• General examination\n• Neurological examination\n• Gestational age estimation" }
-            },
-            {
-                id: 7, page: "43-44",
-                km: { question: "៧. ការផ្តល់សេរ៉ូមតាមសរសៃឈាមសម្រាប់គ្រុនឈាម Grade I & II (IV fluid for DHF) ៖", answer: "+ ផ្ដើមដោយ Crystalloid 1.5-3ml/kg/h រយៈពេល ១-៣ ម៉ោង\n  • បើធូរស្រាល៖ បន្ត 3ml/kg/h ៣ ម៉ោងទៀត រួចបន្ថយមក 1.5ml/kg/h ក្នុងរង្វង់ ៤៨ ម៉ោង រួចផ្អាក\n  • បើមិនធូរស្រាល៖ បន្តកម្រិតដើម ១-៣ ម៉ោង រួចពិនិត្យ Hct បើកាន់តែធ្ងន់ធ្ងរត្រូវដំឡើងកម្រិត 3-6ml/kg/h" },
-                fr: { question: "7. IV fluid therapy for DHF grade I & II :", answer: "+ Start IV fluid 1.5-3ml/kg/h crystalloid solutions over 1-3h\n  • Improvement: IV to 3ml/kg/h for another 3h -> Lower to 1.5ml/kg/h over 48h, then stop.\n  • No improvement: continue same rate, recheck Hct, adjust accordingly." },
-                en: { question: "7. IV Fluid Protocol for DHF Grade I & II:", answer: "+ Start IV crystalloid at 1.5-3 ml/kg/h over 1-3 hours.\n  • If improved: Maintain 3 ml/kg/h for 3h, then step down to 1.5 ml/kg/h over 48h before stopping.\n  • If no improvement: Re-evaluate vital signs and Hct, increase to 3-6 ml/kg/h if worsening." }
-            },
-            {
-                id: 8, page: "44",
-                km: { question: "៨. សញ្ញាធ្ងន់ធ្ងរនៃជំងឺរលាកស្រោមខួរដោយបាក់តេរី (Méningite bactérienne) ៖", answer: "- ប្រព័ន្ធសរសៃឈាម៖ ចង្វាក់បេះដូងកើនឡើង, បាតដៃបាតជើងត្រជាក់, គ្មានទឹកនោម, សម្ពាធឈាមធ្លាក់\n- ស្បែក៖ ស្នាមជាំស្បែករីករាលដាលលឿន (Purpura extensif)\n- ប្រព័ន្ធប្រសាទ៖ វង្វេងស្មារតី ឬសន្លប់ (Coma)" },
-                fr: { question: "8. Signe de gravité méningite bactérienne :", answer: "- Hémodynamique : augmentation FC, TRC allongé, extrémités froides, anurie, hypotension.\n- Cutanés : purpura rapidement extensif ou nécrotique\n- Neurologique : trouble de la conscience, parfois coma" },
-                en: { question: "8. Severity Signs in Bacterial Meningitis:", answer: "- Hemodynamic: tachycardia, prolonged CRT, cold extremities, anuria, hypotension/collapse\n- Skin: rapidly progressive or necrotic purpura\n- Neurological: altered consciousness, coma" }
-            },
-            {
-                id: 9, page: "44",
-                km: { question: "៩. កត្តាព្យាករណ៍មិនល្អនៃជំងឺរលាកស្រោមខួរ (Élément de mauvais pronostic) ៖", answer: "- ការពន្យារពេលក្នុងការផ្តល់ថ្នាំសម្លាប់បាក់តេរី\n- អាយុនៅក្មេងពេក (ទារក)\n- មេរោគបង្កជាប្រភេទ Pneumocoque\n- សភាពសន្លប់តាំងពីដំបូង\n- មានការធ្លាក់ចុះសម្ពាធឈាម ឬសម្ពាធក្នុងក្បាលកើនឡើង ដែលព្យាបាលយឺតយ៉ាវ" },
-                fr: { question: "9. Élément de mauvais pronostic :", answer: "- Retard à la mise en route d'un traitement bactéricide\n- Jeune âge (nourrisson)\n- Germe (pneumocoque)\n- Gravité de tableau neurologique initial (forme comateuse)\n- Existence d'un collapsus associé ou de signes d'HTIC traités tardivement." },
-                en: { question: "9. Poor Prognostic Factors in Meningitis:", answer: "- Delayed antibiotic treatment\n- Young age (infants)\n- Pathogen type (e.g., Pneumococcus)\n- Initial coma presentation\n- Untreated or delayed treatment of shock or intracranial hypertension" }
-            },
-            {
-                id: 10, page: "45",
-                km: { question: "១០. និយមន័យ និងរោគរស្មីនៃជំងឺរលាកស្រោមខួរ (Physiopathologie méningite) ៖", answer: "+ ជំងឺរលាកស្រោមខួរ គឺជាការរលាកនៃស្រោមខួរ ដែលភាគច្រើនបណ្តាលមកពីវីរុស\n+ ដំណើរបង្កជំងឺ៖ មេរោគចូលតាមផ្លូវដង្ហើម -> ជ្រាបចូល LCR តាមសរសៃឈាម -> មេរោគកើនឡើងលឿនក្នុង LCR -> រាងកាយផលិត Cytokines" },
-                fr: { question: "10. Définition et physiopathologie des méningites :", answer: "+ Inflammation des méninges (virale la plus fréquente).\n+ Physiopathologie :\n  - Germes de portage du rhino-pharynx\n  - Pénétration dans le LCR par voie hématogène\n  - Multiplication rapide dans le LCR sans bactéricide naturel\n  - Réponse de l'hôte : production de cytokines" },
-                en: { question: "10. Pathophysiology of Meningitis:", answer: "+ Inflammation of meninges, most commonly viral.\n+ Pathophysiology: Nasopharyngeal colonization -> Hematogenous spread into CSF -> Rapid bacterial multiplication in CSF -> Cytokine cascade activation." }
-            },
-            {
-                id: 11, page: "45",
-                km: { question: "១១. មូលហេតុនៃជំងឺរលាកស្រោមខួរដោយវីរុស (Méningites virales) ៖", answer: "- Entérovirus\n- Paramyxovirus\n- Virus echo\n- Adénovirus\n- Herpes virus" },
-                fr: { question: "11. Causes des méningites virales :", answer: "- Entérovirus\n- Paramyxovirus\n- Virus echo\n- Adénovirus\n- Herpes virus" },
-                en: { question: "11. Causes of Viral Meningitis:", answer: "- Enterovirus\n- Paramyxovirus\n- Echovirus\n- Adenovirus\n- Herpes simplex virus" }
-            },
-            {
-                id: 12, page: "45",
-                km: { question: "១២. របៀបធ្វើរោគវិនិច្ឆ័យរលាកស្រោមខួរលើទារក (Diagnostic méningite nourrisson) ៖", answer: "- ទារករញ៉ួរញ៉ៃ ចង់តែងងុយគេង រអ៊ូរទាំ\n- បដិសេធមិនបៅទឹកដោះគោ\n- មានការកន្ត្រាក់ដោយសារគ្រុនក្តៅ (Convulsions fébriles)\n+ ការពិនិត្យបន្ថែម៖ ពើងពុម្ពពកក្បាល (Fontanelle), ទន់ក ឬរឹងក" },
-                fr: { question: "12. Comment faire du diagnostic méningite nourrisson ?", answer: "- Enfant grognon, somnolence, refus répété du biberon, convulsions fébriles.\n+ Examen : Tension de la fontanelle, hypotonie ou raideur de la nuque, signes neurologiques." },
-                en: { question: "12. Diagnosing Meningitis in Infants:", answer: "- Irritability, lethargy, poor feeding, febrile seizures.\n+ Physical findings: Bulging fontanelle, nuchal rigidity/hypotonia, focal neurological signs." }
-            },
-            {
-                id: 13, page: "46",
-                km: { question: "១៣. ការពិនិត្យបញ្ជាក់ជំងឺរលាកស្រោមខួរ (Examens de confirmation) ៖", answer: "+ ការពិនិត្យទឹកឆ្អឹងខ្នង (LCR) ៖\n- សម្ពាធ LCR កើនឡើង និងបាត់បង់ភាពថ្លា\n- ចំនួនកោសិកាមិនប្រក្រតី (> 10/mm3)\n- កម្រិត Protéinorachie > 0,45 g/l\n- សមាមាត្រស្ករក្នុង LCR / ឈាម < 0,40" },
-                fr: { question: "13. Examens de confirmation méningite sont :", answer: "+ Examen du LCR :\n- LCR hypertendu, perte de limpidité\n- Nombre de cellules > 10/mm3\n- Protéinorachie > 0,45 g/l\n- Rapport glucose LCR / sang < 0,40" },
-                en: { question: "13. Confirmatory Tests for Meningitis:", answer: "+ CSF Examination:\n- Elevated opening pressure, cloudy appearance\n- Cell count > 10/mm3\n- Protein level > 0.45 g/L\n- CSF/Blood glucose ratio < 0.40" }
-            },
-            {
-                id: 14, page: "46-47",
-                km: { question: "១៤. រោគសញ្ញាគ្លីនិក និងមន្ទីរពិសោធន៍នៃជំងឺរលាកបំពង់ខ្យល់តូចៗ (Bronchiolite) ៖", answer: "+ ដំណាក់កាលដំបូង (ORL)៖ គ្រុនក្តៅ, ហៀរសម្រោត, ក្អកស្ងួត\n+ ដំណាក់កាលធ្ងន់ធ្ងរ៖ ក្អួត, អស់កម្លាំងមិនបៅ, កើតមានការអាក់ដង្ហើម (Apnea)\n+ ការស្តាប់សួត៖ ឮសំឡេង Sibilants និង Crépritants\n+ សញ្ញាពិបាកដកដង្ហើម៖ វាយតម្លៃតាម score de silverman" },
-                fr: { question: "14. Signes cliniques et paracliniques du bronchiolite :", answer: "+ Phase débutant : Fièvre élevée, signes rhino-pharyngés, toux sèche.\n+ Phase d'état : Vomissements, apnée (<3M), cyanose, polypnée >60/min.\n+ Auscultation : Râles sibilants et sous-crépitants disséminés." },
-                en: { question: "14. Clinical & Paraclinical Signs of Bronchiolitis:", answer: "+ Early phase: Fever, rhinitis, dry cough.\n+ Progressive phase: Feeding difficulty, apnea in infants <3M, severe respiratory distress.\n+ Auscultation: Wheezing (sibilant râles) and crackles." }
-            },
-            {
-                id: 15, page: "47-49",
-                km: { question: "១៥. កត្តាហានិភ័យនៃការបង្កឱ្យកើតជំងឺហឺត (Risk factors of asthma) ៖", answer: "- អាលែហ្សែន៖ ធូលីដី, រោមសត្វ, កន្លាត, លម្អងផ្កា\n- ការឆ្លងរោគផ្លូវដង្ហើម (វីរុស)\n- ការប្រែប្រួលអារម្មណ៍ខ្លាំង ឬការហាត់ប្រាណ\n- សារធាតុគីមី និងថ្នាំ (Aspirin, Beta blocker)\n- ផ្សែងបារី និងការបំពុលបរិយាកាស" },
-                fr: { question: "15. Risk factors of asthma :", answer: "- Allergen: domestic dust mites, animal fur, cockroach, pollens\n- Respiratory viral infections\n- Emotional expressions, Exercise\n- Chemical irritants & drugs (aspirin, beta blockers)\n- Tobacco smoke, Air pollution" },
-                en: { question: "15. Risk Factors for Asthma:", answer: "- Allergens: Dust mites, pet dander, cockroaches, pollen\n- Viral respiratory infections\n- Exercise and strong emotional stress\n- Medications (Aspirin, Beta-blockers)\n- Tobacco smoke and air pollution" }
-            },
-            {
-                id: 16, page: "47-50",
-                km: { question: "១៦. ការធ្វើរោគវិនិច្ឆ័យ គោលដៅ និងការគ្រប់គ្រងជំងឺហឺត (Asthma management) ៖", answer: "+ ការធ្វើរោគវិនិច្ឆ័យ៖ ប្រវត្តិរោគសញ្ញា, វាស់មុខងារសួត (Spirometry)\n+ គោលដៅ៖ គ្រប់គ្រងរោគសញ្ញា, រក្សាសកម្មភាពរាងកាយ, ការពារការរើឡើងវិញ\n+ ឱសថសំខាន់ ២ ប្រភេទ៖ Controller medications & Reliever medication\n+ ហេតុអ្វីប្រើ Inhaled medication? ព្រោះវាទៅដល់ផ្លូវដង្ហើមផ្ទាល់ និងកាត់បន្ថយផលប៉ះពាល់" },
-                fr: { question: "16. What is the diagnosis / goal / management of asthma ?", answer: "+ Diagnosis: History, Spirometry, Peak expiratory flow.\n+ Goals: Control symptoms, maintain normal activities, prevent exacerbations.\
+    <script src="script.js"></script>
+</body>
+</html>
