@@ -41,7 +41,7 @@
                 <span data-i18n="prev">មុន</span>
             </button>
             <div class="text-sm sm:text-base font-semibold text-indigo-600">
-                <span id="current-q-num">1</span> / <span id="total-q-num">103</span>
+                <span id="current-q-num">1</span> / <span id="total-q-num">25</span>
             </div>
             <button onclick="nextQuestion()" id="next-btn" class="flex items-center gap-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl transition-all shadow-md shadow-indigo-200">
                 <span data-i18n="next">បន្ទាប់</span>
@@ -72,7 +72,7 @@
 
         <!-- Quick Jump Grid Pagination -->
         <div class="mt-8 bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-            <p class="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider text-center" data-i18n="jumpto">ជ្រើសរើសសំណួររហ័ស (១ ដល់ ១០៣)</p>
+            <p id="jumpto-text" class="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider text-center" data-i18n="jumpto">ជ្រើសរើសសំណួររហ័ស (១ ដល់ ២៥)</p>
             <div id="pagination-grid" class="flex flex-wrap gap-1.5 justify-center max-h-36 overflow-y-auto p-1">
                 <!-- Generated dynamically via JS -->
             </div>
@@ -87,7 +87,7 @@
 
     <!-- Application Script -->
     <script>
-        let currentLang = 'km'; // ភាសាដើមលំនាំដើម
+        let currentLang = 'km'; 
         let currentIdx = 0;
 
         const uiTexts = {
@@ -98,7 +98,7 @@
                 prev: "មុន",
                 next: "បន្ទាប់",
                 answer: "ចម្លើយ",
-                jumpto: "ជ្រើសរើសសំណួររហ័ស (១ ដល់ ១០៣)",
+                jumpto: "ជ្រើសរើសសំណួររហ័ស (១ ដល់ ២៥)",
                 badge: "សំណួរទី ",
                 footer: "កម្រងសំណួររោគកុមារ (Pediatric QROC) | រៀបរាងដោយ ឃួន ថាវ៉ាន់"
             },
@@ -109,7 +109,7 @@
                 prev: "Précédent",
                 next: "Suivant",
                 answer: "Réponse",
-                jumpto: "Saut rapide vers une question (1 à 103)",
+                jumpto: "Saut rapide vers une question (1 à 25)",
                 badge: "Question N° ",
                 footer: "QROC Pédiatrie | Préparé par Koun Thavorn"
             },
@@ -120,7 +120,7 @@
                 prev: "Previous",
                 next: "Next",
                 answer: "Answer",
-                jumpto: "Quick Jump to Question (1 to 103)",
+                jumpto: "Quick Jump to Question (1 to 25)",
                 badge: "Question ",
                 footer: "Pediatric QROC | Prepared by Koun Thavorn"
             }
@@ -129,192 +129,184 @@
         const questionsData = [
             {
                 id: 1,
-                km: "Critère du diagnostique du syndrome néphrotique.",
-                fr: "Critères diagnostiques du syndrome néphrotique.",
-                en: "Diagnostic criteria for nephrotic syndrome.",
-                answer: "- Nephrotic range proteinuria (> 50 mg or 0.05g/kg/24h, Dipstick 3-4+, or Urine protein/creatinine ratio > 2)\n- Hypoalbuminémie (< 30g/L)\n- Edema\n- Hyperlipidémie"
+                km: "Critère du diagnostic du syndrome néphrotique",
+                fr: "Critère du diagnostic du syndrome néphrotique",
+                en: "Diagnostic criteria for nephrotic syndrome",
+                answer: "- Nephrotic range proteinuria\n- Hypoalbuminémie\n- Edema\n- Hyperlipidémie"
             },
             {
                 id: 2,
                 km: "Quelles sont les complications cardiovasculaires de la glomérulonéphrite post-infectieuse?",
                 fr: "Quelles sont les complications cardiovasculaires de la glomérulonéphrite post-infectieuse?",
                 en: "What are the cardiovascular complications of post-infectious glomerulonephritis?",
-                answer: "- Volume overload\n- Hypertension\n- Hyperkalemia\n- Hypocalcemia\n- Seizure\n- Elevated serum creatinine and urea."
+                answer: "Les complications cardiovasculaires de la glomérulonéphrite postinfectieuse sont:\n- Volume overload\n- Hypertension\n- Hyperkalemia\n- Hypocalcemia\n- Seizure\n- Elevated serum creatinine and urea"
             },
             {
                 id: 3,
                 km: "Diagnosis of filariasis (15mn)",
-                fr: "Diagnostic de la filariose (15min)",
-                en: "Diagnosis of filariasis",
-                answer: "- Parasite adulte: Biopsie ganglionnaire\n- Microfilaire: Dans le sang prélèvement pendant la nuit vers 23h ou 1h la prise de 1cp (100mg) de Notétézine\n- Dans le liquide chyleux: épanchement vaginal, pleural, varice lymphatique, chylurie..."
+                fr: "Diagnosis of filariasis (15mn)",
+                en: "Diagnosis of filariasis (15mn)",
+                answer: "- Parasite adulte : Biopsie ganglionnaire\n- Microfilaire : Dans le sang prélèvement pendant la nuit vers 23h ou 1h la prise de 1cp (100mg) de Notétézine\n- Dans le liquide chyleux : épanchement vaginal, pleural, varice lymphatique, chylurie..."
             },
             {
                 id: 4,
-                km: "Quels sont les facteurs intervenants dans le développement somatique de l'enfant (5mn)?",
-                fr: "Quels sont les facteurs intervenants dans le développement somatique de l'enfant?",
-                en: "What are the factors involved in the somatic development of the child?",
-                answer: "+ Croissance:\n- Taille (staturale)\n- Poids\n- Surface corporelle\n+ Maturation:\n- Age des dents\n- Age osseux\n- Maturation sexuelle\n- Critères neurologiques\n- Rapports anthropométriques"
+                km: "Quels sont les facteurs intervenants dans le développement somatique de l’enfant (5mn)",
+                fr: "Quels sont les facteurs intervenants dans le développement somatique de l’enfant (5mn)",
+                en: "What are the factors involved in the somatic development of the child (5mn)",
+                answer: "Les facteurs intervenants dans le développement somatique de l’enfant:\n- Croissance:\n  + Taille (staturale)\n  + Poids\n  + Surface corporelle\n- Maturation:\n  + Âge des dent\n  + Âge osseux\n  + Maturation sexuelle\n  + Critères neurologiques\n  + Rapports anthropométriques"
             },
             {
                 id: 5,
-                km: "Describe the treatment of idiopathic thrombocytopenia purpura.",
-                fr: "Décrire le traitement du purpura thrombopénique idiopathique (PTI).",
-                en: "Describe the treatment of idiopathic thrombocytopenic purpura (ITP).",
-                answer: "- Oral Prednisolone: 2mg/kg/day for 14 days then taper and discontinue at 21 days (Max: 60mg/day)\n- IV Methylprednisolone: 30mg/kg/day for 3 days\n- IVIG: 0.8g/kg/dose over 3 hours for 1 day or 250mg/kg for 2 days\n- IV anti-D immunoglobulin: 50ug/kg single dose over 5mn in Rhesus positive patients"
+                km: "Describes the treatment of idiopathic thrombocytopenia purpura",
+                fr: "Describes the treatment of idiopathic thrombocytopenia purpura",
+                en: "Describes the treatment of idiopathic thrombocytopenia purpura",
+                answer: "- Oral Prednisolone: 2mg/kg/day for 14days then taper and discontinue at 21 days (Max: 60mg/day)\n- IV Methylprednisolone: 30mg/kg/day for 3days\n- IVIG: 0.8g/kg/dose over 3 hours for 1day or 250mg/kg for 2 days\n- IV anti-D immunoglobulin: 50ug/kg single dose over 5mn in Rhesus positive patients"
             },
             {
                 id: 6,
-                km: "រៀបរាប់ពី principe ដែលធ្វើអោយមាន Épiglottite.",
-                fr: "Décrire le principe et la physiopathologie de l'épiglottite.",
-                en: "Describe the mechanism causing epiglottitis.",
-                answer: "- Epiglotte enflammée et souvent abcédée devient énorme bouchant le trou de glotte.\n- Presque toujours due à Hemophilus influenzae.\n- Syndrome de dyspnée laryngée, des signes généraux importants avec fièvre, l'enfant est assis ou 4 pattes, dysphagie."
+                km: "រៀបរាប់ពី principe ដែលធ្វើឱ្យកើត épiglottite",
+                fr: "Décrire le principe de l'épiglottite",
+                en: "Describe the mechanism causing epiglottitis",
+                answer: "- Épiglotte enflammé et souvent abcédée devient énorme boucher le trou de glotte\n- Presque toujours due a Hemophilus influenza\n- Syndrome de dyspnée laryngée, des signes généraux importants avec fièvre, l'enfant est assis ou 4 pattes, la dysphagie"
             },
             {
                 id: 7,
-                km: "Citez les signes cliniques et paracliniques de la fièvre dengue hémorragique.",
-                fr: "Citez les signes cliniques et paracliniques de la fièvre dengue hémorragique.",
-                en: "Cite the clinical and paraclinical signs of dengue hemorrhagic fever.",
-                answer: "+ Signes cliniques:\n- Febrile phase: Clinical signs similar to DF, positive tourniquet test, petechiae, ecchymosis, epistaxis, gum and GI bleeding.\n- Afebrile (Critical phase 24h-48h): Fever drops, general condition deteriorates, somnolent, asthenia, severe vomiting, severe abdominal pain, no urine output 4-6h.\n+ Signes paracliniques:\n- Thrombocytopenia (platelet < 100,000/mm3)\n- Signs of plasma leakage: Hemoconcentration (Hct ↑ > 20% baseline), pleural effusion, ascites, hypoalbuminemia."
+                km: "Citez les signes cliniques et paracliniques de la fièvre dengue hémorragique",
+                fr: "Citez les signes cliniques et paracliniques de la fièvre dengue hémorragique",
+                en: "Cite the clinical and paraclinical signs of dengue hemorrhagic fever",
+                answer: "Signes cliniques :\n- Febrile phase:\n  + Clinical signs & symptoms are similar to DF.\n  + Manifestations of bleeding is evidenced than DF:\n    * Positive tourniquet test\n    * Petechiae\n    * Ecchymosis, Epistaxis\n    * Gum and GI bleeding\n- Afebrile: Critical phase \"24h-48h\"\n  + Fever starts to drop, usually on day 4 or 5 of disease, but:\n  + General condition become deterioration\n  + Somnolent, Asthenia, Severe vomiting, Severe abdominal pain, No urine output 4 - 6h\n\nSignes paracliniques :\n- Thrombocytopenia (platelet < 100 000/mm3)\n- Signs of plasma leakage:\n  + Hemoconcentration (Hct increases > 20% of Hct baseline)\n  + Other plasma leakage signs: Pleural effusion, Ascites, Hypoalbuminemia"
             },
             {
                 id: 8,
-                km: "Quels sont les moyens de diagnostic d'une méningite chez l'enfant?",
-                fr: "Quels sont les moyens de diagnostic d'une méningite chez l'enfant?",
+                km: "Quels sont les moyens de diagnostic d’une méningite chez l’enfant?",
+                fr: "Quels sont les moyens de diagnostic d’une méningite chez l’enfant?",
                 en: "What are the diagnostic methods for meningitis in children?",
-                answer: "- Syndrome infectieux: Fièvre à début souvent brutal\n- Syndrome méningé: céphalée, vomissement\n- Examen physique:\n+ Raideur de la nuque\n+ Signe de Kernig\n+ Signe de Brudzinski"
+                answer: "Les moyens de diagnostic d’une méningite chez l’enfant:\n- Syndrome infectieux: Fièvre à début souvent brutal\n- Syndrome méningé: céphalée, vomissement\n- Examen:\n  + Raideur de la nuque\n  + Signe de Kernig\n  + Signe de Brudzinski"
             },
             {
                 id: 9,
                 km: "Éléments de gravité du Paludisme?",
-                fr: "Quels sont les éléments de gravité du paludisme?",
-                en: "What are the severe elements of malaria?",
-                answer: "- Coma, convulsion\n- Ictère\n- Hypoglycémie\n- Insuffisance rénale\n- Parasitémie > 5%\n- Anémie grave\n- Hémoglobinurie\n- OAP (Oedème aigu du poumon)\n- Déshydratation, Thrombopénie"
+                fr: "Éléments de gravité du Paludisme?",
+                en: "Severe elements of malaria?",
+                answer: "Les éléments de gravité :\n- Coma, convulsion, ictère\n- Hypoglycémie\n- Insuffisance rénale - parasitémie > 5%\n- Anémie grave\n- Hémoglobinurie - OAP\n- Déshydratation - Thrombopénie"
             },
             {
                 id: 10,
-                km: "Citez les trois grands mécanismes de l'anémie du nourrisson.",
-                fr: "Citez les trois grands mécanismes de l'anémie du nourrisson.",
-                en: "Cite the three major mechanisms of anemia in infants.",
-                answer: "- Le défaut de production de GR qui est le plus souvent lié à une étiologie carentielle;\n- La destruction augmentée de GR dans le cadre d'une hémolyse;\n- La perte de GR liée à une hémorragie."
+                km: "Citez vous les trois grands mécanismes de l’anémie du nourrisson",
+                fr: "Citez les trois grands mécanismes de l’anémie du nourrisson",
+                en: "Cite the three major mechanisms of anemia in infants",
+                answer: "Trois grands mécanismes de l’anémie :\n- Le défaut de production de GR qui est le plus souvent lié à une étiologie carentielle ;\n- La destruction augmentée de GR dans le cadre d’une hémolyse ;\n- La perte de GR liée à une hémorragie."
             },
             {
                 id: 11,
                 km: "Clinical signs of pleural effusion?",
-                fr: "Quels sont les signes cliniques de l'épanchement pleural (pleurésie)?",
+                fr: "Quels sont les signes cliniques de l'épanchement pleural?",
                 en: "Clinical signs of pleural effusion?",
-                answer: "- Fever, dry cough\n- Dyspnea (more or less marked depending on abundance)\n- Chest pain\n- Immobility of a hemithorax\n- MV (Murmure vésiculaire) decreased or absent\n- Matity (Matité)"
+                answer: "- Fever\n- Dry cough\n- Dyspnea (more or less marked depending on the abundance of the effusion)\n- Chest pain\n- Immobility of a hemithorax\n- MV decreased or absent\n- Matity"
             },
             {
                 id: 12,
-                km: "Diagnostic et examen de laboratoire de la coqueluche (ក្អកមាន់)?",
+                km: "Diagnostic et examen de laboratoire នៃជំងឺក្អកមាន់?",
                 fr: "Diagnostic et examen de laboratoire de la coqueluche?",
-                en: "Diagnosis and laboratory examination of pertussis (whooping cough)?",
-                answer: "Diagnosis:\n- Période de début: toux émétique, nocturne, fièvre modérée (37.5°C-38°C)\n- Période des quintes (7 à 10 jours), cyanose, phase de déclin.\nExamen de laboratoire:\n+ Test ELISA anticorps anti-Bordetella pertussis\n+ Hyperlymphocytose (10,000 à 30,000 leucocytes dont 60 à 90% de lymphocytes)\n+ Radiographie de thorax: parfois atélectasie."
+                en: "Diagnosis and laboratory examination of pertussis?",
+                answer: "Diagnosis :\n- Période de début : toux, émétisante, nocturne, Fièvre modérée (37,5°c - 38°c)\n- Période des quintes (7 à 10 jours), cyanose.\n- Phase de déclin des quintes.\n\nExamen de laboratoire :\n- Test Elisa anti corps anti - Bordetella pertussis\n- Hyperlymphocytose (10 000 à 30 000 Leucocytes dont 60 à 90% de lymphocytes).\n- Radiographie de thorax : parfois atélectasie."
             },
             {
                 id: 13,
-                km: "Citez les signes cliniques de la rhino-pharyngite de l'enfant au-dessous de 2 ans.",
-                fr: "Citez les signes cliniques de la rhino-pharyngite de l'enfant au-dessous de 2 ans.",
-                en: "Cite the clinical signs of nasopharyngitis in children under 2 years.",
-                answer: "- L'encombrement ORL, fièvre\n- Dysphagie (anorexie brutale pour les aliments solides)\n- L'inflammation nasale (gêne respiratoire, jetage net)\n- Vomissements, selles ou glaires ingérées, ou diarrhée authentique\n- L'évolution est favorable"
+                km: "Citez les signes cliniques rhino-pharyngite de l’enfant au-dessous de 2ans?",
+                fr: "Citez les signes cliniques de la rhino-pharyngite de l'enfant au-dessous de 2 ans?",
+                en: "Cite the clinical signs of nasopharyngitis in children under 2 years?",
+                answer: "- L'encombrement ORL, Fièvre.\n- Dysphagie (anorexie brutale pour les alimentations solides).\n- L'inflammation nasale : (gêne respiratoire, le jettage nette).\n- Vomissements, selles : les glaires ingérées ou une diarrhée authentique.\n- L'évolution est favorable."
             },
             {
                 id: 14,
-                km: "Complications de la fièvre typhoïde?",
-                fr: "Quelles sont les complications de la fièvre typhoïde?",
+                km: "Complication de la fièvre typhoïde?",
+                fr: "Complications de la fièvre typhoïde?",
                 en: "Complications of typhoid fever?",
                 answer: "- Intestinal hemorrhage\n- Intestinal perforation\n- Toxic hepatitis\n- Toxic myocarditis\n- Bronchitis, bronchopneumonia"
             },
             {
                 id: 15,
-                km: "Traitement de l'ictère à bilirubine libre?",
-                fr: "Quel est le traitement de l'ictère à bilirubine libre?",
+                km: "Traitement de l’ictère à bilirubine libre?",
+                fr: "Traitement de l’ictère à bilirubine libre?",
                 en: "Treatment of unconjugated jaundice?",
-                answer: "- Apport nutritionnel précoce\n- Photothérapie\n- Albumine\n- Exsanguino-transfusion\n- Prévention de l'hémorragie"
+                answer: "- Apport nutritionnel précoce\n- Photothérapie\n- Albustine\n- Exsanguino-transfusion\n- Prévention de l'hémorragie"
             },
             {
                 id: 16,
-                km: "What are the risk factors of asthma?",
+                km: "What are the risks factors of asthma?",
                 fr: "Quels sont les facteurs de risque de l'asthme?",
                 en: "What are the risk factors of asthma?",
-                answer: "Host factors:\n- Genetic (genes predisposing to atopy and airway hyper-responsiveness)\n- Obesity, Sex\nEnvironmental factors:\n- Allergens (Indoor: mites, furred animals, cockroaches, fungi, moulds; Outdoor: pollens, fungi)\n- Infections (viral)\n- Tobacco smoke (active/passive), Air pollution, Diet."
+                answer: "- Host factors:\n  + Genetic (Genes pre-disposing to atopy, Genes pre-disposing to airway hyper-responsiveness)\n  + Obesity, Sex\n- Environmental factors:\n  + Allergens (Indoor: Domestic mites, furred animals, cockroach allergens, fungi, moulds, yeasts; Outdoor: Pollens, fungi, moulds, yeasts)\n  + Infections (predominantly viral)\n  + Occupational sensitizers\n  + Tobacco smoke (Passive smoking, Active smoking)\n  + Outdoor/Indoor Air Pollution\n  + Diet"
             },
             {
                 id: 17,
-                km: "Diagnosis of Trichinosis (Trichinella spiralis)?",
-                fr: "Quel est le diagnostic de la trichinose?",
-                en: "Diagnosis of Trichinosis (Trichinella spiralis)?",
-                answer: "- Serology\n- Muscle biopsy for Trichinella\n- Compatible clinical symptoms (eosinophilia, fever, myalgia, facial or periorbital edema)\n- Antibodies to Trichinella detectable approximately 3 weeks after infection."
+                km: "Diagnosis of Trichinosis (trichinella spiralis)?",
+                fr: "Diagnostic de la trichinose?",
+                en: "Diagnosis of Trichinosis (trichinella spiralis)?",
+                answer: "- Serology\n- Muscle biopsy for Trichinella\n- More compatible clinical symptoms (eosinophilia, fever, myalgia, facial or periorbital edema).\n- Antibodies to Trichinella are detectable approximately 3 wk after infection"
             },
             {
                 id: 18,
                 km: "ចូរនិយាយអំពី définition របស់ Nephrotic syndrome?",
-                fr: "Définition du syndrome néphrotique.",
-                en: "Definition of Nephrotic syndrome.",
-                answer: "- Nephrotic range proteinuria: > 50 mg or 0.05g/kg/24h, or Dipstick 3-4+, or Urine protein/creatinine ratio > 2\n- Hypoalbuminemia < 30g/L\n- Edema\n- Hyperlipidemia"
+                fr: "Définition du syndrome néphrotique?",
+                en: "Definition of Nephrotic syndrome?",
+                answer: "- Nephrotic range proteinuria: 50 mg or 0.05g /kg/24h or Dipstick 3-4+ or Urine protein/creatinine ratio > 2\n- Hypoalbuminemia < 30g/L\n- Edema\n- Hyperlipidemia"
             },
             {
                 id: 19,
-                km: "Clinical manifestation of Guillain-Barré syndrome?",
-                fr: "Quelles sont les manifestations cliniques du syndrome de Guillain-Barré?",
-                en: "Clinical manifestations of Guillain-Barré syndrome?",
-                answer: "- Begin with symmetrical muscle paralysis rapidly progressing in an ascending fashion over hours to days\n- Affect cranial nerves (drooling, difficulty swallowing)\n- 30% affect autonomic nerves\n- Loss of pain, temperature, bladder dysfunction, orthostatic hypotension."
+                km: "Clinical manifestation of Guillain Barre syndrome?",
+                fr: "Manifestations cliniques du syndrome de Guillain-Barré?",
+                en: "Clinical manifestation of Guillain Barre syndrome?",
+                answer: "- Begin with muscle paralysis symmetrical rapidly progress in an ascending fashion over periode of hour to day\n- Affect of nerve cranial (drooling, difficulty swallowing)\n- 30% affect autonomic nerves\n- Loss of pain, temperature, bladder dysfunction, orthopedic hypotension"
             },
             {
                 id: 20,
                 km: "Clinical manifestation of Encephalitis?",
-                fr: "Quelles sont les manifestations cliniques de l'encéphalite?",
+                fr: "Manifestations cliniques de l'encéphalite?",
                 en: "Clinical manifestation of Encephalitis?",
-                answer: "- Fever, delirium, or confusion progressing to unconsciousness, seizures\n- Cranial nerve palsies, paresis and paralysis, involuntary movements, abnormal reflexes\n- Signs of marked increased intracranial pressure (ICP) may be present."
+                answer: "- Fever, delirium, or confusion progressing to unconsciousness, seizure activity,\n- Cranial nerve (palsies, paresis and paralysis), involuntary movement,\n- And abnormal reflexes. Signs of marked ICP may be present."
             },
             {
                 id: 21,
-                km: "តើជំងឺ Hemophilia កើតឡើងដោយសារមូលហេតុអ្វី និងរោគវិនិច្ឆ័យដូចម្ដេច?",
+                km: "ជំងឺ hemophilia កើតឡើងដោយសារមូលហេតុអ្វី?",
                 fr: "Quelle est la cause de l'hémophilie et son diagnostic?",
-                en: "What causes hemophilia and how is it diagnosed?",
-                answer: "- Cause: Mutation or change in genes providing instructions for clotting factor proteins, causing low levels of factor VIII (8) or factor IX (9).\n- Diagnosis: CBC (platelets normal), bleeding time normal, PT normal, aPTT prolonged, Factor assay for type and severity, DNA test / Amniocentesis for carriers."
+                en: "What is the cause of hemophilia and its diagnosis?",
+                answer: "- Cause: Caused by a mutation or change, in one of the genes, that provides instructions for making the clotting factor proteins needed to form a blood clot it cause of low levels of either factor VIII (8) or factor IX (9).\n- Tests: Complete blood count (CBC) PTL count normal. Hemostasis tests: bleeding time (normal), PT (normal), aPTT (prolonged).\n- Factor assay: test shows the type and severity of hemophilia\n- Carriers and Prenatal diagnosis : DNA test is the most accurate test for carrier, Amniocentesis."
             },
             {
                 id: 22,
-                km: "តើស្តេសអ្វីខ្លះដើម្បីធ្វើរោគវិនិច្ឆ័យដើម្បីរកជំងឺ Thalassemia?",
+                km: "តើសេសអី្វខ្លះដើម្បីធ្វើរោគវិនិច្ឆ័យដើម្បីរកជំងឺ Thalassemia?",
                 fr: "Quels sont les examens pour diagnostiquer la thalassémie?",
-                en: "What tests are used to diagnose thalassemia?",
-                answer: "- Blood test for anemia and abnormal hemoglobin\n- Microscope: red blood cells have abnormal shapes\n- Hemoglobin electrophoresis\n- Severe splenomegaly might indicate hemoglobin H disease."
+                en: "What are the exams to diagnose thalassemia?",
+                answer: "- Take blood to check (anemia and abnormal hemoglobin)\n- Microscope : red blood cell have a body shaped\n- Hemoglobin electrophoresis\n- Severe splenomegaly might hemoglobin H disease"
             },
             {
                 id: 23,
                 km: "Quelle est la définition de la convulsion fébrile?",
                 fr: "Quelle est la définition de la convulsion fébrile?",
                 en: "What is the definition of febrile seizure?",
-                answer: "Un événement survenant habituellement chez un nourrisson ou un enfant entre 6 mois et 5 ans, associé à de la fièvre, sans signe d'infection intracrânienne ou autre cause définie, à l'exclusion des convulsions avec fièvre survenant chez un enfant ayant déjà présenté des convulsions sans fièvre."
+                answer: "La Convulsion fébrile : un événement survenant habituellement chez un nourrisson ou un enfant entre 5 mois et 5 ans, associé à la fièvre, sans signe d'infection intracrânienne ou autre cause définie, à l'exclusion des convulsions avec fièvre survenant chez un enfant ayant déjà présenté des convulsions sans fièvre."
             },
             {
                 id: 24,
-                km: "Clinical signs of Japanese Encephalitis (JE) មានអ្វីខ្លះ?",
-                fr: "Quels sont les signes cliniques de l'encéphalite japonaise?",
-                en: "Clinical signs of Japanese Encephalitis?",
-                answer: "- Prodromal stage (1-6 days): Fever, rigor, headache, GI problems, lethargy, malaise.\n- Acute encephalitis stage: Convulsions, altered sensorium, coma, tremors in fingers/tongue/eyelids, abnormal limb movements, mask-like face, stiff neck, muscular rigidity, speech impairment.\n- Late stage & Sequelae: Mental impairment, epilepsy, abnormal movements, behavior abnormalities, motor neuron paresis."
+                km: "Clinical signs of JE?",
+                fr: "Signes cliniques de l'encéphalite japonaise?",
+                en: "Clinical signs of JE?",
+                answer: "- A prodromal stage (Lasts for 1-5 days): Fever, Rigor, Headache, Gastrointestinal problems, Lethargy, Malaise\n- Acute encephalitis stage: Convulsions, Altered sensorium, unconsciousness, coma, Tremors in fingers, tongue, eyelids and eyes, Abnormal movements of limbs, Mask like face, Stiff neck, Muscular rigidity, Speech impairment\n- Late stage & Sequelae: Mental impairment, Epilepsy, abnormal movements, behavior abnormalities, Paresis motor neuron type"
             },
             {
                 id: 25,
-                km: "ចូររៀបរាប់អំពី les facteurs de risques de prématurité.",
+                km: "ចូររៀបរាប់អំពី les facteurs de risques de prématuré",
                 fr: "Quels sont les facteurs de risque de la prématurité?",
                 en: "What are the risk factors for prematurity?",
-                answer: "- Facteurs maternels: obésité, antécédent d'accouchement prématuré, âge (< 18 ou > 35 ans), alcool, tabac, infections, maladies chroniques, maladies pulmonaires, voyages longs, absence de suivi prénatal, malnutrition, pré-éclampsie, multiparité, placenta praevia.\n- Facteurs fœtaux et annexes: anomalies chromosomiques, détresse fœtale, RCIU (retard de croissance intra-utérin), incompatibilité de groupe sanguin, infections transmises par la mère, traumatismes."
-            },
-            {
-                id: 26,
-                km: "Diagnostic de pleurésie purulente?",
-                fr: "Quel est le diagnostic de la pleurésie purulente?",
-                en: "Diagnosis of purulent pleurisy?",
-                answer: "- Signes cliniques + Radiographie / Échographie / TDM / IRM => Pleurésie purulente.\n- Chimie: liquide riche en protéines (exsudatif), pH < 7.2.\n- Cytologie: GB > 10,000/mm3 et PNN > 50%."
+                answer: "- គភ៌ចន្លោះ\n- សុខភាពម្តាយ : ជាតិផ្ទៃ និងស្ត្រីមានគ្រួសារមិនគ្រប់គ្រប, អាយុម្ដាយ <18 ឆ្នាំ ឬ >35 ឆ្នាំ, ដឹកគ្រួសារ ឬ ចាក់ថ្នាំ\n- កត្តាសុខភាពម្តាយ : មានជំងឺផ្ទៃខ្លួន, ជំងឺទឹកនោមផ្អែម, ជំងឺរលាកសួត"
             }
         ];
 
         function setLanguage(lang) {
             currentLang = lang;
             
-            // Highlight active button
             ['km', 'fr', 'en'].forEach(l => {
                 const btn = document.getElementById(`btn-${l}`);
                 if (l === lang) {
@@ -324,7 +316,6 @@
                 }
             });
 
-            // Update UI static texts
             const t = uiTexts[lang];
             document.getElementById('page-title').innerText = t.title;
             document.getElementById('main-header-title').innerText = t.headerTitle;
@@ -335,7 +326,6 @@
             document.querySelector('[data-i18n="jumpto"]').innerText = t.jumpto;
             document.getElementById('footer-text').innerText = t.footer;
 
-            // Refresh current question display
             displayQuestion(currentIdx);
         }
 
@@ -344,16 +334,13 @@
             const q = questionsData[index];
             const t = uiTexts[currentLang];
 
-            // Update question numbers
             document.getElementById('current-q-num').innerText = q.id;
             document.getElementById('total-q-num').innerText = questionsData.length;
 
-            // Update badge and texts based on current language
             document.getElementById('question-badge').innerText = t.badge + q.id;
             document.getElementById('question-text').innerText = q[currentLang] || q.km;
             document.getElementById('answer-text').innerText = q.answer;
 
-            // Update pagination buttons styling
             const grid = document.getElementById('pagination-grid');
             Array.from(grid.children).forEach((btn, idx) => {
                 if (idx === index) {
@@ -363,7 +350,6 @@
                 }
             });
 
-            // Handle Prev/Next buttons disabled state
             document.getElementById('prev-btn').disabled = (index === 0);
             document.getElementById('next-btn').disabled = (index === questionsData.length - 1);
         }
@@ -380,7 +366,6 @@
             }
         }
 
-        // Initialize Pagination Grid
         function initPagination() {
             const grid = document.getElementById('pagination-grid');
             grid.innerHTML = '';
@@ -392,7 +377,6 @@
             });
         }
 
-        // Run initialization on load
         window.onload = () => {
             initPagination();
             displayQuestion(0);
