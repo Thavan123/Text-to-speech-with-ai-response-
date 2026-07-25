@@ -1,165 +1,379 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="km">
 <head>
-<meta charset="UTF-8">
-<title>Pediatric Questions Viewer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pédiatrie Q&A - ឃួន ថាវ៉ាន់</title>
+    <!-- Import Google Fonts for Beautiful Khmer & English Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #0284c7;
+            --primary-hover: #0369a1;
+            --bg-color: #f0f9ff;
+            --card-bg: #ffffff;
+            --text-color: #0f172a;
+            --text-muted: #475569;
+            --accent-color: #16a34a;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
 
-<style>
-body {
-  font-family: "Segoe UI", sans-serif;
-  background: #f5f7fb;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Kantumruy Pro', 'Poppins', sans-serif;
+        }
 
-/* Card */
-.card {
-  width: 600px;
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  position: relative;
-}
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
 
-/* Question text */
-.question {
-  font-size: 20px;
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
+        /* App Header */
+        header {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 5px solid var(--primary-color);
+        }
 
-/* Buttons */
-.controls {
-  display: flex;
-  justify-content: space-between;
-}
+        h1 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
 
-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background: #4a6cf7;
-  color: white;
-  font-size: 14px;
-}
+        .author {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            font-weight: 600;
+        }
 
-button:hover {
-  background: #364fc7;
-}
+        /* Language Selector Bar */
+        .lang-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 18px;
+        }
 
-/* Language switch */
-.lang {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
+        .lang-btn {
+            background-color: #e2e8f0;
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-select {
-  padding: 5px;
-}
-</style>
+        .lang-btn:hover {
+            background-color: #cbd5e1;
+            transform: translateY(-2px);
+        }
 
+        .lang-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+        }
+
+        /* Main Q&A Card */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+        }
+
+        .q-number {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            background: #e0f2fe;
+            padding: 6px 16px;
+            border-radius: 20px;
+        }
+
+        .q-page {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Question and Answer Styles - Extra Large and Clear */
+        .question-box {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0369a1;
+            line-height: 1.5;
+            background: #f8fafc;
+            padding: 20px;
+            border-left: 6px solid var(--primary-color);
+            border-radius: 8px;
+        }
+
+        .answer-box {
+            font-size: 1.3rem;
+            color: #334155;
+            line-height: 1.8;
+            white-space: pre-line;
+            padding: 10px 5px;
+        }
+
+        /* Controls / Buttons */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 20px;
+            border-top: 2px solid #f1f5f9;
+        }
+
+        .nav-btn {
+            flex: 1;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(2, 132, 199, 0.3);
+        }
+
+        .nav-btn:disabled {
+            background-color: #cbd5e1;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Responsive Design for Mobile */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.7rem; }
+            .author { font-size: 1.05rem; }
+            .question-box { font-size: 1.25rem; }
+            .answer-box { font-size: 1.1rem; }
+            .nav-btn { font-size: 1rem; padding: 12px; }
+            .lang-btn { font-size: 0.95rem; padding: 8px 14px; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="card">
-  <div class="lang">
-    <select id="language">
-      <option value="km">Khmer</option>
-      <option value="en">English</option>
-      <option value="fr">French</option>
-    </select>
-  </div>
+    <!-- Header Section -->
+    <header>
+        <h1 id="app-title">សំណួរ-ចម្លើយ Pédiatrie</h1>
+        <div class="author" id="author-name">រៀបចំដោយ៖ ឃួន ថាវ៉ាន់</div>
+        
+        <!-- Language Switcher -->
+        <div class="lang-container">
+            <button class="lang-btn active" onclick="setLanguage('km')">🇰🇭 ភាសាខ្មែរ</button>
+            <button class="lang-btn" onclick="setLanguage('fr')">🇫🇷 Français</button>
+            <button class="lang-btn" onclick="setLanguage('en')">🇬🇧 English</button>
+        </div>
+    </header>
 
-  <div id="question" class="question"></div>
+    <!-- Main Content Box -->
+    <main class="container">
+        <div class="card-header">
+            <span class="q-number" id="q-number">សំណួរទី ១</span>
+            <span class="q-page" id="q-page">ទំព័រ ៥១</span>
+        </div>
 
-  <div class="controls">
-    <button onclick="prev()">⬅ Prev</button>
-    <button onclick="next()">Next ➡</button>
-  </div>
-</div>
+        <div class="question-box" id="question-text">
+            <!-- Question Content -->
+        </div>
 
-<script>
+        <div class="answer-box" id="answer-text">
+            <!-- Answer Content -->
+        </div>
 
-// ===== QUESTIONS (extract from your PDF) =====
-const questions = [
-  {
-    km: "រៀបរាប់ Syndrome Hémolytique et Urémique",
-    en: "Describe Hemolytic Uremic Syndrome",
-    fr: "Décrire le syndrome hémolytique et urémique"
-  },
-  {
-    km: "រៀបរាប់ clinical 2 formes របស់ SHU",
-    en: "Describe the 2 clinical forms of HUS",
-    fr: "Décrire les deux formes cliniques du SHU"
-  },
-  {
-    km: "រៀបរាប់ signes clinique de laryngite sus glottique",
-    en: "Describe clinical signs of supraglottic laryngitis",
-    fr: "Signes cliniques de la laryngite sus-glottique"
-  },
-  {
-    km: "ការថែទាំ prématuré (anténatal, naissance, post-natal)",
-    en: "Management of premature baby",
-    fr: "Prise en charge du prématuré"
-  },
-  {
-    km: "មេរោគបង្ក meningite purulente",
-    en: "Causative germs of purulent meningitis",
-    fr: "Germes responsables de méningite purulente"
-  },
-  {
-    km: "ធាតុធ្ងន់ធ្ងរ paludisme",
-    en: "Severity criteria of malaria",
-    fr: "Éléments de gravité du paludisme"
-  },
-  {
-    km: "ការផ្ទេរ HIV ម្តាយទៅកូន",
-    en: "Mother-to-child HIV transmission",
-    fr: "Transmission du VIH mère-enfant"
-  },
-  {
-    km: "Diagnosis syndrome néphrotique",
-    en: "Diagnosis of nephrotic syndrome",
-    fr: "Diagnostic du syndrome néphrotique"
-  }
-];
+        <!-- Navigation Buttons -->
+        <div class="controls">
+            <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">
+                ⬅️ <span id="btn-prev-text">ថយក្រោយ</span>
+            </button>
+            <button class="nav-btn" id="next-btn" onclick="nextQuestion()">
+                <span id="btn-next-text">បន្តទៅមុខ</span> ➡️
+            </button>
+        </div>
+    </main>
 
-let index = 0;
+    <script>
+        // Database of Questions & Answers in 3 Languages
+        const questionsData = [
+            {
+                id: 1,
+                page: "51",
+                km: {
+                    question: "១. ការធ្វើរោគវិនិច្ឆ័យជំងឺតេតាណូស (Diagnostic du tétanos) ៖",
+                    answer: "• ផ្អែកលើប្រវត្តិ (Arguments anamnestiques) ៖\n  - ស្នាមរបួស\n  - ប្រវត្តិផ្ទាល់ខ្លួននៃការចាក់វ៉ាក់សាំង\n\n• ផ្អែកលើសញ្ញាគ្លីនិក (Arguments cliniques) ៖\n  - អាការៈស្ទះថ្គាមខ្លាំងមិនអាចបើកបាន (Trismus invincible, irréductible)\n  - ការកញ្រ្ជោលសាច់ដុំកើនឡើងពេលមានរំញោច\n  - ស្តារស្មារតីនៅល្អជាធម្មតានៅពេលមានការកញ្រ្ជោលសាច់ដុំ"
+                },
+                fr: {
+                    question: "1. Diagnostic du tétanos :",
+                    answer: "+ Arguments anamnestiques :\n  - Notions de la plaie\n  - Notion de la vaccination\n\n+ Arguments cliniques :\n  - Trismus invincible, irréductible\n  - Contracture s'accentuant lors du stimulus\n  - La conscience est conservée lors de la contracture"
+                },
+                en: {
+                    question: "1. Diagnosis of Tetanus:",
+                    answer: "+ History / Anamnesis:\n  - History of wound / injury\n  - Vaccination status history\n\n+ Clinical Signs:\n  - Trismus (lockjaw) invincible and irreducible\n  - Muscle spasms worsening with stimuli\n  - Consciousness remains fully intact during spasms"
+                }
+            },
+            {
+                id: 2,
+                page: "51",
+                km: {
+                    question: "២. ផលវិបាកនៃជំងឺកញ្ជ្រិល (Complications de la rougeole) ៖",
+                    answer: "• ផលវិបាកផ្លូវដង្ហើម ៖ រលាកសួត (Pneumonie), ការឆ្លងរោគបាក់តេរីបន្ថែម, រលាកបំពង់ក\n• ផលវិបាកប្រព័ន្ធប្រសាទ ៖ រលាកខួរក្បាល (Encéphalite)\n• ផលវិបាកប្រព័ន្ធរំលាយអាហារ ៖ រាករូស (Diarrhée)\n• ផលវិបាកបេះដូង ៖ រលាកសាច់ដុំបេះដូង (Myocardite)\n• ផលវិបាកភ្នែក ៖ រលាកបាតភ្នែក (Conjonctivite), រលាកកញ្ចក់ភ្នែក (Kératite)\n• ផលវិបាកឈាម ៖ ប៉ាពូរ៉ាចុះផ្លាកែត (Purpura thrombopénique), ការហូរឈាម"
+                },
+                fr: {
+                    question: "2. Complications de la rougeole :",
+                    answer: "- Complications respiratoires : Pneumonie, surinfections bactériennes, pharyngite\n- Complication neurologique = Encéphalite\n- Complication digestive = Diarrhée\n- Complication cardiaque = Myocardite\n- Complications oculaires : Conjonctivite, Kératite\n- Complications hématologiques = Purpura thrombopénique, hémorragie"
+                },
+                en: {
+                    question: "2. Complications of Measles:",
+                    answer: "- Respiratory complications: Pneumonia, secondary bacterial infections, pharyngitis\n- Neurological complication: Encephalitis\n- Digestive complication: Diarrhea\n- Cardiac complication: Myocarditis\n- Ocular complications: Conjunctivitis, Keratitis\n- Hematological complications: Thrombocytopenic purpura, hemorrhage"
+                }
+            },
+            {
+                id: 3,
+                page: "52",
+                km: {
+                    question: "៣. ការព្យាបាលជំងឺក្អកមាន់ (Traitement de la coqueluche) ៖",
+                    answer: "• តម្រូវឱ្យសម្រាកពេទ្យសម្រាប់ទារកអាយុតិចជាង ៣ ខែ\n• តាមដានសុខភាពកុមារដែលរងផលប៉ះពាល់\n• ធ្វើការរៀបចំនូវការផ្តាច់ខ្លួន និងផ្អាកការសិក្សារយៈពេល ៣០ ថ្ងៃចាប់ពីផ្ដើមក្អក\n• ផ្តល់អុកស៊ីសែន និងកែសម្រួលជាតិទឹកក្នុងរាងកាយបើចាំបាច់\n• ប្រើថ្នាំ Erythromycine : 50 mg/kg/ថ្ងៃ ដោយចែកជា ៤ ដង\n• ចាក់វ៉ាក់សាំងការពារ"
+                },
+                fr: {
+                    question: "3. Traitement de la coqueluche :",
+                    answer: "- Hospitalisation pour les nourrissons de moins de 3 mois\n- Surveillance des enfants atteints\n- Isolement et éviction scolaire de 30 jours à partir du début des quintes\n- Oxygène et correction des troubles hydro-électrolytiques si besoin\n- Erythromycine : 50 mg/kg/j en 4 prises\n- Vaccination"
+                },
+                en: {
+                    question: "3. Treatment of Pertussis (Whooping Cough):",
+                    answer: "- Hospitalization for infants under 3 months\n- Close monitoring of affected children\n- Isolation and school exclusion for 30 days from onset of coughing fits\n- Oxygen and fluid/electrolyte correction if necessary\n- Erythromycin: 50 mg/kg/day divided into 4 doses\n- Vaccination"
+                }
+            },
+            {
+                id: 4,
+                page: "52",
+                km: {
+                    question: "៤. និយមន័យនៃជំងឺលឿងលើទារកទើបនឹងកើត (Définition ictère néonatale) ៖",
+                    answer: "គឺជាភ្នែក ឬស្បែកលឿង ដែលបណ្តាលមកពីការកើនឡើងនូវកម្រិតប៊ីលីរុយប៊ីននៅក្នុងឈាមទារក (Hyperbilirubinémie)។"
+                },
+                fr: {
+                    question: "4. Définition ictère néonatale :",
+                    answer: "C'est la jaunisse due à l'hyperbilirubinémie du nouveau-né."
+                },
+                en: {
+                    question: "4. Definition of Neonatal Jaundice:",
+                    answer: "Yellowish discoloration of the skin and eyes caused by hyperbilirubinemia in the newborn."
+                }
+            }
+        ];
 
-// Display function
-function showQuestion() {
-  let lang = document.getElementById("language").value;
-  document.getElementById("question").innerText = questions[index][lang];
-}
+        // State variables
+        let currentIndex = 0;
+        let currentLang = 'km';
 
-// Next
-function next() {
-  if (index < questions.length - 1) {
-    index++;
-    showQuestion();
-  }
-}
+        // UI Translations
+        const uiText = {
+            km: { title: "សំណួរ-ចម្លើយ Pédiatrie", author: "រៀបចំដោយ៖ ឃួន ថាវ៉ាន់", qPrefix: "សំណួរទី", pagePrefix: "ទំព័រ", prev: "ថយក្រោយ", next: "បន្តទៅមុខ" },
+            fr: { title: "Q&R Pédiatrie", author: "Préparé par : KHUON THAVAN", qPrefix: "Question n°", pagePrefix: "Page", prev: "Précédent", next: "Suivant" },
+            en: { title: "Pédiatrie Q&A", author: "Prepared by: KHUON THAVAN", qPrefix: "Question No.", pagePrefix: "Page", prev: "Previous", next: "Next" }
+        };
 
-// Previous
-function prev() {
-  if (index > 0) {
-    index--;
-    showQuestion();
-  }
-}
+        // Initialize App
+        function updateDisplay() {
+            const currentData = questionsData[currentIndex];
+            const langData = currentData[currentLang];
+            const ui = uiText[currentLang];
 
-// Language change
-document.getElementById("language").addEventListener("change", showQuestion);
+            // Update UI elements
+            document.getElementById('app-title').textContent = ui.title;
+            document.getElementById('author-name').textContent = ui.author;
+            document.getElementById('q-number').textContent = `${ui.qPrefix} ${currentIndex + 1}`;
+            document.getElementById('q-page').textContent = `${ui.pagePrefix} ${currentData.page}`;
+            
+            document.getElementById('question-text').textContent = langData.question;
+            document.getElementById('answer-text').textContent = langData.answer;
 
-// Init
-showQuestion();
+            document.getElementById('btn-prev-text').textContent = ui.prev;
+            document.getElementById('btn-next-text').textContent = ui.next;
 
-</script>
+            // Handle button states
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+            document.getElementById('next-btn').disabled = currentIndex === questionsData.length - 1;
+        }
 
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Update Active Class on Lang Buttons
+            const buttons = document.querySelectorAll('.lang-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (lang === 'km') buttons[0].classList.add('active');
+            if (lang === 'fr') buttons[1].classList.add('active');
+            if (lang === 'en') buttons[2].classList.add('active');
+
+            updateDisplay();
+        }
+
+        function nextQuestion() {
+            if (currentIndex < questionsData.length - 1) {
+                currentIndex++;
+                updateDisplay();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateDisplay();
+            }
+        }
+
+        // Initial Load
+        updateDisplay();
+    </script>
 </body>
   </html>
+  
