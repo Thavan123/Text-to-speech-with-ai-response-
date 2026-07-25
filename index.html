@@ -15,8 +15,8 @@
     <header class="bg-indigo-700 text-white shadow-md sticky top-0 z-50">
         <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
-                <h1 id="main-header-title" class="text-xl sm:text-2xl font-bold tracking-wide text-center sm:text-left">កម្រងសំណួររោគកុមារ (១ - ៦៣)</h1>
-                <p id="main-header-subtitle" class="text-xs sm:text-sm text-indigo-200 text-center sm:text-left">រៀបរាងដោយ ឃួន ថាវ៉ាន់</p>
+                <h1 id="ui-header-title" class="text-xl sm:text-2xl font-bold tracking-wide text-center sm:text-left">កម្រងសំណួររោគកុមារ (១ - ៦៣)</h1>
+                <p id="ui-header-subtitle" class="text-xs sm:text-sm text-indigo-200 text-center sm:text-left">រៀបរាងដោយ ឃួន ថាវ៉ាន់</p>
             </div>
             <div class="flex items-center gap-2 bg-indigo-800/60 p-1.5 rounded-xl border border-indigo-500/30">
                 <button onclick="setLanguage('km')" id="btn-km" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all bg-white text-indigo-700 shadow-sm">ភាសាខ្មែរ</button>
@@ -29,13 +29,13 @@
     <main class="max-w-4xl w-full mx-auto px-4 py-8 flex-grow">
         <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
             <button onclick="prevQuestion()" id="prev-btn" class="flex items-center gap-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-                <span>មុន</span>
+                <span id="ui-prev">មុន</span>
             </button>
             <div class="text-sm sm:text-base font-semibold text-indigo-600">
                 <span id="current-q-num">1</span> / <span id="total-q-num">63</span>
             </div>
             <button onclick="nextQuestion()" id="next-btn" class="flex items-center gap-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl transition-all shadow-md shadow-indigo-200">
-                <span>បន្ទាប់</span>
+                <span id="ui-next">បន្ទាប់</span>
             </button>
         </div>
 
@@ -47,7 +47,7 @@
             <h2 id="question-text" class="text-lg sm:text-xl font-bold text-slate-900 mb-6 leading-relaxed"></h2>
 
             <div class="border-t border-slate-100 pt-6">
-                <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
+                <h3 id="ui-answer-label" class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
                     <span>ចម្លើយ</span>
                 </h3>
                 <div id="answer-text" class="text-slate-700 bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-100 leading-relaxed whitespace-pre-line text-sm sm:text-base"></div>
@@ -55,16 +55,52 @@
         </div>
 
         <div class="mt-8 bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-            <p id="jumpto-text" class="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider text-center">ជ្រើសរើសសំណួររហ័ស (១ ដល់ ៦៣)</p>
+            <p id="ui-jumpto" class="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider text-center">ជ្រើសរើសសំណួររហ័ស (១ ដល់ ៦៣)</p>
             <div id="pagination-grid" class="flex flex-wrap gap-1.5 justify-center max-h-48 overflow-y-auto p-1"></div>
         </div>
     </main>
 
     <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 mt-12">
-        <p>កម្រងសំណួររោគកុមារ (Pediatric QROC) | រៀបរាងដោយ ឃួន ថាវ៉ាន់</p>
+        <p id="ui-footer">កម្រងសំណួររោគកុមារ (Pediatric QROC) | រៀបរាងដោយ ឃួន ថាវ៉ាន់</p>
     </footer>
 
     <script>
+        const uiTexts = {
+            km: {
+                title: "កម្រងសំណួររោគកុមារ (១-៦៣)",
+                headerTitle: "កម្រងសំណួររោគកុមារ (១ - ៦៣)",
+                headerSub: "រៀបរាងដោយ ឃួន ថាវ៉ាន់",
+                prev: "មុន",
+                next: "បន្ទាប់",
+                answer: "ចម្លើយ",
+                jumpTo: "ជ្រើសរើសសំណួររហ័ស (១ ដល់ ៦៣)",
+                footer: "កម្រងសំណួររោគកុមារ (Pediatric QROC) | រៀបរាងដោយ ឃួន ថាវ៉ាន់",
+                badge: "សំណួរទី "
+            },
+            fr: {
+                title: "Questions de Pédiatrie (1-63)",
+                headerTitle: "Questions de Pédiatrie (1 - 63)",
+                headerSub: "Préparé par Khoun Thavan",
+                prev: "Précédent",
+                next: "Suivant",
+                answer: "Réponse",
+                jumpTo: "Accès rapide aux questions (1 à 63)",
+                footer: "Questions de Pédiatrie (Pediatric QROC) | Préparé par Khoun Thavan",
+                badge: "Question N° "
+            },
+            en: {
+                title: "Pediatric Questions (1-63)",
+                headerTitle: "Pediatric Questions (1 - 63)",
+                headerSub: "Prepared by Khoun Thavan",
+                prev: "Previous",
+                next: "Next",
+                answer: "Answer",
+                jumpTo: "Quick Jump (1 to 63)",
+                footer: "Pediatric Questions (Pediatric QROC) | Prepared by Khoun Thavan",
+                badge: "Question "
+            }
+        };
+
         let currentLang = 'km'; 
         let currentIdx = 0;
 
@@ -96,7 +132,7 @@
             { id: 25, km: "តើវ៉ាក់សាំងអ្វីខ្លះដែលត្រូវផ្តល់ឱ្យទារកភ្លាមក្រោយពេលកើតនៅកម្ពុជា?", fr: "Quels vaccins doivent être administrés au nouveau-né immédiatement après la naissance au Cambodge?", en: "What vaccines should be given to newborns immediately after birth in Cambodia?", answer: { km: "- វ៉ាក់សាំងរលាកថ្លើមបេ\n- វ៉ាក់សាំង BCG", fr: "- Hépatite B\n- Vaccin BCG", en: "- Hepatitis B\n- BCG vaccine" } },
             { id: 26, km: "តើធ្វើដូចម្តេចដើម្បីធ្វើរោគវិនិច្ឆ័យជំងឺ pleurésie purulente?", fr: "Comment diagnostiquer la pleurésie purulente?", en: "How to diagnose pleurisy?", answer: { km: "- រស្មីសួត ឬអ៊ុលត្រាសោន និងការវិភាគទឹកភ្លៀងសួត", fr: "- Imagerie + Analyse du liquide", en: "- Imaging + Fluid analysis" } },
             { id: 27, km: "តើប៉ារ៉ាម៉ែត្រនៃពិន្ទុ Apgar មានអ្វីខ្លះ?", fr: "Quels sont les paramètres du score d’Apgar?", en: "What are the parameters of the Apgar score?", answer: { km: "- ពណ៌សម្បុរ, ចង្វាក់បេះដូង, ការឆ្លើយតប, សាច់ដុំ, ការដកដង្ហើម", fr: "- Coloration, Fréquence cardiaque, Réactivité, Tonus, Respiration", en: "- Color, Heart rate, Reflex, Tone, Respiration" } },
-            { id: 28, km: "តើប៉ារ៉ាម៉ែត្រនៃពិន្ទុ Silverman មានអ្វីខ្លះ?", fr: "Quels sont les paramètres du score de Silverman?", en: "What are the parameters of the Silverman score?", answer: { km: "- ការ נកដង្ហើមទ្រូង, ជំនួយពោះ, សំឡេងដកដង្ហើម", fr: "- Mouvements thoraciques, Battement des ailes du nez, Geignement", en: "- Chest movements, Nasal flaring, Grunting" } },
+            { id: 28, km: "តើប៉ារ៉ាម៉ែត្រនៃពិន្ទុ Silverman មានអ្វីខ្លះ?", fr: "Quels sont les paramètres du score de Silverman?", en: "What are the parameters of the Silverman score?", answer: { km: "- ការដកដង្ហើមទ្រូង, ជំនួយពោះ, សំឡេងដកដង្ហើម", fr: "- Mouvements thoraciques, Battement des ailes du nez, Geignement", en: "- Chest movements, Nasal flaring, Grunting" } },
             { id: 29, km: "ចូរចាត់ថ្នាក់ការរលាកស្រោមខួរ រលាកបំពង់ក និងមេរោគរបេង។", fr: "Classer la méningite, l’angine streptococcique et Mycobacterium tuberculosis.", en: "Classify meningitis, streptococcal pharyngitis, and tuberculosis.", answer: { km: "- ការចាត់ថ្នាក់តាមភ្នាក់ងារបង្ក និងទីតាំងរលាក។", fr: "- Classification selon l'agent pathogène.", en: "- Classification according to pathogen." } },
             { id: 30, km: "តើការរលាកស្រោមខួរក្បាលប្រភេទណាខ្លះដែលទាក់ទងនឹងដំបៅលលាដ៍ក្បាល?", fr: "Quelles méningites sont associées à des lésions crâniennes?", en: "Which meningitis cases are associated with cranial lesions?", answer: { km: "- រលាកស្រោមខួរបាក់តេរីបន្ទាប់ពីមានការបាក់លលាដ៍ក្បាល។", fr: "- Méningite bactérienne post-traumatique.", en: "- Post-traumatic bacterial meningitis." } },
             { id: 31, km: "រោគវិនិច្ឆ័យចំពោះ méningite lymphocytaire រួមនឹង transaminases ខ្ពស់ និងខ្សោយតម្រងនោម។", fr: "Méningite lymphocytaire associée à une élévation des transaminases et insuffisance rénale.", en: "Lymphocytic meningitis with elevated transaminases and renal failure.", answer: { km: "- គិតដល់ Leptospirosis ឬ arbovirose ជាដើម។", fr: "- Évoquer une leptospirose.", en: "- Suspect leptospirosis." } },
@@ -130,20 +166,38 @@
             { id: 59, km: "ដំណាក់កាលឆ្លងមេរោគអេដស៍ពីម្តាយទៅកូនបើគ្មានវិធានការការពារ៖", fr: "Période de transmission du VIH de la mère à l'enfant :", en: "Period of HIV transmission from mother to child:", answer: { km: "- ក្នុងផ្ទៃ\n- ពេលសម្រាល\n- ក្រោយពេលសម្រាល / បំបៅដោះ", fr: "- Anténatale\n- Pendant l'accouchement\n- Post-natale", en: "- Antenatal\n- During delivery\n- Postnatal" } },
             { id: 60, km: "Le diagnostic du syndrome néphrotique :", fr: "Quels sont les critères de diagnostic du syndrome néphrotique ?", en: "What is the diagnosis of nephrotic syndrome?", answer: { km: "- Protéinurie > 3g/24h\n- Hypoalbuminémie < 30g/L\n- Œdème\n- Hyperlipidémie", fr: "- Protéinurie > 3g/24h\n- Hypoalbuminémie < 30g/L\n- Œdème\n- Hyperlipidémie", en: "- Proteinuria > 3g/24h\n- Hypoalbuminemia < 30g/L\n- Edema\n- Hyperlipidemia" } },
             { id: 61, km: "La classification broncho pneumonie ?", fr: "Quelle est la classification de la broncho-pneumonie ?", en: "What is the classification of bronchopneumonia?", answer: { km: "- Stade I léger\n- Stade II modéré\n- Stade III sévère", fr: "- Stade I léger\n- Stade II modéré\n- Stade III sévère", en: "- Stage I mild\n- Stage II moderate\n- Stage III severe" },
-            { id: 62, km: "Guillain-Barré syndrome : signs, symptoms, diagnosis, treatment", fr: "Syndrome de Guillain-Barré : signes, symptômes, diagnostic, traitement", en: "Guillain-Barré syndrome: signs, symptoms, diagnosis, treatment", answer: { km: "- Signs: Paralysie musculaire symétrique ascendante.\n- Diagnosis: Analyse LCR, EMG.\n- Treatment: Soins de support, IVIG.", fr: "- Signes : Paralysie musculaire symétrique ascendante.\n- Diagnostic : Analyse LCR, EMG.\n- Traitement : Soins de support, IVIG.", en: "- Signs: Symmetrical ascending paralysis.\n- Diagnosis: CSF analysis, EMG.\n- Treatment: Support, IVIG." },
+            { id: 62, km: "Guillain-Barré syndrome : signs, symptoms, diagnosis, treatment", fr: "Syndrome de Guillain-Barré : signes, symptômes, diagnostic, traitement", en: "Guillain-Barré syndrome: signs, symptoms, diagnosis, treatment", answer: { km: "- Signs: Paralysie musculaire symétrique ascendante.\n- Diagnosis: Analyse LCR, EMG.\n- Treatment: Soins de support, IVIG.", fr: "- Signes : Paralysie musculaire symétrique ascendante.\n- Diagnostic : Analyse LCR, EMG.\n- Traitement : Soins de support, IVIG.", en: "- Signs: Symmetrical ascending paralysis.\n- Diagnosis: CSF analysis, EMG.\n- Treatment: Support, IVIG." } },
             { id: 63, km: "តើគោលការណ៍សំខាន់ៗក្នុងការថែទាំទារកទើបកើតមានអ្វីខ្លះ?", fr: "Quels sont les principes essentiels des soins aux nouveau-nés?", en: "What are the essential principles of newborn care?", answer: { km: "- រក្សាកំដៅរាងកាយ\n- ការពារការឆ្លងមេរោគ\n- ការបំបៅដោះកូនដោយផ្ទាល់", fr: "- Réchauffement\n- Prévention des infections\n- Allaitement maternel précoce", en: "- Warming\n- Infection prevention\n- Early breastfeeding" } }
         ];
+
+        function updateUI() {
+            const t = uiTexts[currentLang];
+            document.getElementById('page-title').textContent = t.title;
+            document.getElementById('ui-header-title').textContent = t.headerTitle;
+            document.getElementById('ui-header-subtitle').textContent = t.headerSub;
+            document.getElementById('ui-prev').textContent = t.prev;
+            document.getElementById('ui-next').textContent = t.next;
+            document.getElementById('ui-answer-label').querySelector('span').textContent = t.answer;
+            document.getElementById('ui-jumpto').textContent = t.jumpTo;
+            document.getElementById('ui-footer').textContent = t.footer;
+        }
 
         function updateContent() {
             if(currentIdx >= questionsData.length) currentIdx = 0;
             const q = questionsData[currentIdx];
+            const t = uiTexts[currentLang];
             
             document.getElementById('current-q-num').textContent = currentIdx + 1;
             document.getElementById('total-q-num').textContent = questionsData.length;
             
-            document.getElementById('question-badge').textContent = "សំណួរទី " + (currentIdx + 1);
+            document.getElementById('question-badge').textContent = t.badge + (currentIdx + 1);
             document.getElementById('question-text').textContent = q[currentLang] || q.km;
-            document.getElementById('answer-text').textContent = (q.answer && q.answer[currentLang]) ? q.answer[currentLang] : (q.answer ? q.answer.km : "កំពុងរៀបចំចម្លើយ...");
+            
+            let ans = "";
+            if (q.answer) {
+                ans = q.answer[currentLang] || q.answer.km || "";
+            }
+            document.getElementById('answer-text').textContent = ans;
 
             document.getElementById('prev-btn').disabled = currentIdx === 0;
             document.getElementById('next-btn').disabled = currentIdx === questionsData.length - 1;
@@ -179,6 +233,8 @@
                 btn.className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all text-indigo-100 hover:bg-indigo-600/50";
             });
             document.getElementById(`btn-${lang}`).className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all bg-white text-indigo-700 shadow-sm";
+            
+            updateUI();
             updateContent();
         }
 
@@ -210,6 +266,7 @@
             }
         }
 
+        updateUI();
         buildPaginationGrid();
         updateContent();
     </script>
