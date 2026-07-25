@@ -166,6 +166,7 @@
         .nav-btn:disabled {
             background-color: #cbd5e1;
             cursor: not-allowed;
+            opacity: 0.6;
         }
     </style>
 </head>
@@ -218,77 +219,78 @@
                 en: { question: "3. Specific Treatment for Nephrotic Syndrome:", answer: "+ Initial episode: Prednisolone 60 mg/m2/day (or 2mg/kg/day), max 80mg/24h for 4 weeks\n+ Relapse > 3 months after completion\n+ Relapse ≤ 3 months after completion" }
             },
             {
-                id: 4, page: "51",
-                km: { question: "៤. ការធ្វើរោគវិនិច្ឆ័យជំងឺតេតាណូស (Diagnostic du tétanos) ៖", answer: "• ផ្អែកលើប្រវត្តិ ៖ ស្នាមរបួស, ប្រវត្តិផ្ទាល់ខ្លួននៃការចាក់វ៉ាក់សាំង\n• ផ្អែកលើសញ្ញាគ្លីនិក ៖ អាការៈស្ទះថ្គាមខ្លាំងមិនអាចបើកបាន (Trismus invincible), ការកញ្រ្ជោលសាច់ដុំកើនឡើងពេលមានរំញោច, ស្មារតីនៅល្អជាធម្មតា" },
-                fr: { question: "4. Diagnostic du tétanos :", answer: "+ Arguments anamnestiques : Notions de la plaie, Notion de la vaccination\n+ Arguments cliniques : Trismus invincible, contracture s'accentuant lors du stimulus, conscience conservée" },
-                en: { question: "4. Diagnosis of Tetanus:", answer: "+ History: Wound history, vaccination history\n+ Clinical signs: Lockjaw (trismus), severe muscle spasms with stimulation, intact consciousness" }
+                id: 4, page: "41",
+                km: { question: "៤. ការចុះថយផ្លាកែតដាច់ដោយឡែក (<100,000/mm3) និងស្លេកស្លាំងប្រវត្តិហូរឈាម ៖", answer: "• ឃើញមាន Giant platelet លើ blood smear (កើនឡើង MPV)\n• ការបូមខួរឆ្អឹង (Bone marrow aspiration) បង្ហាញ megakaryocytes ធម្មតាឬកើនឡើង និងគ្មានកោសិកាមិនប្រក្រតី" },
+                fr: { question: "4. Isolated thrombocytopenia (<100,000/mm3) and anemia if history of bleeding :", answer: "• Giant platelet on the blood smear (increase MPV)\n• Bone marrow aspiration show normal or increased megakaryocytes, normal myeloid/erythroid elements and absence of abnormal cells." },
+                en: { question: "4. Isolated Thrombocytopenia (<100,000/mm3) & Anemia with Bleeding History:", answer: "• Giant platelets on blood smear (increased MPV)\n• Bone marrow aspiration reveals normal/increased megakaryocytes without abnormal cell populations." }
             },
             {
-                id: 5, page: "52",
-                km: { question: "៥. ការព្យាបាលជំងឺក្អកមាន់ (Traitement de la coqueluche) ៖", answer: "• សម្រាកពេទ្យសម្រាប់ទារកអាយុ < ៣ ខែ\n• ធ្វើការរៀបចំនូវការផ្តាច់ខ្លួន និងផ្អាកការសិក្សារយៈពេល ៣០ ថ្ងៃ\n• ផ្តល់អុកស៊ីសែន និងកែសម្រួលជាតិទឹកបើចាំបាច់\n• ប្រើថ្នាំ Erythromycine : 50 mg/kg/ថ្ងៃ ចែកជា ៤ ដង" },
-                fr: { question: "5. Traitement de la coqueluche :", answer: "- Hospitalisation pour les nourrissons < 3 mois\n- Isolement et éviction scolaire de 30 jours\n- Oxygène et correction des troubles hydro-électrolytiques\n- Erythromycine : 50 mg/kg/j en 4 prises" },
-                en: { question: "5. Treatment of Pertussis (Whooping Cough):", answer: "- Hospitalization for infants <3 months\n- Isolation and school exclusion for 30 days\n- Oxygen support and electrolyte correction\n- Erythromycin: 50 mg/kg/day divided into 4 doses" }
-            }
-        ];
-
-        let currentIndex = 0;
-        let currentLang = 'km';
-
-        const uiText = {
-            km: { title: "សំណួរ-ចម្លើយ Pédiatrie", author: "រៀបចំដោយ៖ ឃួន ថាវ៉ាន់", qPrefix: "សំណួរទី", pagePrefix: "ទំព័រ", prev: "⬅️ ថយក្រោយ", next: "បន្តទៅមុខ ➡️" },
-            fr: { title: "Q&R Pédiatrie", author: "Préparé par : KHUON THAVAN", qPrefix: "Question n°", pagePrefix: "Page", prev: "⬅️ Précédent", next: "Suivant ➡️" },
-            en: { title: "Pédiatrie Q&A", author: "Prepared by: KHUON THAVAN", qPrefix: "Question No.", pagePrefix: "Page", prev: "⬅️ Previous", next: "Next ➡️" }
-        };
-
-        function updateDisplay() {
-            const currentData = questionsData[currentIndex];
-            const langData = currentData[currentLang];
-            const ui = uiText[currentLang];
-
-            document.getElementById('app-title').textContent = ui.title;
-            document.getElementById('author-name').textContent = ui.author;
-            document.getElementById('q-number').textContent = `${ui.qPrefix} ${currentIndex + 1}`;
-            document.getElementById('q-page').textContent = `${ui.pagePrefix} ${currentData.page}`;
-            
-            document.getElementById('question-text').textContent = langData.question;
-            document.getElementById('answer-text').textContent = langData.answer;
-
-            document.getElementById('prev-btn').textContent = ui.prev;
-            document.getElementById('next-btn').textContent = ui.next;
-
-            document.getElementById('prev-btn').disabled = (currentIndex === 0);
-            document.getElementById('next-btn').disabled = (currentIndex === questionsData.length - 1);
-        }
-
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.getElementById('btn-km').classList.remove('active');
-            document.getElementById('btn-fr').classList.remove('active');
-            document.getElementById('btn-en').classList.remove('active');
-
-            document.getElementById(`btn-${lang}`).classList.add('active');
-            updateDisplay();
-        }
-
-        function nextQuestion() {
-            if (currentIndex < questionsData.length - 1) {
-                currentIndex++;
-                updateDisplay();
-            }
-        }
-
-        function prevQuestion() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateDisplay();
-            }
-        }
-
-        // Run when page loads
-        window.onload = function() {
-            updateDisplay();
-        };
-    </script>
-</body>
-                </html>
-    
+                id: 5, page: "41",
+                km: { question: "៥. ហេតុអ្វីបានជាត្រូវពិនិត្យសុខភាពទារកទើបនឹងកើត? (Objectives) ៖", answer: "• ដើម្បីស្វែងរកភាពមិនប្រក្រតី និងបញ្ជូនទៅជំនាញឱ្យទាន់ពេលវេលា\n• ផ្តល់ព័ត៌មានដល់ឪពុកម្តាយ និងបង្កើតទំនាក់ទំនងល្អ\n• ផ្តល់ឱកាសឱ្យគ្រួសារសួរដេញដោលអំពីទារក" },
+                fr: { question: "5. Objectives of Newborn Examination :", answer: "• Detection of abnormalities and to allow referral to appropriate service in a timely fashion\n• Parent information and relationship building\n• Provide the family with an opportunity to ask questions about their baby" },
+                en: { question: "5. Objectives of Newborn Examination:", answer: "• Early detection of abnormalities for timely referral\n• Parent communication and trust building\n• Providing opportunities for parents to ask questions regarding their child" }
+            },
+            {
+                id: 6, page: "42",
+                km: { question: "៦. តើត្រូវពិនិត្យអ្វីខ្លះលើទារក? (What to examine?) ៖", answer: "• សញ្ញាជីវិត (Vital signs)\n• ការពិនិត្យរាងកាយ (Physical exam)\n• ការពិនិត្យទូទៅ (General exam)\n• ការពិនិត្យប្រព័ន្ធប្រសាទ (Neurological exam)\n• ការវាយតម្លៃអាយុក្នុងផ្ទៃ (Estimation of gestational age)" },
+                fr: { question: "6. What to examine ?", answer: "• Vital signs\n• Physical exam\n• General exam\n• Neurological exam\n• Estimation of gestational age" },
+                en: { question: "6. What to Examine in a Newborn?", answer: "• Vital signs\n• Physical examination\n• General examination\n• Neurological examination\n• Gestational age estimation" }
+            },
+            {
+                id: 7, page: "43-44",
+                km: { question: "៧. ការផ្តល់សេរ៉ូមតាមសរសៃឈាមសម្រាប់គ្រុនឈាម Grade I & II (IV fluid for DHF) ៖", answer: "+ ផ្ដើមដោយ Crystalloid 1.5-3ml/kg/h រយៈពេល ១-៣ ម៉ោង\n  • បើធូរស្រាល៖ បន្ត 3ml/kg/h ៣ ម៉ោងទៀត រួចបន្ថយមក 1.5ml/kg/h ក្នុងរង្វង់ ៤៨ ម៉ោង រួចផ្អាក\n  • បើមិនធូរស្រាល៖ បន្តកម្រិតដើម ១-៣ ម៉ោង រួចពិនិត្យ Hct បើកាន់តែធ្ងន់ធ្ងរត្រូវដំឡើងកម្រិត 3-6ml/kg/h" },
+                fr: { question: "7. IV fluid therapy for DHF grade I & II :", answer: "+ Start IV fluid 1.5-3ml/kg/h crystalloid solutions over 1-3h\n  • Improvement: IV to 3ml/kg/h for another 3h -> Lower to 1.5ml/kg/h over 48h, then stop.\n  • No improvement: continue same rate, recheck Hct, adjust accordingly." },
+                en: { question: "7. IV Fluid Protocol for DHF Grade I & II:", answer: "+ Start IV crystalloid at 1.5-3 ml/kg/h over 1-3 hours.\n  • If improved: Maintain 3 ml/kg/h for 3h, then step down to 1.5 ml/kg/h over 48h before stopping.\n  • If no improvement: Re-evaluate vital signs and Hct, increase to 3-6 ml/kg/h if worsening." }
+            },
+            {
+                id: 8, page: "44",
+                km: { question: "៨. សញ្ញាធ្ងន់ធ្ងរនៃជំងឺរលាកស្រោមខួរដោយបាក់តេរី (Méningite bactérienne) ៖", answer: "- ប្រព័ន្ធសរសៃឈាម៖ ចង្វាក់បេះដូងកើនឡើង, បាតដៃបាតជើងត្រជាក់, គ្មានទឹកនោម, សម្ពាធឈាមធ្លាក់\n- ស្បែក៖ ស្នាមជាំស្បែករីករាលដាលលឿន (Purpura extensif)\n- ប្រព័ន្ធប្រសាទ៖ វង្វេងស្មារតី ឬសន្លប់ (Coma)" },
+                fr: { question: "8. Signe de gravité méningite bactérienne :", answer: "- Hémodynamique : augmentation FC, TRC allongé, extrémités froides, anurie, hypotension.\n- Cutanés : purpura rapidement extensif ou nécrotique\n- Neurologique : trouble de la conscience, parfois coma" },
+                en: { question: "8. Severity Signs in Bacterial Meningitis:", answer: "- Hemodynamic: tachycardia, prolonged CRT, cold extremities, anuria, hypotension/collapse\n- Skin: rapidly progressive or necrotic purpura\n- Neurological: altered consciousness, coma" }
+            },
+            {
+                id: 9, page: "44",
+                km: { question: "៩. កត្តាព្យាករណ៍មិនល្អនៃជំងឺរលាកស្រោមខួរ (Élément de mauvais pronostic) ៖", answer: "- ការពន្យារពេលក្នុងការផ្តល់ថ្នាំសម្លាប់បាក់តេរី\n- អាយុនៅក្មេងពេក (ទារក)\n- មេរោគបង្កជាប្រភេទ Pneumocoque\n- សភាពសន្លប់តាំងពីដំបូង\n- មានការធ្លាក់ចុះសម្ពាធឈាម ឬសម្ពាធក្នុងក្បាលកើនឡើង ដែលព្យាបាលយឺតយ៉ាវ" },
+                fr: { question: "9. Élément de mauvais pronostic :", answer: "- Retard à la mise en route d'un traitement bactéricide\n- Jeune âge (nourrisson)\n- Germe (pneumocoque)\n- Gravité de tableau neurologique initial (forme comateuse)\n- Existence d'un collapsus associé ou de signes d'HTIC traités tardivement." },
+                en: { question: "9. Poor Prognostic Factors in Meningitis:", answer: "- Delayed antibiotic treatment\n- Young age (infants)\n- Pathogen type (e.g., Pneumococcus)\n- Initial coma presentation\n- Untreated or delayed treatment of shock or intracranial hypertension" }
+            },
+            {
+                id: 10, page: "45",
+                km: { question: "១០. និយមន័យ និងរោគរស្មីនៃជំងឺរលាកស្រោមខួរ (Physiopathologie méningite) ៖", answer: "+ ជំងឺរលាកស្រោមខួរ គឺជាការរលាកនៃស្រោមខួរ ដែលភាគច្រើនបណ្តាលមកពីវីរុស\n+ ដំណើរបង្កជំងឺ៖ មេរោគចូលតាមផ្លូវដង្ហើម -> ជ្រាបចូល LCR តាមសរសៃឈាម -> មេរោគកើនឡើងលឿនក្នុង LCR -> រាងកាយផលិត Cytokines" },
+                fr: { question: "10. Définition et physiopathologie des méningites :", answer: "+ Inflammation des méninges (virale la plus fréquente).\n+ Physiopathologie :\n  - Germes de portage du rhino-pharynx\n  - Pénétration dans le LCR par voie hématogène\n  - Multiplication rapide dans le LCR sans bactéricide naturel\n  - Réponse de l'hôte : production de cytokines" },
+                en: { question: "10. Pathophysiology of Meningitis:", answer: "+ Inflammation of meninges, most commonly viral.\n+ Pathophysiology: Nasopharyngeal colonization -> Hematogenous spread into CSF -> Rapid bacterial multiplication in CSF -> Cytokine cascade activation." }
+            },
+            {
+                id: 11, page: "45",
+                km: { question: "១១. មូលហេតុនៃជំងឺរលាកស្រោមខួរដោយវីរុស (Méningites virales) ៖", answer: "- Entérovirus\n- Paramyxovirus\n- Virus echo\n- Adénovirus\n- Herpes virus" },
+                fr: { question: "11. Causes des méningites virales :", answer: "- Entérovirus\n- Paramyxovirus\n- Virus echo\n- Adénovirus\n- Herpes virus" },
+                en: { question: "11. Causes of Viral Meningitis:", answer: "- Enterovirus\n- Paramyxovirus\n- Echovirus\n- Adenovirus\n- Herpes simplex virus" }
+            },
+            {
+                id: 12, page: "45",
+                km: { question: "១២. របៀបធ្វើរោគវិនិច្ឆ័យរលាកស្រោមខួរលើទារក (Diagnostic méningite nourrisson) ៖", answer: "- ទារករញ៉ួរញ៉ៃ ចង់តែងងុយគេង រអ៊ូរទាំ\n- បដិសេធមិនបៅទឹកដោះគោ\n- មានការកន្ត្រាក់ដោយសារគ្រុនក្តៅ (Convulsions fébriles)\n+ ការពិនិត្យបន្ថែម៖ ពើងពុម្ពពកក្បាល (Fontanelle), ទន់ក ឬរឹងក" },
+                fr: { question: "12. Comment faire du diagnostic méningite nourrisson ?", answer: "- Enfant grognon, somnolence, refus répété du biberon, convulsions fébriles.\n+ Examen : Tension de la fontanelle, hypotonie ou raideur de la nuque, signes neurologiques." },
+                en: { question: "12. Diagnosing Meningitis in Infants:", answer: "- Irritability, lethargy, poor feeding, febrile seizures.\n+ Physical findings: Bulging fontanelle, nuchal rigidity/hypotonia, focal neurological signs." }
+            },
+            {
+                id: 13, page: "46",
+                km: { question: "១៣. ការពិនិត្យបញ្ជាក់ជំងឺរលាកស្រោមខួរ (Examens de confirmation) ៖", answer: "+ ការពិនិត្យទឹកឆ្អឹងខ្នង (LCR) ៖\n- សម្ពាធ LCR កើនឡើង និងបាត់បង់ភាពថ្លា\n- ចំនួនកោសិកាមិនប្រក្រតី (> 10/mm3)\n- កម្រិត Protéinorachie > 0,45 g/l\n- សមាមាត្រស្ករក្នុង LCR / ឈាម < 0,40" },
+                fr: { question: "13. Examens de confirmation méningite sont :", answer: "+ Examen du LCR :\n- LCR hypertendu, perte de limpidité\n- Nombre de cellules > 10/mm3\n- Protéinorachie > 0,45 g/l\n- Rapport glucose LCR / sang < 0,40" },
+                en: { question: "13. Confirmatory Tests for Meningitis:", answer: "+ CSF Examination:\n- Elevated opening pressure, cloudy appearance\n- Cell count > 10/mm3\n- Protein level > 0.45 g/L\n- CSF/Blood glucose ratio < 0.40" }
+            },
+            {
+                id: 14, page: "46-47",
+                km: { question: "១៤. រោគសញ្ញាគ្លីនិក និងមន្ទីរពិសោធន៍នៃជំងឺរលាកបំពង់ខ្យល់តូចៗ (Bronchiolite) ៖", answer: "+ ដំណាក់កាលដំបូង (ORL)៖ គ្រុនក្តៅ, ហៀរសម្រោត, ក្អកស្ងួត\n+ ដំណាក់កាលធ្ងន់ធ្ងរ៖ ក្អួត, អស់កម្លាំងមិនបៅ, កើតមានការអាក់ដង្ហើម (Apnea)\n+ ការស្តាប់សួត៖ ឮសំឡេង Sibilants និង Crépritants\n+ សញ្ញាពិបាកដកដង្ហើម៖ វាយតម្លៃតាម score de silverman" },
+                fr: { question: "14. Signes cliniques et paracliniques du bronchiolite :", answer: "+ Phase débutant : Fièvre élevée, signes rhino-pharyngés, toux sèche.\n+ Phase d'état : Vomissements, apnée (<3M), cyanose, polypnée >60/min.\n+ Auscultation : Râles sibilants et sous-crépitants disséminés." },
+                en: { question: "14. Clinical & Paraclinical Signs of Bronchiolitis:", answer: "+ Early phase: Fever, rhinitis, dry cough.\n+ Progressive phase: Feeding difficulty, apnea in infants <3M, severe respiratory distress.\n+ Auscultation: Wheezing (sibilant râles) and crackles." }
+            },
+            {
+                id: 15, page: "47-49",
+                km: { question: "១៥. កត្តាហានិភ័យនៃការបង្កឱ្យកើតជំងឺហឺត (Risk factors of asthma) ៖", answer: "- អាលែហ្សែន៖ ធូលីដី, រោមសត្វ, កន្លាត, លម្អងផ្កា\n- ការឆ្លងរោគផ្លូវដង្ហើម (វីរុស)\n- ការប្រែប្រួលអារម្មណ៍ខ្លាំង ឬការហាត់ប្រាណ\n- សារធាតុគីមី និងថ្នាំ (Aspirin, Beta blocker)\n- ផ្សែងបារី និងការបំពុលបរិយាកាស" },
+                fr: { question: "15. Risk factors of asthma :", answer: "- Allergen: domestic dust mites, animal fur, cockroach, pollens\n- Respiratory viral infections\n- Emotional expressions, Exercise\n- Chemical irritants & drugs (aspirin, beta blockers)\n- Tobacco smoke, Air pollution" },
+                en: { question: "15. Risk Factors for Asthma:", answer: "- Allergens: Dust mites, pet dander, cockroaches, pollen\n- Viral respiratory infections\n- Exercise and strong emotional stress\n- Medications (Aspirin, Beta-blockers)\n- Tobacco smoke and air pollution" }
+            },
+            {
+                id: 16, page: "47-50",
+                km: { question: "១៦. ការធ្វើរោគវិនិច្ឆ័យ គោលដៅ និងការគ្រប់គ្រងជំងឺហឺត (Asthma management) ៖", answer: "+ ការធ្វើរោគវិនិច្ឆ័យ៖ ប្រវត្តិរោគសញ្ញា, វាស់មុខងារសួត (Spirometry)\n+ គោលដៅ៖ គ្រប់គ្រងរោគសញ្ញា, រក្សាសកម្មភាពរាងកាយ, ការពារការរើឡើងវិញ\n+ ឱសថសំខាន់ ២ ប្រភេទ៖ Controller medications & Reliever medication\n+ ហេតុអ្វីប្រើ Inhaled medication? ព្រោះវាទៅដល់ផ្លូវដង្ហើមផ្ទាល់ និងកាត់បន្ថយផលប៉ះពាល់" },
+                fr: { question: "16. What is the diagnosis / goal / management of asthma ?", answer: "+ Diagnosis: History, Spirometry, Peak expiratory flow.\n+ Goals: Control symptoms, maintain normal activities, prevent exacerbations.\
