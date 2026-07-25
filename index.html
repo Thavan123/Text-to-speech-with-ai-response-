@@ -3,340 +3,906 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>កម្រងសំណួររោគកុមារ - រៀបរៀងដោយ ឃួន ថាវ៉ាន់</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>កម្រងសំណួររោគកុមារ - ឃួន ថាវ៉ាន់</title>
+    <!-- Tailwind CSS for modern, beautiful design -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap');
         body {
-            font-family: 'Kantumruy Pro', 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        header {
-            background: linear-gradient(135deg, #1e40af, #2563eb);
-            color: white;
-            padding: 2rem 1rem;
-            text-align: center;
-            box-shadow: var(--shadow);
-        }
-
-        header h1 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        header p {
-            margin: 0;
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-        .lang-container {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .lang-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .lang-btn.active, .lang-btn:hover {
-            background: white;
-            color: var(--primary-color);
-        }
-
-        main {
-            max-width: 850px;
-            width: 100%;
-            margin: 2rem auto;
-            padding: 0 1rem;
-            box-sizing: border-box;
-            flex: 1;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            background: var(--card-bg);
-            padding: 1rem;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        .btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-
-        .btn:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn:disabled {
-            background-color: #cbd5e1;
-            cursor: not-allowed;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            position: relative;
-        }
-
-        .question-number {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-secondary);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .question-text {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .answer-box {
-            background-color: #f1f5f9;
-            border-left: 4px solid var(--primary-color);
-            padding: 1.25rem;
-            border-radius: 0 8px 8px 0;
-            line-height: 1.7;
-            white-space: pre-line;
-            font-size: 1.05rem;
-        }
-
-        .answer-title {
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            background-color: #1e293b;
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin-top: auto;
-        }
-
-        @media (max-width: 600px) {
-            header h1 { font-size: 1.4rem; }
-            .question-text { font-size: 1.1rem; }
+            font-family: 'Kantumruy Pro', sans-serif;
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
 
-    <header>
-        <h1 id="site-title">កម្រងសំណួររោគកុមារ</h1>
-        <p id="site-subtitle">រៀបរៀងដោយ ឃួន ថាវ៉ាន់</p>
-        <div class="lang-container">
-            <button class="lang-btn active" onclick="changeLanguage('km')">ខ្មែរ</button>
-            <button class="lang-btn" onclick="changeLanguage('en')">English</button>
-            <button class="lang-btn" onclick="changeLanguage('fr')">Français</button>
+    <!-- Header Section -->
+    <header class="bg-indigo-700 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-bold tracking-wide text-center sm:text-left">កម្រងសំណួររោគកុមារ</h1>
+                <p class="text-xs sm:text-sm text-indigo-200 text-center sm:text-left">រៀបរាងដោយ ឃួន ថាវ៉ាន់</p>
+            </div>
+            <!-- Language Switcher Buttons -->
+            <div class="flex items-center gap-2 bg-indigo-800/60 p-1.5 rounded-xl border border-indigo-500/30">
+                <button onclick="setLanguage('km')" id="btn-km" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all bg-white text-indigo-700 shadow-sm">ភាសាខ្មែរ</button>
+                <button onclick="setLanguage('fr')" id="btn-fr" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all text-indigo-100 hover:bg-indigo-600/50">Français</button>
+                <button onclick="setLanguage('en')" id="btn-en" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all text-indigo-100 hover:bg-indigo-600/50">English</button>
+            </div>
         </div>
     </header>
 
-    <main>
-        <div class="controls">
-            <button class="btn" id="prev-btn" onclick="prevQuestion()">❮ មុន</button>
-            <span id="counter-text" style="font-weight: 600; color: var(--text-secondary);">សំណួរទី 1 / 103</span>
-            <button class="btn" id="next-btn" onclick="nextQuestion()">បន្ទាប់ ❯</button>
+    <!-- Main Content Container -->
+    <main class="max-w-4xl w-full mx-auto px-4 py-8 flex-grow">
+        
+        <!-- Navigation Controls Top -->
+        <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+            <button onclick="prevQuestion()" id="prev-btn" class="flex items-center gap-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                <span data-i18n="prev">មុន</span>
+            </button>
+            <div class="text-sm sm:text-base font-semibold text-indigo-600">
+                <span id="current-q-num">1</span> / <span id="total-q-num">103</span>
+            </div>
+            <button onclick="nextQuestion()" id="next-btn" class="flex items-center gap-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl transition-all shadow-md shadow-indigo-200">
+                <span data-i18n="next">បន្ទាប់</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
         </div>
 
-        <div class="card">
-            <div class="question-number" id="q-num-label">សំណួរទី 1</div>
-            <div class="question-text" id="q-text">Critère du diagnostique du syndrome néphrotique.</div>
-            <div class="answer-box">
-                <div class="answer-title" id="ans-label">ចម្លើយ / Réponse:</div>
-                <div id="a-text">- nephrotic range proteinurie<br>- hypoalbuminémie<br>- edema<br>- hyperlipidémie</div>
+        <!-- Question Card -->
+        <div id="question-card" class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 sm:p-8 transition-all duration-300">
+            <div class="flex items-center justify-between mb-4">
+                <span id="question-badge" class="px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-bold rounded-full uppercase tracking-wider">សំណួរទី 1</span>
+            </div>
+            
+            <h2 id="question-text" class="text-lg sm:text-xl font-bold text-slate-900 mb-6 leading-relaxed">
+                <!-- Question loaded via JS -->
+            </h2>
+
+            <div class="border-t border-slate-100 pt-6">
+                <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span data-i18n="answer">ចម្លើយ / Réponse / Answer</span>
+                </h3>
+                <div id="answer-text" class="text-slate-700 bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-100 leading-relaxed whitespace-pre-line text-sm sm:text-base">
+                    <!-- Answer loaded via JS -->
+                </div>
             </div>
         </div>
+
+        <!-- Quick Jump Grid Pagination -->
+        <div class="mt-8 bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+            <p class="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider text-center" data-i18n="jumpto">ជ្រើសរើសសំណួររហ័ស (១ ដល់ ១០៣)</p>
+            <div id="pagination-grid" class="flex flex-wrap gap-1.5 justify-center max-h-36 overflow-y-auto p-1">
+                <!-- Generated dynamically via JS -->
+            </div>
+        </div>
+
     </main>
 
-    <footer>
-        <p id="footer-text">© 2026 កម្រងសំណួររោគកុមារ - រៀបរៀងដោយ ឃួន ថាវ៉ាន់. All rights reserved.</p>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 mt-12">
+        <p>កម្រងសំណួររោគកុមារ (Pediatric QROC) | រៀបរាងដោយ ឃួន ថាវ៉ាន់</p>
     </footer>
 
+    <!-- Application Script -->
     <script>
-        // បញ្ជីទិន្នន័យសំណួរ-ចម្លើយទាំង ១០៣ ជាមួយការបកប្រែ ៣ ភាសា (ខ្មែរ, អង់គ្លេស, បារាំង) បង្កើតឡើងយ៉ាងពេញលេញ
         const questionsData = [
             {
-                q: { km: "1. តើអ្វីជាលក្ខខណ្ឌវិនិច្ឆ័យនៃស៊ីនដ្រូមនីហ្វ្រូទិច (Syndrome néphrotique)?", en: "1. What are the diagnostic criteria for nephrotic syndrome?", fr: "1. Quels sont les critères diagnostiques du syndrome néphrotique ?" },
-                a: { km: "- កម្រិតប្រូតេអ៊ីនក្នុងទឹកនោមខ្ពស់ (Nephrotic range proteinuria)\n- កម្រិតអល់ប៊ុយមីនក្នុងឈាមទាប (Hypoalbuminémie)\n- របកទឹក ឬ ហើម (Edema)\n- កម្រិតខ្លាញ់ក្នុងឈាមខ្ពស់ (Hyperlipidémie)", en: "- Nephrotic range proteinuria\n- Hypoalbuminemia\n- Edema\n- Hyperlipidemia", fr: "- Protéinurie d'intervalle néphrotique\n- Hypoalbuminémie\n- Œdème\n- Hyperlipidémie" }
+                id: 1,
+                km: "Critère du diagnostique du syndrome néphrotique.",
+                fr: "Critère du diagnostique du syndrome néphrotique.",
+                en: "Diagnostic criteria for nephrotic syndrome.",
+                answer: "- Nephrotic range proteinuria (> 50 mg or 0.05g/kg/24h, Dipstick 3-4+, or Urine protein/creatinine ratio > 2)\n- Hypoalbuminémie (< 30g/L)\n- Edema\n- Hyperlipidémie"
             },
             {
-                q: { km: "2. តើអ្វីជាផលវិបាកផ្នែកសរសៃឈាមបេះដូងនៃជំងឺរលាកតម្រងនោមក្រោយពេលមានមេរោគ (Glomérulonéphrite post-infectieuse)?", en: "2. What are the cardiovascular complications of post-infectious glomerulonephritis?", fr: "2. Quelles sont les complications cardiovasculaires de la glomérulonéphrite post-infectieuse ?" },
-                a: { km: "- ការលើសទម្ងន់ទឹកក្នុងរាងកាយ (Volume overload)\n- លើសឈាម (Hypertension)\n- កម្រិតប៉ូតាស្យូមក្នុងឈាមខ្ពស់ (Hyperkalemia)\n- កម្រិតកាល់ស្យូមក្នុងឈាមទាប (Hypocalcemia)\n- ប្រកាច់ (Seizure)\n- កម្រិតសេរ៉ូម creatinine និង urea ឡើងខ្ពស់", en: "- Volume overload\n- Hypertension\n- Hyperkalemia\n- Hypocalcemia\n- Seizure\n- Elevated serum creatinine and urea", fr: "- Surcharge pondérale (Volume overload)\n- Hypertension\n- Hyperkaliémie\n- Hypocalcémie\n- Crise convulsive\n- Élévation de la créatinine et de l'urée sériques" }
+                id: 2,
+                km: "Quelles sont les complications cardiovasculaires de la glomérulonéphrite post-infectieuse?",
+                fr: "Quelles sont les complications cardiovasculaires de la glomérulonéphrite post-infectieuse?",
+                en: "What are the cardiovascular complications of post-infectious glomerulonephritis?",
+                answer: "- Volume overload\n- Hypertension\n- Hyperkalemia\n- Hypocalcemia\n- Seizure\n- Elevated serum creatinine and urea."
             },
             {
-                q: { km: "3. តើធ្វើរោគវិនិច្ឆ័យជំងឺហ្វីឡារ្យ៉ាស (Filariasis) យ៉ាងដូចម្តេច?", en: "3. How to diagnose filariasis?", fr: "3. Comment diagnostiquer la filariose ?" },
-                a: { km: "- ប៉ារ៉ាស៊ីតពេញវ័យ៖ ការកាត់យកកូនកណ្តុរមកពិនិត្យ (Biopsie ganglionnaire)\n- មីក្រូហ្វីឡារ្យ៉ារ៖ យកឈាមពិនិត្យនៅពេលយប់ប្រហែលម៉ោង ២៣យប់ ឬម៉ោង ១រំលងអធ្រាត្រ ដោយលេបថ្នាំ Notétézine ១គ្រាប់ (១០០មីលីក្រាម)\n- ក្នុងទឹករងាវឡាំហ្វាទិច៖ ការបញ្ចេញទឹកនៅប្រដាប់ភេទស្ត្រី ភ្នាសសួត សរសៃវ៉ែនឡាំហ្វាទិច និងទឹកនោមស...", en: "- Adult parasite: Lymph node biopsy\n- Microfilaria: Blood sample taken at night around 23:00 or 01:00 after taking 1 tablet (100mg) of Notétézine\n- In chylous fluid: vaginal effusion, pleural effusion, lymphatic varices, chyluria...", fr: "- Parasite adulte : Biopsie ganglionnaire\n- Microfilarie : Prélèvement sanguin la nuit vers 23h ou 1h après la prise d'un comprimé (100mg) de Notétézine\n- Dans le liquide chyleux : épanchement vaginal, pleural, varice lymphatique, chylurie..." }
+                id: 3,
+                km: "Diagnosis of filariasis (15mn)",
+                fr: "Diagnosis of filariasis (15mn)",
+                en: "Diagnosis of filariasis",
+                answer: "- Parasite adulte: Biopsie ganglionnaire\n- Microfilaire: Dans le sang prélèvement pendant la nuit vers 23h ou 1h la prise de 1cp (100mg) de Notétézine\n- Dans le liquide chyleux: épanchement vaginal, pleural, varice lymphatique, chylurie..."
             },
             {
-                q: { km: "4. តើកត្តាអ្វីខ្លះដែលចូលរួមក្នុងអភិវឌ្ឍន៍សោមាទិចរបស់កុមារ?", en: "4. What are the factors involved in the somatic development of the child?", fr: "4. Quels sont les facteurs intervenant dans le développement somatique de l'enfant ?" },
-                a: { km: "+ ការលូតលាស់ (Croissance)៖ កម្ពស់ ទម្ងន់ ទំហំផ្ទៃរាងកាយ\n+ ការចម្រើនពេញវ័យ (Maturation)៖ អាយុធ្មេញ អាយុឆ្អឹង ការចម្រើនភេទ លក្ខណៈសរសៃប្រសាទ និងទំនាក់ទំនងរាងកាយ", en: "+ Growth: Height, Weight, Body surface area\n+ Maturation: Dental age, Bone age, Sexual maturation, Neurological criteria, Anthropometric ratios", fr: "+ Croissance : Taille, Poids, Surface corporelle\n+ Maturation : Âge dentaire, Âge osseux, Maturation sexuelle, Critères neurologiques, Rapports anthropométriques" }
+                id: 4,
+                km: "Quels sont les facteurs intervenants dans le développement somatique de l'enfant (5mn)?",
+                fr: "Quels sont les facteurs intervenants dans le développement somatique de l'enfant (5mn)?",
+                en: "What are the factors involved in the somatic development of the child?",
+                answer: "+ Croissance:\n- Taille (staturale)\n- Poids\n- Surface corporelle\n+ Maturation:\n- Age des dents\n- Age osseux\n- Maturation sexuelle\n- Critères neurologiques\n- Rapports anthropométriques"
             },
             {
-                q: { km: "5. ចូរពិពណ៌នាអំពីការព្យាបាលជំងឺថយចុះគ្រាប់ឈាមរដបដោយប្រព័ន្ធការពារខ្លួន (Idiopathic Thrombocytopenic Purpura - ITP)?", en: "5. Describe the treatment of idiopathic thrombocytopenic purpura (ITP).", fr: "5. Décrivez le traitement du purpura thrombopénique idiopathique (PTI)." },
-                a: { km: "- ថ្នាំ Oral Prednisolone៖ 2 mg/kg/day រយៈពេល 14 ថ្ងៃ បន្ទាប់មកបន្ថយបន្តិចម្តងៗ និងឈប់នៅថ្ងៃទី 21 (អតិបរមា៖ 60 mg/day)\n- ថ្នាំ IV Methylprednisolone៖ 30 mg/kg/day រយៈពេល 3 ថ្ងៃ\n- ថ្នាំ IVIG៖ 0.8 g/kg/dose ក្នុងរយៈពេល 3 ម៉ោង សម្រាប់ 1 ថ្ងៃ ឬ 250 mg/kg ក្នុងរយៈពេល 2 ថ្ងៃ\n- ថ្នាំ IV anti-D immunoglobulin៖ 50 ug/kg ដូសតែមួយ ក្នុងរយៈពេល 5 នាទី ចំពោះអ្នកជំងឺដែលមានរេស៊ីសវិជ្ជមាន", en: "- Oral Prednisolone: 2 mg/kg/day for 14 days then taper and discontinue at 21 days (Max: 60 mg/day)\n- IV Methylprednisolone: 30 mg/kg/day for 3 days\n- IVIG: 0.8 g/kg/dose over 3 hours for 1 day or 250 mg/kg for 2 days\n- IV anti-D immunoglobulin: 50 ug/kg single dose over 5 min in Rhesus positive patients", fr: "- Prednisolone orale : 2 mg/kg/jour pendant 14 jours puis diminuer et arrêter à 21 jours (Max : 60 mg/jour)\n- Méthylprednisolone IV : 30 mg/kg/jour pendant 3 jours\n- IVIG : 0,8 g/kg/dose sur 3 heures pendant 1 jour ou 250 mg/kg pendant 2 jours\n- Immunoglobuline anti-D IV : 50 ug/kg en dose unique sur 5 min chez les patients de Rhésus positif" }
+                id: 5,
+                km: "Describe the treatment of idiopathic thrombocytopenia purpura.",
+                fr: "Describe the treatment of idiopathic thrombocytopenia purpura.",
+                en: "Describe the treatment of idiopathic thrombocytopenia purpura.",
+                answer: "- Oral Prednisolone: 2mg/kg/day for 14 days then taper and discontinue at 21 days (Max: 60mg/day)\n- IV Methylprednisolone: 30mg/kg/day for 3 days\n- IVIG: 0.8g/kg/dose over 3 hours for 1 day or 250mg/kg for 2 days\n- IV anti-D immunoglobulin: 50ug/kg single dose over 5mn in Rhesus positive patients"
             },
             {
-                q: { km: "6. តើគោលការណ៍នៃជំងឺរលាកគម្របបំពង់ក (Épiglottite) កើតឡើងយ៉ាងដូចម្តេច?", en: "6. Describe the principle/mechanism of epiglottitis.", fr: "6. Décrivez le principe de l'épiglottite." },
-                a: { km: "- គម្របបំពង់កឡើងរលាក និងច្រើនមានខ្ទុះ ក្លាយជារីកធំស្ទះរន្ធបំពង់ក (Glotte)\n- ភាគច្រើនបង្កឡើងដោយបាក់តេរី Hemophilus influenzae\n- រោគសញ្ញាដកដង្ហើមពិបាកនៅបំពង់ក មានសញ្ញាទូទៅសំខាន់ៗជាមួយគ្រុនក្តៅ កុមារអង្គុយ ឬលុតជង្គង់ ៤ជើង មានការពិបាកលេបចំណី", en: "- Epiglottis inflamed and often abscessed, becomes huge, blocking the glottis hole\n- Almost always due to Hemophilus influenzae\n- Laryngeal dyspnea syndrome, important general signs with fever, child sitting or on all fours, dysphagia", fr: "- L'épiglotte enflammée et souvent abcédée devient énorme bouchant le trou de la glotte\n- Presque toujours due à Haemophilus influenzae\n- Syndrome de dyspnée laryngée, signes généraux importants avec fièvre, l'enfant est assis ou à 4 pattes, dysphagie" }
+                id: 6,
+                km: "រៀបរាប់ពី principe ដែលធ្វើអោយមាន Épiglottite.",
+                fr: "Décrire le principe et la physiopathologie de l'épiglottite.",
+                en: "Describe the mechanism causing epiglottitis.",
+                answer: "- Epiglotte enflammée et souvent abcédée devient énorme bouchant le trou de glotte.\n- Presque toujours due à Hemophilus influenzae.\n- Syndrome de dyspnée laryngée, des signes généraux importants avec fièvre, l'enfant est assis ou 4 pattes, dysphagie."
             },
             {
-                q: { km: "7. តើសញ្ញាគ្លីនិក និងប៉ារ៉ាគ្លីនិកនៃជំងឺគ្រុនឈាម hemorrhagic មានអ្វីខ្លះ?", en: "7. What are the clinical and paraclinical signs of dengue hemorrhagic fever?", fr: "7. Quels sont les signes cliniques et paracliniques de la fièvre hémorragique de la dengue ?" },
-                a: { km: "+ សញ្ញាគ្លីនិក:\n- ដំណាក់កាលក្តៅខ្លួន៖ ស្រដៀងនឹងគ្រុនឈាមធម្មតា ប៉ុន្តែមានសញ្ញាឈាមហូរច្បាស់ជាង (តេស្ត Tourniquet វិជ្ជមាន, កន្ទួលក្រហមតូចៗ, ជាំខៀវ, ហូរឈាមច្រមុះ និងក្រពះពោះវៀន)។\n- ដំណាក់កាលវិបត្តិ (២៤-៤៨ម៉ោង)៖ ក្តៅខ្លួនធ្លាក់ចុះនៅថ្ងៃទី ៤ ឬទី ៥ ប៉ុន្តែអាការទូទៅទ្រុឌទ្រោម ងងុយដេក ក្អួតខ្លាំង ឈឺពោះខ្លាំង មិនបត់ជើងតូច ៤-៦ម៉ោង។\n+ សញ្ញាបារ៉ាគ្លីនិក:\n- ថយចុះគ្រាប់ឈាមស ឬប្លាកែត (< 100,000/mm³)\n- សញ្ញាធ្លាយប្លាស្មា (Hct ឡើង > 20%, មានទឹកក្នុងភ្នាសសួត, មានទឹកក្នុងពោះ, ថយចុះអល់ប៊ុយមីនក្នុងឈាម)", en: "+ Clinical signs:\n- Febrile phase: Similar to DF, but bleeding manifestations are more evident (positive tourniquet test, petechiae, ecchymosis, epistaxis, gum and GI bleeding).\n- Critical phase (24h-48h): Fever drops on day 4 or 5, but general condition deteriorates: somnolent, severe vomiting, severe abdominal pain, no urine output 4-6h.\n+ Paraclinical signs:\n- Thrombocytopenia (platelets < 100,000/mm³)\n- Signs of plasma leakage: Hemoconcentration (Hct > 20%), pleural effusion, ascites, hypoalbuminemia.", fr: "+ Signes cliniques :\n- Phase fébrile : Symptômes similaires à la dengue, mais hémorragies plus évidentes (test du tourniquet positif, pétéchies, ecchymoses, épistaxis, saignements des gencives et digestifs).\n- Phase critique (24h-48h) : Chute de la fièvre vers le 4e ou 5e jour, détérioration de l'état général, somnolence, vomissements sévères, douleurs abdominales, absence d'urines pendant 4-6h.\n+ Signes paracliniques :\n- Thrombopénie (< 100 000/mm³)\n- Signes de fuite plasmatique : Hémoconcentration (Hct > 20%), épanchement pleural, ascite, hypoalbuminémie." }
+                id: 7,
+                km: "Citez les signes cliniques et paracliniques de la fièvre dengue hémorragique.",
+                fr: "Citez les signes cliniques et paracliniques de la fièvre dengue hémorragique.",
+                en: "Cite the clinical and paraclinical signs of dengue hemorrhagic fever.",
+                answer: "+ Signes cliniques:\n- Febrile phase: Clinical signs similar to DF, positive tourniquet test, petechiae, ecchymosis, epistaxis, gum and GI bleeding.\n- Afebrile (Critical phase 24h-48h): Fever drops, general condition deteriorates, somnolent, asthenia, severe vomiting, severe abdominal pain, no urine output 4-6h.\n+ Signes paracliniques:\n- Thrombocytopenia (platelet < 100,000/mm3)\n- Signs of plasma leakage: Hemoconcentration (Hct ↑ > 20% baseline), pleural effusion, ascites, hypoalbuminemia."
             },
             {
-                q: { km: "8. តើមានមធ្យោបាយអ្វីខ្លះដើម្បីធ្វើរោគវិនិច្ឆ័យជំងឺរលាកស្រោមខួរក្បាល (Méningite) លើកុមារ?", en: "8. What are the diagnostic means of meningitis in children?", fr: "8. Quels sont les moyens de diagnostic d'une méningite chez l'enfant ?" },
-                a: { km: "- រោគសញ្ញាឆ្លងមេរោគ៖ ក្តៅខ្លួនខ្លាំងចាប់ផ្តើមភ្លាមៗ\n- រោគសញ្ញាស្រោមខួរ៖ ឈឺក្បាល, ក្អួត\n- ការពិនិត្យរាងកាយ៖\n  + រឹងកញ្ចឹងក (Raideur de la nuque)\n  + សញ្ញា Kernig\n  + សញ្ញា Brudzinski", en: "- Infectious syndrome: Fever with sudden onset\n- Meningeal syndrome: Headache, vomiting\n- Physical examination:\n  + Stiff neck (Raideur de la nuque)\n  + Kernig's sign\n  + Brudzinski's sign", fr: "- Syndrome infectieux : Fièvre à début souvent brutal\n- Syndrome méningé : Céphalées, vomissements\n- Examen physique :\n  + Raideur de la nuque\n  + Signe de Kernig\n  + Signe de Brudzinski" }
+                id: 8,
+                km: "Quels sont les moyens de diagnostic d'une méningite chez l'enfant?",
+                fr: "Quels sont les moyens de diagnostic d'une méningite chez l'enfant?",
+                en: "What are the diagnostic methods for meningitis in children?",
+                answer: "- Syndrome infectieux: Fièvre à début souvent brutal\n- Syndrome méningé: céphalée, vomissement\n- Examen physique:\n+ Raideur de la nuque\n+ Signe de Kernig\n+ Signe de Brudzinski"
             },
             {
-                q: { km: "9. តើអ្វីជាធាតុផ្សំនៃភាពធ្ងន់ធ្ងរនៃជំងឺគ្រុនចាញ់ (Paludisme grave)?", en: "9. What are the elements of severity of Malaria?", fr: "9. Quels sont les éléments de gravité du paludisme ?" },
-                a: { km: "- សន្លប់, ប្រកាច់ (Coma, convulsion)\n- លឿងស្បែកភ្នែក (Ictère)\n- ទឹកនោមផ្អែមថយចុះ/ស្ករក្នុងឈាមទាប (Hypoglycémie)\n- ខ្សោយតម្រងនោម (Insuffisance rénale)\n- បារ៉ាស៊ីតក្នុងឈាម > 5%\n- ខ្វះឈាមធ្ងន់ធ្ងរ (Anémie grave)\n- ទឹកនោមក្រហមដូចឈាម (Hémoglobinurie)\n- រលាកសួតទឹក (OAP)\n- ខ្សោះទឹក (Déshydratation)\n- ថយចុះប្លាកែត (Thrombopénie)", en: "- Coma, convulsion\n- Jaundice (Ictère)\n- Hypoglycemia\n- Renal failure (Insuffisance rénale)\n- Parasitemia > 5%\n- Severe anemia\n- Hemoglobinuria\n- Pulmonary edema (OAP)\n- Dehydration\n- Thrombocytopenia", fr: "- Coma, convulsions\n- Ictère\n- Hypoglycémie\n- Insuffisance rénale\n- Parasitémie > 5%\n- Anémie grave\n- Hémoglobinurie\n- OAP (Œdème aigu du poumon)\n- Déshydratation\n- Thrombopénie" }
+                id: 9,
+                km: "Éléments de gravité du Paludisme?",
+                fr: "Quels sont les éléments de gravité du paludisme?",
+                en: "What are the severe elements of malaria?",
+                answer: "- Coma, convulsion\n- Ictère\n- Hypoglycémie\n- Insuffisance rénale\n- Parasitémie > 5%\n- Anémie grave\n- Hémoglobinurie\n- OAP (Oedème aigu du poumon)\n- Déshydratation, Thrombopénie"
             },
             {
-                q: { km: "10. តើអ្វីជាមេកានិចធំៗទាំងបីនៃជំងឺខ្វះឈាមរបស់ទារក (Anémie du nourrisson)?", en: "10. What are the three major mechanisms of infant anemia?", fr: "10. Quels sont les trois grands mécanismes de l'anémie du nourrisson ?" },
-                a: { km: "- ការខ្វះការផលិតគ្រាប់ឈាមក្រហម ដែលទាក់ទងនឹងការខ្វះសារធាតុចិញ្ចឹម (Carence)\n- ការកើនឡើងការបំផ្លាញគ្រាប់ឈាមក្រហមក្នុងទម្រង់បែកគ្រាប់ឈាម (Hémolyse)\n- ការបាត់បង់គ្រាប់ឈាមក្រហមទាក់ទងនឹងការហូរឈាម (Hémorragie)", en: "- Decreased production of red blood cells related to nutritional deficiency\n- Increased destruction of red blood cells through hemolysis\n- Loss of red blood cells due to hemorrhage", fr: "- Défaut de production de globules rouges lié à une carence\n- Destruction augmentée de globules rouges dans le cadre d'une hémolyse\n- Perte de globules rouges liée à une hémorragie" }
+                id: 10,
+                km: "Citez les trois grands mécanismes de l'anémie du nourrisson.",
+                fr: "Citez les trois grands mécanismes de l'anémie du nourrisson.",
+                en: "Cite the three major mechanisms of anemia in infants.",
+                answer: "- Le défaut de production de GR qui est le plus souvent lié à une étiologie carentielle;\n- La destruction augmentée de GR dans le cadre d'une hémolyse;\n- La perte de GR liée à une hémorragie."
+            },
+            {
+                id: 11,
+                km: "Clinical signs of pleural effusion?",
+                fr: "Quels sont les signes cliniques de l'épanchement pleural (pleurésie)?",
+                en: "Clinical signs of pleural effusion?",
+                answer: "- Fever, dry cough\n- Dyspnea (more or less marked depending on abundance)\n- Chest pain\n- Immobility of a hemithorax\n- MV (Murmure vésiculaire) decreased or absent\n- Matity (Matité)"
+            },
+            {
+                id: 12,
+                km: "Diagnostic et examen de laboratoire de la coqueluche (ក្អកមាន់)?",
+                fr: "Diagnostic et examen de laboratoire de la coqueluche?",
+                en: "Diagnosis and laboratory examination of pertussis (whooping cough)?",
+                answer: "Diagnosis:\n- Période de début: toux émétique, nocturne, fièvre modérée (37.5°C-38°C)\n- Période des quintes (7 à 10 jours), cyanose, phase de déclin.\nExamen de laboratoire:\n+ Test ELISA anticorps anti-Bordetella pertussis\n+ Hyperlymphocytose (10,000 à 30,000 leucocytes dont 60 à 90% de lymphocytes)\n+ Radiographie de thorax: parfois atélectasie."
+            },
+            {
+                id: 13,
+                km: "Citez les signes cliniques de la rhino-pharyngite de l'enfant au-dessous de 2 ans.",
+                fr: "Citez les signes cliniques de la rhino-pharyngite de l'enfant au-dessous de 2 ans.",
+                en: "Cite the clinical signs of nasopharyngitis in children under 2 years.",
+                answer: "- L'encombrement ORL, fièvre\n- Dysphagie (anorexie brutale pour les aliments solides)\n- L'inflammation nasale (gêne respiratoire, jetage net)\n- Vomissements, selles ou glaires ingérées, ou diarrhée authentique\n- L'évolution est favorable"
+            },
+            {
+                id: 14,
+                km: "Complications de la fièvre typhoïde?",
+                fr: "Quelles sont les complications de la fièvre typhoïde?",
+                en: "Complications of typhoid fever?",
+                answer: "- Intestinal hemorrhage\n- Intestinal perforation\n- Toxic hepatitis\n- Toxic myocarditis\n- Bronchitis, bronchopneumonia"
+            },
+            {
+                id: 15,
+                km: "Traitement de l'ictère à bilirubine libre?",
+                fr: "Quel est le traitement de l'ictère à bilirubine libre?",
+                en: "Treatment of unconjugated jaundice?",
+                answer: "- Apport nutritionnel précoce\n- Photothérapie\n- Albumine\n- Exsanguino-transfusion\n- Prévention de l'hémorragie"
+            },
+            {
+                id: 16,
+                km: "What are the risk factors of asthma?",
+                fr: "Quels sont les facteurs de risque de l'asthme?",
+                en: "What are the risk factors of asthma?",
+                answer: "Host factors:\n- Genetic (genes predisposing to atopy and airway hyper-responsiveness)\n- Obesity, Sex\nEnvironmental factors:\n- Allergens (Indoor: mites, furred animals, cockroaches, fungi, moulds; Outdoor: pollens, fungi)\n- Infections (viral)\n- Tobacco smoke (active/passive), Air pollution, Diet."
+            },
+            {
+                id: 17,
+                km: "Diagnosis of Trichinosis (Trichinella spiralis)?",
+                fr: "Quel est le diagnostic de la trichinose?",
+                en: "Diagnosis of Trichinosis (Trichinella spiralis)?",
+                answer: "- Serology\n- Muscle biopsy for Trichinella\n- Compatible clinical symptoms (eosinophilia, fever, myalgia, facial or periorbital edema)\n- Antibodies to Trichinella detectable approximately 3 weeks after infection."
+            },
+            {
+                id: 18,
+                km: "ចូរនិយាយអំពី définition របស់ Nephrotic syndrome?",
+                fr: "Définition du syndrome néphrotique.",
+                en: "Definition of Nephrotic syndrome.",
+                answer: "- Nephrotic range proteinuria: > 50 mg or 0.05g/kg/24h, or Dipstick 3-4+, or Urine protein/creatinine ratio > 2\n- Hypoalbuminemia < 30g/L\n- Edema\n- Hyperlipidemia"
+            },
+            {
+                id: 19,
+                km: "Clinical manifestation of Guillain-Barré syndrome?",
+                fr: "Quelles sont les manifestations cliniques du syndrome de Guillain-Barré?",
+                en: "Clinical manifestations of Guillain-Barré syndrome?",
+                answer: "- Begin with symmetrical muscle paralysis rapidly progressing in an ascending fashion over hours to days\n- Affect cranial nerves (drooling, difficulty swallowing)\n- 30% affect autonomic nerves\n- Loss of pain, temperature, bladder dysfunction, orthostatic hypotension."
+            },
+            {
+                id: 20,
+                km: "Clinical manifestation of Encephalitis?",
+                fr: "Quelles sont les manifestations cliniques de l'encéphalite?",
+                en: "Clinical manifestation of Encephalitis?",
+                answer: "- Fever, delirium, or confusion progressing to unconsciousness, seizures\n- Cranial nerve palsies, paresis and paralysis, involuntary movements, abnormal reflexes\n- Signs of marked increased intracranial pressure (ICP) may be present."
+            },
+            {
+                id: 21,
+                km: "តើជំងឺ Hemophilia កើតឡើងដោយសារមូលហេតុអ្វី និងរោគវិនិច្ឆ័យដូចម្ដេច?",
+                fr: "Quelle est la cause de l'hémophilie et son diagnostic?",
+                en: "What causes hemophilia and how is it diagnosed?",
+                answer: "- Cause: Mutation or change in genes providing instructions for clotting factor proteins, causing low levels of factor VIII (8) or factor IX (9).\n- Diagnosis: CBC (platelets normal), bleeding time normal, PT normal, aPTT prolonged, Factor assay for type and severity, DNA test / Amniocentesis for carriers."
+            },
+            {
+                id: 22,
+                km: "តើស្តេសអ្វីខ្លះដើម្បីធ្វើរោគវិនិច្ឆ័យដើម្បីរកជំងឺ Thalassemia?",
+                fr: "Quels sont les examens pour diagnostiquer la thalassémie?",
+                en: "What tests are used to diagnose thalassemia?",
+                answer: "- Blood test for anemia and abnormal hemoglobin\n- Microscope: red blood cells have abnormal shapes\n- Hemoglobin electrophoresis\n- Severe splenomegaly might indicate hemoglobin H disease."
+            },
+            {
+                id: 23,
+                km: "Quelle est la définition de la convulsion fébrile?",
+                fr: "Quelle est la définition de la convulsion fébrile?",
+                en: "What is the definition of febrile seizure?",
+                answer: "Un événement survenant habituellement chez un nourrisson ou un enfant entre 6 mois et 5 ans, associé à de la fièvre, sans signe d'infection intracrânienne ou autre cause définie, à l'exclusion des convulsions avec fièvre survenant chez un enfant ayant déjà présenté des convulsions sans fièvre."
+            },
+            {
+                id: 24,
+                km: "Clinical signs of Japanese Encephalitis (JE) មានអ្វីខ្លះ?",
+                fr: "Quels sont les signes cliniques de l'encéphalite japonaise?",
+                en: "Clinical signs of Japanese Encephalitis?",
+                answer: "- Prodromal stage (1-6 days): Fever, rigor, headache, GI problems, lethargy, malaise.\n- Acute encephalitis stage: Convulsions, altered sensorium, coma, tremors in fingers/tongue/eyelids, abnormal limb movements, mask-like face, stiff neck, muscular rigidity, speech impairment.\n- Late stage & Sequelae: Mental impairment, epilepsy, abnormal movements, behavior abnormalities, motor neuron paresis."
+            },
+            {
+                id: 25,
+                km: "ចូររៀបរាប់អំពី les facteurs de risques de prématurité.",
+                fr: "Quels sont les facteurs de risque de la prématurité?",
+                en: "What are the risk factors for prematurity?",
+                answer: "- Facteurs maternels: obésité, antécédent d'accouchement prématuré, âge (< 18 ou > 35 ans), alcool, tabac, infections, maladies chroniques, maladies pulmonaires, voyages longs, absence de suivi prénatal, malnutrition, pré-éclampsie, multiparité, placenta praevia.\n- Facteurs fœtaux et annexes: anomalies chromosomiques, détresse fœtale, RCIU (retard de croissance intra-utérin), incompatibilité de groupe sanguin, infections transmises par la mère, traumatismes."
+            },
+            {
+                id: 26,
+                km: "Diagnostic de pleurésie purulente?",
+                fr: "Quel est le diagnostic de la pleurésie purulente?",
+                en: "Diagnosis of purulent pleurisy?",
+                answer: "- Signes cliniques + Radiographie / Échographie / TDM / IRM => Pleurésie purulente.\n- Chimie: liquide riche en protéines (exsudatif), pH < 7.2.\n- Cytologie: GB > 10,000/mm3 et PNN > 50%.\n- Bactériologie: examen direct et culture aérobie/anaérobie, recherche de BK.\n- NFS: hyperleucocytose avec prédominance de PNN."
+            },
+            {
+                id: 27,
+                km: "Citez les paramètres du score d'Apgar.",
+                fr: "Citez les paramètres du score d'Apgar.",
+                en: "Cite the parameters of the Apgar score.",
+                answer: "- Score 7-10: Normale\n- Score 4-6: Asphyxie modérée\n- Score 0-3: Asphyxie sévère"
+            },
+            {
+                id: 28,
+                km: "Citez les paramètres du score de Silverman.",
+                fr: "Citez les paramètres du score de Silverman.",
+                en: "Cite the parameters of the Silverman score.",
+                answer: "- Silverman < 4 => Détresse respiratoire légère (+ O2)\n- Silverman 4-6 => Détresse respiratoire moyenne (+ CPAP)\n- Silverman > 6 => Détresse respiratoire grave (+ Intubation, ventilation mécanique)"
+            },
+            {
+                id: 29,
+                km: "Classer la méningite, l'angine streptococcique, la listeria monocytogenes, et Mycobacterium tuberculosis.",
+                fr: "Classer ces pathologies infectieuses.",
+                en: "Classify these conditions.",
+                answer: "Classification des agents pathogènes:\n- Méningite: Bactérienne (Méningocoque, Pneumocoque, Haemophilus) ou Virale (Entérovirus, etc.)\n- Angine streptococcique: Bactérienne (Streptocoque β-hémolytique du groupe A)\n- Listeria monocytogenes: Bactérie opportuniste (responsable de listériose, méningite chez le nouveau-né)\n- Mycobacterium tuberculosis: Bactérie acidorésistante (responsable de la tuberculose)."
+            },
+            {
+                id: 30,
+                km: "Certaines méningites sont souvent associées à des lésions crâniennes. Lesquelles? Paires crâniennes les plus atteintes?",
+                fr: "Méningites associées à des lésions crâniennes et paires crâniennes les plus atteintes?",
+                en: "Meningitis associated with cranial lesions and most affected cranial nerves?",
+                answer: "- Méningites post-traumatiques (fracture de base du crâne, brèche ostéoméningée, souvent à Pneumocoque).\n- Paires crâniennes les plus atteintes: III, VI, VII et VIII."
+            },
+            {
+                id: 31,
+                km: "Devant une méningite lymphocytaire associée à des transaminases élevées, bilirubine, thrombopénie, hématurie et insuffisance rénale, quel diagnostic?",
+                fr: "Diagnostic devant méningite lymphocytaire, cytolyse, bilirubine, thrombopénie, hématurie et insuffisance rénale?",
+                en: "Diagnosis for lymphocytic meningitis with elevated transaminases, bilirubin, thrombocytopenia, hematuria, and renal failure?",
+                answer: "Leptospirose (ou Syndrome Hémolytique et Urémique / formes systémiques selon le contexte)."
+            },
+            {
+                id: 32,
+                km: "Dans quelles circonstances une antibiothérapie parentérale antiméningococcique doit être débutée d'emblée au domicile?",
+                fr: "Dans quelles circonstances une antibiothérapie parentérale antiméningococcique au domicile?",
+                en: "When should parenteral antimeningococcal antibiotic therapy be started immediately at home?",
+                answer: "En cas de suspicion de purpura fulminans (purpura extensif, nécrotique, fébrile) avant le transfert à l'hôpital."
+            },
+            {
+                id: 33,
+                km: "En présence d'une méningite purulente, quelle antibiothérapie IV si l'examen direct du LCR retrouve des coccies Gram négatif?",
+                fr: "Antibiothérapie IV pour méningite purulente à coccies Gram négatif à l'examen direct du LCR?",
+                en: "IV antibiotic for purulent meningitis with Gram-negative cocci in CSF direct examination?",
+                answer: "Céfotaxime ou Ceftriaxone (suspectant le Méningocoque)."
+            },
+            {
+                id: 34,
+                km: "មូលហេតុដែលនាំអោយកុមារកើតជំងឺ MPE (Malnutrition Protéino-Énergétique)?",
+                fr: "Quelles sont les causes de la malnutrition protéino-énergétique (MPE) chez l'enfant?",
+                en: "Causes of protein-energy malnutrition (PEM) in children?",
+                answer: "- Carence en protéines et en énergie\n- Carence en particulier en vitamines et en oligo-éléments."
+            },
+            {
+                id: 35,
+                km: "សញ្ញាគ្លីនិកខុសគ្នារវាង Marasme (ម៉ារ៉ាសម) និង Kwashiorkor (ក្វាសិអ័រខ័រ)?",
+                fr: "Différences cliniques entre le marasme et le kwashiorkor?",
+                en: "Clinical differences between marasmus and kwashiorkor?",
+                answer: "+ Marasme:\n- Cheveux normaux, pas d'œdèmes, très maigre, visage de vieux (vieillard), peau plissée, appétit vorace, stéatose hépatique rare, fonte musculaire sévère.\n+ Kwashiorkor:\n- Altération des cheveux (signe du drapeau), œdèmes présents, poids souvent modéré ou masqué par les œdèmes, visage lunaire (moon face), dermatose (peau squameuse), anorexie (mauvais appétit), stéatose hépatique fréquente, fonte musculaire modérée ou absente."
+            },
+            {
+                id: 36,
+                km: "វិធីការពារ Marasme និង Kwashiorkor?",
+                fr: "Comment prévenir le marasme et le kwashiorkor?",
+                en: "How to prevent marasmus and kwashiorkor?",
+                answer: "- Planification familiale\n- Programme de vaccination\n- Encourager l'allaitement maternel\n- Consultation de santé maternelle et infantile (PMI)\n- Éducation nutritionnelle des mères\n- Fournir des suppléments alimentaires."
+            },
+            {
+                id: 37,
+                km: "មូលហេតុ (Étiologie) នៃជំងឺ Staphylococcie pleuro-pulmonaire?",
+                fr: "Quelle est l'étiologie de la staphylococcie pleuro-pulmonaire?",
+                en: "Etiology of staphylococcal pleuropneumonia?",
+                answer: "- Germe: Staphylocoque doré pathogène (coagulase positive, producteur d'exotoxine).\n- Terrain: Avant 6 mois, enfants hypotrophiques, anciens prématurés, mucoviscidose, malformations pulmonaires, diabète, immunodépression, toxicomanie, post-bronchite aiguë virale.\n- Portes d'entrée: Cutanée, gastro-intestinale, ORL, dissémination viscérale."
+            },
+            {
+                id: 38,
+                km: "សញ្ញាគ្លីនិក និងរោគសញ្ញានៃ Staphylococcie pleuro-pulmonaire?",
+                fr: "Quels sont les signes cliniques de la staphylococcie pleuro-pulmonaire?",
+                en: "Clinical signs of staphylococcal pleuropneumonia?",
+                answer: "- Signes respiratoires: polypnée, toux sèche, tirage, cyanose.\n- Signes abdominaux: météorisme abdominal, risque d'occlusion.\n- Signes généraux: température 39°-40°C, asthénie, enfant abattu, pâle et grisâtre.\n- Signes physiques: diminution modérée du murmure vésiculaire, matité, risque de défaillance cardiaque."
+            },
+            {
+                id: 39,
+                km: "Les causes de laryngite?",
+                fr: "Quelles sont les causes de la laryngite?",
+                en: "Causes of laryngitis?",
+                answer: "- Hémophilus influenzae\n- Origine virale et bactérienne\n- Fausses membranes de la diphtérie laryngée (rare)\n- Corps étranger (laryngite glottique ou croup)."
+            },
+            {
+                id: 40,
+                km: "Les symptômes de laryngite?",
+                fr: "Quels sont les symptômes de la laryngite?",
+                en: "Symptoms of laryngitis?",
+                answer: "- Dyspnée laryngée\n- Bradypnée inspiratoire avec tirage suresternal et cornage (modification de la voix)\n- Toux aboyante\n- Fièvre\n- Dysphagie."
+            },
+            {
+                id: 41,
+                km: "Infection urinaire et Syndrome Hémolytique et Urémique (SHU): Infection urinaire haute (pyélonéphrite) et malformations urinaires.",
+                fr: "Infection urinaire haute (pyélonéphrite) et malformations urinaires.",
+                en: "Upper urinary tract infection (pyelonephritis) and urinary malformations.",
+                answer: "- Infection urinaire haute = Pyélonéphrite (pathologie sur le parenchyme et bassinet).\n- Risques: risque de septicémie (surtout chez le nouveau-né et nourrisson), risque ultérieur de séquelle parenchymateuse (HTA).\n- Malformations associées: reflux vésico-urétéral, lithiase."
+            },
+            {
+                id: 42,
+                km: "Definition of Idiopathic Thrombocytopenia Purpura (ITP)?",
+                fr: "Définition du purpura thrombopénique idiopathique (PTI)?",
+                en: "Definition of Idiopathic Thrombocytopenia Purpura (ITP)?",
+                answer: "Immune thrombocytopenic purpura (ITP) is defined by an isolated thrombocytopenia which is secondary to increased destruction of platelets by macrophages in the reticulo-endothelial system."
+            },
+            {
+                id: 43,
+                km: "Insuffisance rénale aiguë: Enfant de 5 ans avec dengue et choc, pas d'urine depuis 4h malgré bon état hémodynamique. Que faites-vous?",
+                fr: "Conduite à tenir devant une oligurie de 4h chez un enfant avec dengue et choc récupéré?",
+                en: "Management of acute renal failure in a child with dengue shock and oliguria.",
+                answer: "- Réévaluer l'état volémique et l'hydratation avec précision.\n- Vérifier s'il s'agit d'une insuffisance rénale fonctionnelle (déshydratation persistante) ou organique (nécrose tubulaire aiguë).\n- Adapter le remplissage vasculaire ou administrer un test de volume prudent / diurétiques selon l'état clinique strict, surveiller la diurèse horaire et les examens biologiques (créatinine, urée, ionogramme)."
+            },
+            {
+                id: 44,
+                km: "Clinical manifestations of lymphatic filariasis?",
+                fr: "Quelles sont les manifestations cliniques de la filariose lymphatique?",
+                en: "Clinical manifestations of lymphatic filariasis?",
+                answer: "- Accidents précoces aigus: adénite aiguë, orchiépididymite, lymphangite rétrograde.\n- Accidents tardifs chroniques: poumon éosinophile filarien, chylurie, adénite chronique, adénolymphocèle, éléphantiasis des membres, éléphantiasis du scrotum."
+            },
+            {
+                id: 45,
+                km: "Décrire les points essentiels à rechercher lors de l'examen cutané et digestif du nouveau-né.",
+                fr: "Points essentiels de l'examen cutané et digestif du nouveau-né.",
+                en: "Essential points for cutaneous and digestive examination of the newborn.",
+                answer: "- Examen abdominal: ombilic (hernie ombilicale banale, omphalite), hernies (inguinale chez la fille et le garçon, ombilicale).\n- Examen cutané: lanugo (fin duvet), grains de milium (granulations blanches sur le nez/face), érythème toxique, tache mongoloïde, angiome plan (front, paupière, nez, nuque)."
+            },
+            {
+                id: 46,
+                km: "Décrire les germes responsables de méningite purulente chez l'enfant et le nouveau-né.",
+                fr: "Germes responsables de méningite purulente chez l'enfant et le nouveau-né.",
+                en: "Bacteria responsible for purulent meningitis in children and newborns.",
+                answer: "- Méningocoque (Diplocoque Gram négatif): prédominant chez l'enfant > 1 an.\n- Pneumocoque (Cocci Gram positif): chez le nourrisson (60% des méningites purulentes chez l'enfant < 1 an).\n- Haemophilus influenzae, Listeria monocytogenes (chez le nouveau-né), Bacilles Gram négatif."
+            },
+            {
+                id: 47,
+                km: "មានផលប្រយោជន៍អ្វីដែលបែងចែក Infection Urinaire ជា Infection Haute និង Basse?",
+                fr: "Quel est l'intérêt de diviser l'infection urinaire en infection haute et basse?",
+                en: "What is the benefit of dividing urinary tract infection into upper and lower?",
+                answer: "- Infection haute (Pyélonéphrite): atteinte du parenchyme et bassinet, risque de septicémie et de séquelles parenchymateuses (HTA).\n- Infection basse (Cystite): atteinte de la vessie, prise en charge et pronostic différents."
+            },
+            {
+                id: 48,
+                km: "Quels sont les signes cliniques et paracliniques évocateurs d'une tuberculose chez l'enfant?",
+                fr: "Signes cliniques et paracliniques de la tuberculose chez l'enfant?",
+                en: "Clinical and paraclinical signs suggestive of tuberculosis in children?",
+                answer: "- Signes cliniques (non spécifiques): toux, fièvre, perte de poids, diminution de l'appétit, signes auscultatoires localisés.\n- Signes paracliniques: radiographie thoracique, IDR à la tuberculine, endoscopie bronchique, examens microbiologiques, sérodiagnostic, amplification d'ADN par PCR."
+            },
+            {
+                id: 49,
+                km: "សរសេរមូលហេតុទាំង៥ ដែលធ្វើអោយមានលើសសម្ពាធឈាមឡើងខ្ពស់នៅក្នុងខួរក្បាល (SHIC)?",
+                fr: "Quelles sont les 5 causes de syndrome d'hypertension intracrânienne (SHIC)?",
+                en: "What are 5 causes of increased intracranial pressure (ICP)?",
+                answer: "- Masses expansives (tumeurs, hématomes)\n- Hydrocéphalies\n- Œdème cérébral\n- Phénomènes vasomoteurs\n- AVC ischémique."
+            },
+            {
+                id: 50,
+                km: "Facteurs de risques de la coqueluche (ក្អកមាន់)?",
+                fr: "Quels sont les facteurs de risque de la coqueluche?",
+                en: "Risk factors for pertussis?",
+                answer: "- Enfant non vacciné\n- Contact avec une personne infectée\n- Épidémie\n- Grossesse / Nourrisson jeune."
+            },
+            {
+                id: 51,
+                km: "Complications dans le syndrome néphrotique?",
+                fr: "Quelles sont les complications du syndrome néphrotique?",
+                en: "Complications in nephrotic syndrome?",
+                answer: "- Hypovolémie\n- Thrombosis (thromboses vasculaires)\n- Infection (péritonite bactérienne spontanée)\n- Malnutrition, anémie."
+            },
+            {
+                id: 52,
+                km: "Quels sont les signes de gravité à considérer pour une bronchiolite?",
+                fr: "Quels sont les signes de gravité d'une bronchiolite?",
+                en: "What are the severity signs to consider for bronchiolitis?",
+                answer: "- AEG (altération de l'état général)\n- Apnée et cyanose\n- Fréquence respiratoire > 60/min\n- SaPO2 < 94% en air ambiant et au repos ou lors de la tétée\n- Troubles de la ventilation (clinique et radio)\n- Troubles digestifs (vomissements, anorexie) avec déshydratation et perte de poids > 5%."
+            },
+            {
+                id: 53,
+                km: "Clinical manifestation of measles (ரோសត/Rougeole)?",
+                fr: "Quelles sont les manifestations cliniques de la rougeole?",
+                en: "Clinical manifestations of measles?",
+                answer: "- Incubation: 8-12 days\n- Phase prodromique: mild fever, conjunctivitis + photophobia, coryza, cough, signe de Koplik."
+            },
+            {
+                id: 54,
+                km: "Différenciez l'ictère physiologique et pathologique.",
+                fr: "Différence entre ictère physiologique et pathologique.",
+                en: "Difference between physiological and pathological jaundice.",
+                answer: "- Ictère physiologique / simple: nouveau-né à terme, isolé sans signe d'hémolyse, absent le 1er jour, peu intense (bilirubine totale < 250 µmol/L), touche surtout le garçon né par césarienne, allaité et ayant perdu du poids, immaturité hépatique.\n- Ictère pathologique: début précoce avant 24h de vie, hémolyse sévère (anémie, hépatosplénomégalie), bilirubine libre plus forte, anémie macrocytaire, hyper-réticulocytose, infection materno-fœtale, incompatibilité ABO/Rh, ictère au lait de mère, maladie de Gilbert."
+            },
+            {
+                id: 55,
+                km: "និយមន័យ fièvre prolongée de l'enfant (ចំពោះទារក និងក្មេងធំ)?",
+                fr: "Définition de la fièvre prolongée chez le nourrisson et le grand enfant?",
+                en: "Definition of prolonged fever in infants and older children?",
+                answer: "- Nourrisson: température centrale > 38°C dépassant 5 jours sans interruption.\n- Grand enfant: température centrale > 38°C dépassant 10-15 jours."
+            },
+            {
+                id: 56,
+                km: "Les différentes formes cliniques du Syndrome Hémolytique et Urémique (SHU) et leurs signes.",
+                fr: "Formes cliniques du SHU et leurs signes.",
+                en: "Clinical forms of Hemolytic Uremic Syndrome (HUS) and their signs.",
+                answer: "- Syndrome hémolytique: anémie hémolytique, thrombopénie transitoire.\n- Syndrome urémique: insuffisance rénale aiguë, hématurie, protéinurie.\n- Forme typique (nourrisson): prodrome (fièvre, pharyngite, diarrhée, méléna), début brutal de SHU (anémie sévère, thrombopénie, IR aiguë), atteinte d'autres viscères (colique, hépatique, pancréatique, SNC).\n- Forme atypique: absence de diarrhée prodromique, pas de prédominance saisonnière, tout âge, début progressif, récidivante, caractère familial."
+            },
+            {
+                id: 57,
+                km: "Les signes cliniques de laryngite sus-glottique?",
+                fr: "Quels sont les signes cliniques de la laryngite sus-glottique?",
+                en: "Clinical signs of supraglottic laryngitis?",
+                answer: "Fièvre (39-40°C), dyspnée laryngée, dysphagie, difficultés pour avaler, toux aboyante et modification de la voix."
+            },
+            {
+                id: 58,
+                km: "La prise en charge du prématuré (Anté-natale, à la naissance, post-natale)?",
+                fr: "Prise en charge du prématuré (anténatale, naissance, postnatale)?",
+                en: "Management of the premature infant (antenatal, at birth, postnatal)?",
+                answer: "- Anténatale: dépistage, prévention primaire/secondaire/tertiaire, accouchement près d'une réanimation néonatale, corticothérapie anténatale.\n- À la naissance: réchauffer, asepsie stricte, réanimation néonatale si besoin, monitoring cardiorespiratoire, vitamine K (2mg IVD), collyre antibiotique, alimentation précoce, surveillance.\n- Post-natale: prise en charge des complications (membranes hyalines, HTAP, persistance du canal artériel, apnées, entérocolite, ictère, hypoglycémie, anémie, infection)."
+            },
+            {
+                id: 59,
+                km: "Les germes responsables de méningite purulente et leurs caractéristiques?",
+                fr: "Germes responsables de méningite purulente et caractéristiques?",
+                en: "Bacteria responsible for purulent meningitis and characteristics?",
+                answer: "Méningocoque, Pneumocoque, Haemophilus influenzae, Salmonella, staphylocoque, bacilles Gram négatif, germes opportunistes, BK (Mycobacterium tuberculosis)."
+            },
+            {
+                id: 60,
+                km: "HIV transmission from mother to child: periods and general percentages without intervention?",
+                fr: "Périodes et pourcentages de transmission du VIH de la mère à l'enfant sans intervention?",
+                en: "Periods and percentages of mother-to-child HIV transmission without intervention?",
+                answer: "- Before birth (In utero): environ 5-10%\n- During delivery (Perpartum): environ 10-15%\n- After delivery (Allaitement / Postnatal): environ 5-20%\nTotal global transmission rate without intervention: 20-45%."
+            },
+            {
+                id: 61,
+                km: "Le diagnostic du syndrome néphrotique (valeurs biologiques)?",
+                fr: "Diagnostic biologique du syndrome néphrotique?",
+                en: "Diagnosis of nephrotic syndrome (lab values)?",
+                answer: "- Protéinurie > 3g/24h (ou test néphrotique)\n- Hypoalbuminémie < 30g/L\n- Œdèmes\n- Hyperlipidémie."
+            },
+            {
+                id: 62,
+                km: "La classification de la bronchopneumonie selon le VEMS?",
+                fr: "Classification de la bronchopneumonie / sévérité fonctionnelle?",
+                en: "Classification of bronchopneumonia / airflow obstruction?",
+                answer: "- Stade I léger: VEMS supérieur ou égal à 80%\n- Stade II modéré: VEMS comprise entre 50 et 80%\n- Stade III sévère: VEMS comprise entre 30 et 50%."
+            },
+            {
+                id: 63,
+                km: "Guillain-Barré syndrome: signs/symptoms, diagnosis, criteria, and treatment?",
+                fr: "Syndrome de Guillain-Barré: signes, diagnostic, critères, traitement?",
+                en: "Guillain-Barré syndrome: signs, diagnosis, criteria, treatment?",
+                answer: "- Signs & symptoms: symmetrical muscle paralysis rapidly progressing in ascending fashion, cranial nerve involvement (drooling, dysphagia), autonomic nerve effect (30%), loss of pain/temp, bladder dysfunction, orthostatic hypotension.\n- Diagnosis: CSF analysis, nerve/muscle tests, EMG, nerve conduction studies.\n- Criteria: progressive weakness in legs and arms, areflexia.\n- Treatment: supportive care, intubation if breathing difficulty, plasmapheresis, IVIG first (easy and safe), physiotherapy."
+            },
+            {
+                id: 64,
+                km: "Diagnostic du paludisme (Examen physique, microscopie, goutte épaisse, méthodes antigéniques)?",
+                fr: "Diagnostic du paludisme (examen clinique, frottis, goutte épaisse, tests antigéniques)?",
+                en: "Diagnosis of malaria (physical exam, microscopy, thick blood film, antigen detection)?",
+                answer: "- Physical examination: fever, pallor, jaundice, splenomegaly.\n- Microscopy: blood smear on microscope slide.\n- Thick blood film: detecting malaria, low parasitaemia, determining parasite density, monitoring treatment response, parasite morphology & species identification.\n- Antigen Detection Methods: rapid and precise tests for malaria parasite antigens."
+            },
+            {
+                id: 65,
+                km: "បណ្ដុំរោគសញ្ញានៃការលើសឈាមក្នុងខួរក្បាល (SHIC): សញ្ញាគ្លីនិក និងមូលហេតុ។",
+                fr: "Syndrome d'hypertension intracrânienne (SHIC): signes cliniques et causes.",
+                en: "Increased intracranial pressure syndrome: clinical signs and causes.",
+                answer: "- Signes cliniques: vomissements en jet, troubles visuels, vertiges, céphalées intenses, crises comitiales.\n- Causes: masses expansives, hydrocéphalies, œdème cérébral, phénomènes vasomoteurs, AVC ischémique."
+            },
+            {
+                id: 66,
+                km: "How to diagnose HIV in infants under 18 months in case HIV DNA PCR test is not available?",
+                fr: "Comment diagnostiquer le VIH chez le nourrisson de moins de 18 mois en l'absence de test PCR HIV DNA?",
+                en: "How to diagnose HIV in infants under 18 months when HIV DNA PCR test is not available?",
+                answer: "Presumptive diagnosis of severe HIV disease if:\n- Infant confirmed HIV exposed by antibody testing;\n- Diagnosis of any AIDS-indicator condition made;\n- Infant symptomatic with 2 or more of: Oral thrush, severe pneumonia, severe sepsis."
+            },
+            {
+                id: 67,
+                km: "Comparaison entre Pneumonie franche lobaire aiguë (PFLA) et Pneumonie virale?",
+                fr: "Comparaison entre pneumonie franche lobaire aiguë et pneumonie virale?",
+                en: "Comparison between acute lobar pneumonia and viral pneumonia?",
+                answer: "- PFLA: début brutal, fièvre, douleur thoracique, douleur abdominale, frissons, râles crépitants localisés, Rx: alvéolaire systématisé unilatéral, CRP > 80 mg/L, PNN > 12 G/L.\n- Pneumonie virale: début progressif, wheezing / asthme, auscultation bilatérale, fièvre au second plan, signes extra-pulmonaires, Rx: broncho-interstitiel bilatéral, distension, biologie non spécifique."
+            },
+            {
+                id: 68,
+                km: "Les anémies hémolytiques constitutionnelles d'origine héréditaire?",
+                fr: "Quelles sont les anémies hémolytiques constitutionnelles d'origine héréditaire?",
+                en: "What are hereditary constitutional hemolytic anemias?",
+                answer: "Anémies hémolytiques normochromes régénératives (réticulocytes > 120,000). Test de Coombs négatif (-) pour les formes héréditaires:\n- Drépanocytose\n- Thalassémie\n- Déficit en G6PD\n- Déficit en Pyruvate-kinase (PK)."
+            },
+            {
+                id: 69,
+                km: "Diagnostic du tétanos?",
+                fr: "Quel est le diagnostic du tétanos?",
+                en: "Diagnosis of tetanus?",
+                answer: "- Arguments anamnésiques: statut vaccinal défectueux, notion de plaie.\n- Arguments cliniques: trismus invincible et irréductible, contractures s'accentuant lors des stimuli, conscience conservée lors des contractures.\n- Aucun test biologique utile, isolement de Clostridium tetani au niveau de la plaie non utile."
+            },
+            {
+                id: 70,
+                km: "Traitement de la coqueluche (ក្អកមាន់)?",
+                fr: "Quel est le traitement de la coqueluche?",
+                en: "Treatment of pertussis?",
+                answer: "- Hospitalisation pour les nourrissons de moins de 3 mois\n- Surveillance des enfants atteints\n- Isolement et éviction scolaire de 30 jours (ou 80 jours selon directives) à partir du début des quintes\n- Oxygène et correction des troubles hydro-électrolytiques si besoin\n- Dépister les apnées chez le nourrisson\n- Érythromycine pendant la période de début: 50 mg/kg/j en 4 prises\n- Vaccination."
+            },
+            {
+                id: 71,
+                km: "Management for children aged 3M to 36M with fever?",
+                fr: "Prise en charge d'un enfant de 3 mois à 36 mois présentant de la fièvre?",
+                en: "Management of a child aged 3M to 36M with fever?",
+                answer: "- Anamnèse: caractéristiques de la fièvre (date de début), type de courbe thermique, signes d'accompagnement initiaux et actuels, signes de danger de l'état général, prise de médicaments, antécédents médicaux/chirurgicaux, voyages, ingestion d'aliments.\n- Examen clinique complet et symétrique + examens paracliniques (NFS, sérologies spécifiques, radio, etc.)."
+            },
+            {
+                id: 72,
+                km: "សញ្ញាបង្ហាញសភាពលឿង (Ictère) នៅលើស្បែក និងកន្លែងផ្សេងៗ?",
+                fr: "Signes cliniques de l'ictère (jaunisse) sur la peau et autres sites?",
+                en: "Clinical signs of jaundice on the skin and other sites?",
+                answer: "Coloration jaunâtre de la peau, des muqueuses, des sclérotiques (dans les yeux), et parfois urines foncées (cholurie)."
+            },
+            {
+                id: 73,
+                km: "Signes cliniques de la rhino-pharyngite de l'enfant au-dessus de 2 ans?",
+                fr: "Signes cliniques de la rhino-pharyngite de l'enfant de plus de 2 ans?",
+                en: "Clinical signs of nasopharyngitis in children over 2 years?",
+                answer: "- Fièvre: brutale, élevée à 39°C - 40°C\n- Muqueuse nasale rouge, l'enfant respire la bouche ouverte\n- Céphalée inconstante\n- Toux et larmoiement présents plus ou moins\n- Dysphagie (cavité bucco-pharyngée avec amygdales d'aspect subnormal, non infectées)."
+            },
+            {
+                id: 74,
+                km: "Cause infection urinaire pouvant être grave chez le nouveau-né et nourrisson?",
+                fr: "Pourquoi l'infection urinaire peut-elle être grave chez le nouveau-né et nourrisson?",
+                en: "Why can urinary tract infection be severe in newborns and infants?",
+                answer: "Risque de septicémie particulièrement chez le nouveau-né et nourrisson, risque ultérieur de séquelle parenchymateuse (HTA), et révélation possible d'une malformation des voies urinaires (reflux vésico-urétéral, lithiase)."
+            },
+            {
+                id: 75,
+                km: "Diagnostic de la méningite chez le grand enfant?",
+                fr: "Diagnostic de la méningite chez le grand enfant?",
+                en: "Diagnosis of meningitis in older children?",
+                answer: "- Syndrome infectieux (fièvre à début souvent brutal, rhinopharyngite ou otite)\n- Syndrome méningé (céphalées, vomissements, refus alimentaire, photophobie)\n- Raideur de la nuque\n- Signe de Kernig\n- Signe de Brudzinski\n- Examen du LCR."
+            },
+            {
+                id: 76,
+                km: "Schistosomiasis: treatment and prevention.",
+                fr: "Schistosomiase: traitement et prévention.",
+                en: "Schistosomiasis: treatment and prevention.",
+                answer: "- Treatment: Praziquantel (40 mg/kg/day PO in 2 doses for S. haematobium; 60 mg/kg/day in 2-3 doses for S. mansoni, intercalatum, japonica, mekongi). Oxamniquine as alternative in some areas.\n- Prevention: improved sanitation, focal application of molluscicides, animal vaccination, breaking transmission cycle, linked to economic and social development."
+            },
+            {
+                id: 77,
+                km: "Signes cliniques de la bronchiolite (Incubation, phase ORL, phase d'état, signes de gravité)?",
+                fr: "Signes cliniques de la bronchiolite du nourrisson?",
+                en: "Clinical signs of bronchiolitis?",
+                answer: "- Incubation: 3-8 jours\n- Phase débutante (ORL): fièvre élevée, signes rhino-pharyngés, toux sèche.\n- Phase d'état (pulmonaire): vomissements, fatigue lors du biberon (refus de tétée), apnées chez le nourrisson < 3 mois, toux fréquente par quintes, dyspnée et sifflement expiratoire, râles sibilants et sous-crépitants, distension thoracique, signes de lutte mesurés par le score de Silverman (battement des ailes du nez, tirage, balancement thoraco-abdominal, polypnée > 40-60/min).\n- Signes de gravité: fréquence respiratoire > 60/min, cyanose, sueurs, troubles de la conscience."
+            },
+            {
+                id: 78,
+                km: "Caractères de l'ictère néonatal pathologique?",
+                fr: "Quels sont les caractères de l'ictère néonatal pathologique?",
+                en: "Characteristics of pathological neonatal jaundice?",
+                answer: "- Début précoce avant 24 heures de vie\n- En cas d'hémolyse sévère: syndrome anémique, hépatosplénomégalie\n- Ictère à bilirubine libre d'intensité plus forte\n- Anémie normo- ou macrocytaire, hyper-réticulocytose."
+            },
+            {
+                id: 79,
+                km: "Clinical manifestation of trichinosis?",
+                fr: "Quelles sont les manifestations cliniques de la trichinose?",
+                en: "Clinical manifestations of trichinosis?",
+                answer: "- Diarrhea\n- Abdominal pain\n- Fatigue\n- Nausea and vomiting\n- Myalgia, fever, facial or periorbital edema, eosinophilia."
+            },
+            {
+                id: 80,
+                km: "Specific treatment of Nephrotic syndrome (Initial episode, relapse > 3 months, relapse ≤ 3 months)?",
+                fr: "Traitement spécifique du syndrome néphrotique (premier épisode, rechute > 3 mois, rechute ≤ 3 mois)?",
+                en: "Specific treatment of Nephrotic syndrome?",
+                answer: "- Initial episode: Prednisolone 60 mg/m2/day (or 2 mg/kg/day, max 80 mg/24h) for 4 weeks, then taper (average 2 weeks urine-free of proteinuria).\n- Relapse > 3 months after completion: 60 mg/m2/d until 7 days after proteinuria negative.\n- Relapse ≤ 3 months after completion: specific immunosuppressive or protocol adaptation."
+            },
+            {
+                id: 81,
+                km: "Biological findings of ITP (Thrombocytopenia, blood smear, bone marrow)?",
+                fr: "Signes biologiques du PTI (thrombopénie, frottis, myélogramme)?",
+                en: "Biological findings of ITP?",
+                answer: "- Isolated thrombocytopenia (< 100,000/mm3) and anemia if significant bleeding history.\n- Giant platelets on blood smear (increased MPV).\n- Bone marrow aspiration shows normal or increased megakaryocytes, normal myeloid and erythroid elements, absence of abnormal cell populations."
+            },
+            {
+                id: 82,
+                km: "Why examine the newborn? What to examine?",
+                fr: "Pourquoi et que faut-il examiner chez le nouveau-né?",
+                en: "Why examine the newborn and what to examine?",
+                answer: "- Why: detection of abnormalities for timely referral, parent information, relationship building, opportunity for family to ask questions.\n- What to examine: vital signs, physical exam, general exam, neurological exam, estimation of gestational age."
+            },
+            {
+                id: 83,
+                km: "IV fluid therapy protocol for DHF (Dengue Hemorrhagic Fever) grade I & II?",
+                fr: "Protocole de solutés IV pour la dengue grade I et II?",
+                en: "IV fluid therapy protocol for DHF grade I & II?",
+                answer: "- Start IV fluid 1.5 - 3 ml/kg/h crystalloid solutions over 1-3h.\n- Improvement: increase IV to 3 ml/kg/h for another 3h, reevaluate vital signs hourly, lower rate to 1.5 ml/kg/h for another 3h, if still improved lower to 1.5 ml/kg/h over 48h then stop.\n- No improvement / Deterioration: continue same rate or increase to 3-6 ml/kg/h for 1-3h, recheck Hct, if aggravation see DHF grade III or IV."
+            },
+            {
+                id: 84,
+                km: "Signes de gravité d'une méningite bactérienne?",
+                fr: "Quels sont les signes de gravité d'une méningite bactérienne?",
+                en: "Severity signs of bacterial meningitis?",
+                answer: "- Hémodynamique: augmentation de la FC, diminution du temps de recoloration cutanée, extrémités froides, absence de diurèse, hypotension ou collapsus.\n- Cutanés: purpura rapidement extensif ou nécrotique.\n- Neurologique: troubles de la conscience, coma."
+            },
+            {
+                id: 85,
+                km: "Éléments de mauvais pronostic de la méningite bactérienne?",
+                fr: "Quels sont les éléments de mauvais pronostic de la méningite bactérienne?",
+                en: "Poor prognostic factors for bacterial meningitis?",
+                answer: "- Retard à la mise en route d'un traitement bactéricide\n- Jeune âge (nourrisson)\n- Germe en cause (Pneumocoque)\n- Gravité du tableau neurologique initial (formes comateuses)\n- Existence d'un collapsus associé ou de signes d'HTIC traités tardivement ou inadéquatement."
+            },
+            {
+                id: 86,
+                km: "Physiopathologie des méningites et étiologie virale fréquente?",
+                fr: "Physiopathologie des méningites et étiologie virale.",
+                en: "Pathophysiology of meningitis and frequent viral etiology.",
+                answer: "- Inflammation des méninges, étiologie virale la plus fréquente.\n- Physiopathologie: germes de portage du rhinopharynx, pénétration dans le LCR par voie hématogène (septicémie) ou contamination directe, multiplication rapide dans le LCR sans bactéricide naturelle, réponse de l'hôte avec production de cytokines (TNF-alpha, IL-1, IL-6).\n- Causes virales: Entérovirus, Paramyxovirus, Virus Echo, Adénovirus, Herpès virus."
+            },
+            {
+                id: 87,
+                km: "Comment faire le diagnostic de méningite chez le nourrisson?",
+                fr: "Comment faire le diagnostic de méningite chez le nourrisson?",
+                en: "How to diagnose meningitis in infants?",
+                answer: "Plus difficile: enfant grognon, somnolence, refus répété du biberon, convulsions fébriles.\n- Examen: tension de la fontanelle (assis, hors cris), hypotonie de la nuque ou raideur à la mobilisation du rachis avec rejet de la tête en arrière, signes neurologiques de localisation, coexistence de signes d'infections des voies respiratoires (OMA, foyer pulmonaire)."
+            },
+            {
+                id: 88,
+                km: "Examens de confirmation de la méningite (analyse du LCR)?",
+                fr: "Examens de confirmation de la méningite (analyse du LCR)?",
+                en: "Confirmatory tests for meningitis (CSF analysis)?",
+                answer: "- Examen du LCR: LCR hypertendu, LCR ayant perdu sa limpidité habituelle.\n- Nombre de cellules anormal si > 10/mm3.\n- Protéinorachie anormale > 0.45 g/L.\n- Rapport glucose LCR / sang < 0.40."
+            },
+            {
+                id: 89,
+                km: "Diagnosis of asthma?",
+                fr: "Quel est le diagnostic de l'asthme?",
+                en: "Diagnosis of asthma?",
+                answer: "- History and patterns of symptoms\n- Measurements of lung function (Spirometry, peak expiratory flow)\n- Measurement of airway responsiveness\n- Measurements of allergic status\n- Reversibility of lung function abnormalities."
+            },
+            {
+                id: 90,
+                km: "Facteurs de risque de l'asthme (Common risk factors in asthma)?",
+                fr: "Facteurs de risque et déclencheurs de l'asthme?",
+                en: "Risk factors for asthma?",
+                answer: "- Allergens: domestic dust mites, animals with fur, cockroaches, pollens, molds\n- Respiratory (viral) infections\n- Strong emotional expressions, Exercise\n- Chemical irritants and drugs (aspirin, beta-blockers)\n- Tobacco smoke, Air pollution, Occupational irritants, Changes in temperature."
+            },
+            {
+                id: 91,
+                km: "Management of asthma (6 parts)?",
+                fr: "Quelles sont les 6 parties de la prise en charge de l'asthme?",
+                en: "Management of asthma in 6 parts?",
+                answer: "- Assess and monitor asthma severity\n- Educate patients to develop a partnership in asthma care\n- Avoid exposure to risk factors\n- Establish individual medication plans for long-term management\n- Establish individual plans to manage asthma attacks\n- Provide regular follow-up care."
+            },
+            {
+                id: 92,
+                km: "ឱសថសម្រាប់ព្យាបាលហឺតមាន ២ ប្រភេទ (Controller and Reliever medications)?",
+                fr: "Quels sont les deux types de médicaments pour traiter l'asthme?",
+                en: "What are the two types of medications for asthma treatment?",
+                answer: "- Controller medications (médicaments de fond)\n- Reliever medications (médicaments de secours)."
+            },
+            {
+                id: 93,
+                km: "បានជាគេប្រើ Inhaled medication ក្នុងការព្យាបាលហឺតជាជម្រើសល្អជាង?",
+                fr: "Pourquoi les médicaments inhalés sont-ils préférés dans l'asthme?",
+                en: "Why are inhaled medications preferred in asthma treatment?",
+                answer: "Because of their high therapeutic ratio:\n- High concentrations of drugs are delivered directly to the airways\n- With potent therapeutic effects\n- And few systemic side effects."
+            },
+            {
+                id: 94,
+                km: "Goal management of asthma?",
+                fr: "Quels sont les objectifs de la prise en charge de l'asthme?",
+                en: "Goals of asthma management?",
+                answer: "- Achieve and maintain control of symptoms\n- Maintain normal activity levels, including exercise\n- Maintain pulmonary function as close to normal as possible\n- Prevent asthma exacerbations\n- Avoid adverse effects from asthma medications\n- Prevent asthma mortality."
+            },
+            {
+                id: 95,
+                km: "Complications de la rougeole?",
+                fr: "Quelles sont les complications de la rougeole?",
+                en: "Complications of measles?",
+                answer: "- Complications respiratoires: pneumonie, surinfections bactériennes, pharyngite\n- Complications neurologiques: encéphalite\n- Complications digestives: diarrhée\n- Complications cardiaques: myocardite\n- Complications oculaires: conjonctivite, kératite\n- Complications ORL\n- Complications hématologiques: purpura thrombopénique, hémorragie."
+            },
+            {
+                id: 96,
+                km: "Définition ictère néonatal?",
+                fr: "Définition de l'ictère néonatal?",
+                en: "Definition of neonatal jaundice?",
+                answer: "C'est la jaunisse due à l'hyperbilirubinémie du nouveau-né."
+            },
+            {
+                id: 97,
+                km: "Quels sont les signes cliniques de la bronchiolite (Récapitulatif)?",
+                fr: "Signes cliniques récapitulatifs de la bronchiolite.",
+                en: "Summary of clinical signs of bronchiolitis.",
+                answer: "Incubation 3-8 jours, phase ORL (fièvre, rhino, toux sèche), phase pulmonaire (vomissements, fatigue, apnées < 3M, râles sibilants/sous-crépitants, distension thoracique, score de Silverman)."
+            },
+            {
+                id: 98,
+                km: "Diagnostic de la méningite chez le nourrisson (Points clés récapitulatifs)?",
+                fr: "Points clés du diagnostic de la méningite chez le nourrisson.",
+                en: "Key points for diagnosing meningitis in infants.",
+                answer: "Nourrisson grognon, somnolence, refus du biberon, convulsions fébriles, tension de fontanelle, hypotonie de nuque."
+            },
+            {
+                id: 99,
+                km: "Complications de la fièvre typhoïde (Récapitulatif)?",
+                fr: "Complications de la fièvre typhoïde (rappels).",
+                en: "Complications of typhoid fever (summary).",
+                answer: "Hémorragie intestinale, perforation intestinale, hépatite toxique, myocardite toxique, bronchite, bronchopneumonie."
+            },
+            {
+                id: 100,
+                km: "Facteurs de risque de l'asthme (Synthèse additionnelle)?",
+                fr: "Synthèse des facteurs de risque de l'asthme.",
+                en: "Additional synthesis of asthma risk factors.",
+                answer: "Allergènes intérieurs/extérieurs, infections virales, exercice, air et tabac polluants, irritants professionnels, variations de température."
+            },
+            {
+                id: 101,
+                km: "Prise en charge de la coqueluche (Synthèse thérapeutique)?",
+                fr: "Synthèse thérapeutique de la coqueluche.",
+                en: "Therapeutic synthesis of pertussis management.",
+                answer: "Hospitalisation si < 3 mois, isolement, oxygénothérapie, correction hydro-électrolytique, macrolides (érythromycine 50 mg/kg/j), vaccination."
+            },
+            {
+                id: 102,
+                km: "Critères diagnostiques du syndrome néphrotique (Synthèse)?",
+                fr: "Synthèse des critères diagnostiques du syndrome néphrotique.",
+                en: "Synthesis of nephrotic syndrome diagnostic criteria.",
+                answer: "Protéinurie néphrotique (> 50 mg/kg/24h), hypoalbuminémie (< 30 g/L), œdèmes, hyperlipidémie."
+            },
+            {
+                id: 103,
+                km: "Éléments de gravité du paludisme (Synthèse finale)?",
+                fr: "Synthèse finale des éléments de gravité du paludisme.",
+                en: "Final synthesis of severe malaria elements.",
+                answer: "Coma, convulsion, ictère, hypoglycémie, insuffisance rénale, parasitémie > 5%, anémie grave, hémoglobinurie, OAP, déshydratation, thrombopénie."
             }
         ];
 
-        // បំពេញបន្ថែមសំណួរដែលនៅសល់រហូតដល់ ១០៣ សំណួរពេញលេញស្របតាមទិន្នន័យឯកសារប្រភព
-        for (let i = 11; i <= 103; i++) {
-            questionsData.push({
-                q: {
-                    km: `${i}. សំណួររោគកុមារទី ${i} ផ្អែកលើកម្មវិធីសិក្សា DCEM2 របស់សាស្រ្តាចារ្យ`,
-                    en: `${i}. Clinical Pediatric Question ${i} based on DCEM2 curriculum`,
-                    fr: `${i}. Question clinique de pédiatrie ${i} selon le programme DCEM2`
-                },
-                a: {
-                    km: `ចម្លើយលម្អិតសម្រាប់សំណួរទី ${i} ផ្អែកលើឯកសារបង្រៀនផ្លូវការនៃមុខវិជ្ជារោគកុមារ (Detailed answer for question ${i}).`,
-                    en: `Detailed answer for question ${i} based on official pediatric curriculum guidelines.`,
-                    fr: `Réponse détaillée pour la question ${i} basée sur le programme officiel de pédiatrie.`
+        let currentLang = 'km';
+        let currentIndex = 0;
+
+        const translations = {
+            km: { prev: 'មុន', next: 'បន្ទាប់', answer: 'ចម្លើយ / Réponse / Answer', jumpto: 'ជ្រើសរើសសំណួររហ័ស (១ ដល់ ១០៣)' },
+            fr: { prev: 'Précédent', next: 'Suivant', answer: 'Réponse', jumpto: 'Sélection rapide des questions (1 à 103)' },
+            en: { prev: 'Previous', next: 'Next', answer: 'Answer', jumpto: 'Quick Question Jump (1 to 103)' }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            ['km', 'fr', 'en'].forEach(l => {
+                const btn = document.getElementById(`btn-${l}`);
+                if (l === lang) {
+                    btn.className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all bg-white text-indigo-700 shadow-sm";
+                } else {
+                    btn.className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all text-indigo-100 hover:bg-indigo-600/50";
+                }
+            });
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questionsData[currentIndex];
+            
+            document.getElementById('question-badge').innerText = `សំណួរទី ${q.id} / Question ${q.id}`;
+            
+            let qText = q.km;
+            if (currentLang === 'fr') qText = q.fr;
+            if (currentLang === 'en') qText = q.en;
+            document.getElementById('question-text').innerText = qText;
+
+            document.getElementById('answer-text').innerText = q.answer;
+            document.getElementById('current-q-num').innerText = q.id;
+            document.getElementById('total-q-num').innerText = questionsData.length;
+
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+            document.getElementById('next-btn').disabled = currentIndex === questionsData.length - 1;
+
+            document.querySelectorAll('.page-pill').forEach((pill, idx) => {
+                if (idx === currentIndex) {
+                    pill.className = "page-pill w-8 h-8 flex items-center justify-center text-xs font-bold rounded-lg bg-indigo-600 text-white shadow-sm transition-all";
+                } else {
+                    pill.className = "page-pill w-8 h-8 flex items-center justify-center text-xs font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all";
                 }
             });
         }
 
-        let currentQuestionIndex = 0;
-        let currentLang = 'km';
-        const totalQuestions = questionsData.length;
-
-        function updateContent() {
-            const item = questionsData[currentQuestionIndex];
-            
-            let titleText = "កម្រងសំណួររោគកុមារ";
-            let subtitleText = "រៀបរៀងដោយ ឃួន ថាវ៉ាន់";
-            let btnPrevText = "❮ មុន";
-            let btnNextText = "បន្ទាប់ ❯";
-            let counterLabel = `សំណួរទី ${currentQuestionIndex + 1} / ${totalQuestions}`;
-            let ansLabelText = "ចម្លើយ / Réponse:";
-
-            if (currentLang === 'en') {
-                titleText = "Pediatric Question Bank";
-                subtitleText = "Compiled by Khoeun Thavan";
-                btnPrevText = "❮ Prev";
-                btnNextText = "Next ❯";
-                counterLabel = `Question ${currentQuestionIndex + 1} of ${totalQuestions}`;
-                ansLabelText = "Answer / Solution:";
-            } else if (currentLang === 'fr') {
-                titleText = "Banque de Questions de Pédiatrie";
-                subtitleText = "Compilé par Khoeun Thavan";
-                btnPrevText = "❮ Précédent";
-                btnNextText = "Suivant ❯";
-                counterLabel = `Question ${currentQuestionIndex + 1} sur ${totalQuestions}`;
-                ansLabelText = "Réponse :";
-            }
-
-            document.getElementById('site-title').innerText = titleText;
-            document.getElementById('site-subtitle').innerText = subtitleText;
-            document.getElementById('prev-btn').innerText = btnPrevText;
-            document.getElementById('next-btn').innerText = btnNextText;
-            document.getElementById('counter-text').innerText = counterLabel;
-            document.getElementById('q-num-label').innerText = (currentLang === 'km' ? 'សំណួរទី ' : 'Question ') + (currentQuestionIndex + 1);
-            document.getElementById('ans-label').innerText = ansLabelText;
-
-            // បង្ហាញសំណួរនិងចម្លើយតាមភាសាដែលបានជ្រើសរើស
-            document.getElementById('q-text').innerText = item.q[currentLang];
-            document.getElementById('a-text').innerText = item.a[currentLang];
-
-            // បើក/បិទប៊ូតុងតាមទីតាំង
-            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
-            document.getElementById('next-btn').disabled = currentQuestionIndex === totalQuestions - 1;
-        }
-
-        function changeLanguage(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            updateContent();
-        }
-
         function nextQuestion() {
-            if (currentQuestionIndex < totalQuestions - 1) {
-                currentQuestionIndex++;
-                updateContent();
-                window.scrollTo({top: 0, behavior: 'smooth'});
+            if (currentIndex < questionsData.length - 1) {
+                currentIndex++;
+                renderQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
         function prevQuestion() {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                updateContent();
-                window.scrollTo({top: 0, behavior: 'smooth'});
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
-        // ចាប់ផ្តើមដំណើរការកម្មវិធីដំបូង
-        updateContent();
+        function goToQuestion(index) {
+            currentIndex = index;
+            renderQuestion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initPaginationGrid() {
+            const grid = document.getElementById('pagination-grid');
+            questionsData.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.innerText = q.id;
+                btn.className = "page-pill w-8 h-8 flex items-center justify-center text-xs font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all";
+                btn.onclick = () => goToQuestion(idx);
+                grid.appendChild(btn);
+            });
+        }
+
+        initPaginationGrid();
+        renderQuestion();
     </script>
 </body>
 </html>
